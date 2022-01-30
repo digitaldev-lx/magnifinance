@@ -15,7 +15,7 @@ class CreateBookingItemsTable extends Migration
     public function up()
     {
         Schema::create('booking_items', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 
             $table->unsignedInteger('company_id')->nullable();
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade')->onDelete('cascade');
@@ -23,7 +23,7 @@ class CreateBookingItemsTable extends Migration
             $table->unsignedInteger('booking_id');
             $table->foreign('booking_id')->references('id')->on('bookings')->onUpdate('cascade')->onDelete('cascade');
 
-            $table->unsignedInteger('business_service_id')->nullable();
+            $table->unsignedBigInteger('business_service_id')->nullable();
             $table->foreign('business_service_id')->references('id')->on('business_services')->onUpdate('cascade')->onDelete('cascade');
 
             $table->tinyInteger('quantity');

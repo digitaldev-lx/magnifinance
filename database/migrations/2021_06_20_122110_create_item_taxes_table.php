@@ -18,7 +18,7 @@ class CreateItemTaxesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('tax_id')->nullable();
             $table->foreign('tax_id')->references('id')->on('tax_settings')->onUpdate('cascade')->onDelete('cascade');
-            $table->unsignedInteger('service_id')->nullable();
+            $table->unsignedBigInteger('service_id')->nullable();
             $table->foreign('service_id')->references('id')->on('business_services')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedInteger('deal_id')->nullable();
             $table->foreign('deal_id')->references('id')->on('deals')->onUpdate('cascade')->onDelete('cascade');

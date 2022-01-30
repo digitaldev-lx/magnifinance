@@ -15,7 +15,7 @@ class CreateBusinessServicesTable extends Migration
     public function up()
     {
         Schema::create('business_services', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 
             $table->unsignedInteger('company_id')->nullable();
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade')->onDelete('cascade');

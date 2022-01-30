@@ -15,7 +15,7 @@ class CreateBusinessServiceUserTable extends Migration
     public function up()
     {
         Schema::create('business_service_user', function (Blueprint $table) {
-            $table->unsignedInteger('business_service_id');
+            $table->unsignedBigInteger('business_service_id');
             $table->unsignedInteger('user_id');
 
             $table->foreign('business_service_id')->references('id')->on('business_services')

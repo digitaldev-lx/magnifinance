@@ -20,7 +20,7 @@ class CreateDealItemsTable extends Migration
             $table->unsignedInteger('deal_id')->nullable();
             $table->foreign('deal_id')->references('id')->on('deals')->onUpdate('cascade')->onDelete('cascade');
 
-            $table->unsignedInteger('business_service_id')->nullable();
+            $table->unsignedBigInteger('business_service_id')->nullable();
             $table->foreign('business_service_id')->references('id')->on('business_services')->onUpdate('cascade')->onDelete('cascade');
 
             $table->tinyInteger('quantity');

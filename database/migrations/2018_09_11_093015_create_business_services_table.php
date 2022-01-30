@@ -26,7 +26,7 @@ class CreateBusinessServicesTable extends Migration
 
             $table->text('image')->nullable();
             $table->string('name');
-            $table->string('slug')->unsigned();
+            $table->string('slug');
             $table->text('description');
             $table->float('price');
             $table->float('time');

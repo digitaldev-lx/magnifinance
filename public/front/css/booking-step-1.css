@@ -1,0 +1,200 @@
+.datepicker td, .datepicker th {
+    width: 100px;
+    height: 80px;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 0.79;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4f5962 !important;
+}
+.input-group {
+    border-radius: 30rem;
+}
+
+input.form-control {
+    border-radius: 30rem 0 0 30rem;
+    border: none;
+}
+
+input.form-control:focus {
+    box-shadow: none;
+}
+.input-group-text {
+    border-radius: 0 30rem 30rem 0;
+    border: none;
+}
+.datepicker-dropdown {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+.step_1_booking_date form{
+	width: 762px;
+    padding: 54px 38px 0;
+    background-color: #fff;
+    border-radius: 15px;
+}
+.step_1_booking_date form .table-condensed .prev, .step_1_booking_date form .table-condensed .next{
+	width: 33px;
+    height: 33px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    background-color: #fff;
+    border-radius: 100%;
+    display: flex;
+    margin: 20px auto;
+    justify-content: center;
+    align-items: center;
+}
+.step_1_booking_date form .datepicker-switch{
+	font-family: 'Lato', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.45;
+    letter-spacing: normal;
+    text-align: center;
+    color: #2d2d2d;
+    padding: 0;
+}
+.step_1_booking_date form .dow{
+	font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 0.79;
+    letter-spacing: normal;
+    color: #b4b4b4 !important;
+}
+
+.datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .datepicker table tr td span.active:hover, .datepicker table tr td span.active:hover:hover, .datepicker table tr td span.active.disabled:hover, .datepicker table tr td span.active.disabled:hover:hover, .datepicker table tr td span.active:active, .datepicker table tr td span.active:hover:active, .datepicker table tr td span.active.disabled:active, .datepicker table tr td span.active.disabled:hover:active, .datepicker table tr td span.active.active, .datepicker table tr td span.active:hover.active, .datepicker table tr td span.active.disabled.active, .datepicker table tr td span.active.disabled:hover.active, .datepicker table tr td span.active.disabled, .datepicker table tr td span.active:hover.disabled, .datepicker table tr td span.active.disabled.disabled, .datepicker table tr td span.active.disabled:hover.disabled, .datepicker table tr td span.active[disabled], .datepicker table tr td span.active:hover[disabled], .datepicker table tr td span.active.disabled[disabled], .datepicker table tr td span.active.disabled:hover[disabled]{
+	width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    background-color: var(--primary-color);
+    background-image: none;
+    color: #fff !important;
+}
+.datepicker-months .table-condensed, .datepicker-years .table-condensed, .datepicker-decades .table-condensed, .datepicker-centuries .table-condensed{
+    margin: 0 auto;
+    width: 325px;
+}
+.datepicker table tr td span {
+    display: block;
+    width: 100px !important;
+    height: 80px !important;
+    line-height: 54px;
+    float: left;
+    margin: 1%;
+    cursor: pointer;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+    background: none;
+    color: #C3C3C3 !important;
+    cursor: default;
+}
+
+.month, .year, .decade, .century{
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+.available_appointments{
+    width: 762px;
+    border: solid 10px #efefef;
+    background-color: #fff;
+}
+.step_1_booking_date{
+    margin-bottom: 40px;
+}
+.available_appointments_heading{
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 2.69;
+    letter-spacing: normal;
+    color: #232323;
+    border-bottom: 1px solid #d8d8d8;
+}
+.available_appointments_heading span{
+    font-weight: 600;
+}
+.available_appointments_heading i{
+    padding-right: 10px;
+}
+.available_time{
+    padding: 40px 55px;
+}
+.custom-control{
+    margin-bottom: 27px;
+    padding: 0;
+}
+.custom-control:nth-child(4){
+    margin-bottom: 0px;
+}
+.custom-radio .custom-control-input:checked~.custom-control-label::before {
+    background-color: var(--primary-color)  !important;
+}
+.custom-control-input:focus~.custom-control-label::before {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 2px var(--primary-color)  !important;
+}
+.custom-radio .custom-control-input:checked~.custom-control-label::after {
+    background-image: none !important;
+    content: '\f26b';
+    display: inline-block;
+    font: normal normal normal 14px/1 'Material-Design-Iconic-Font';
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #fff;
+    text-align: center;
+    font-size: 11px;
+    top: 29%;
+}
+.custom-control-label{
+    cursor: pointer;
+}
+.booking_detail_btn {
+    width: 762px;
+    margin-top: 73px;
+}
+.booking_detail_btn a{
+    float: right;
+    background-color: var(--secondary-color);
+    color: #fff;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    border-radius: 4px;
+    padding: 14px 27px;
+    /* opacity: 1; */
+    transition: 0.3s;
+    width: 245px;
+    display: block;
+    text-align: center;
+}
+/* .booking_detail_btn a:hover{
+    opacity: 0.8;
+} */
+
+.available_time ul{
+    padding: 0;
+    text-align: center;
+}
+
+.available_time ul li {
+    list-style: none;
+    display: inline-block;
+    /* margin: 0px 18px; */
+    width: 19.5%;
+}

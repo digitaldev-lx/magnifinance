@@ -1,0 +1,64 @@
+@media (max-width: 991px){
+    .slots-wrapper{
+        margin: 0 20px;
+    }
+    .head-top .head-contact-right {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
+@media(max-width:767px){
+    .topbar .logo{
+        display: block;
+        text-align: center;
+        padding: 15px;
+    }
+    .topbar .logo::before {
+        width: 1000px;
+        right: auto;
+        transform: skewX(0);
+        -webkit-transform: skewX(0);
+        -moz-transform: skewX(0);
+        -ms-transform: skewX(0);
+        -o-transform: skewX(0);
+    }
+    .datepicker-inline {
+        padding: 0;
+    }
+    .datepicker table tr td.day {
+        padding: 10px;
+    }
+    .datepicker table tr td.active.active,
+    .datepicker table tr td.active.active:focus,
+    .datepicker table tr td.active.highlighted.active:focus {
+        padding: 6.75px;
+    }
+    .slots-wrapper{
+        margin: 0 10px;
+    }
+}
+
+@media(max-width: 374px) {
+    .head-top .head-contact-right li.language-drop {
+        border: none;
+    }
+}
+
+@media(max-width: 360px) {
+    .login-box {
+        padding: 30px;
+        padding-top: 0;
+    }
+    .head-top .head-contact-right li.language-drop {
+        margin-left: 0;
+        padding-left: 0;
+    }
+}
+
+@media(max-width: 300px) {
+    .login-box {
+        padding: 10px;
+        padding-top: 0;
+    }
+}

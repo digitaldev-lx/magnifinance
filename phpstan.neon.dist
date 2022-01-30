@@ -1,0 +1,37 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - database
+        - app/Console
+        - app/Exceptions
+        - app/Facades
+        - app/Gateways
+        - app/Helper
+        - app/Notifications
+        - app/Observers
+        - app/Providers
+        - app/Rules
+        - app/Scopes
+        - app/Services
+        - app/Traits
+
+    # The level 8 is the highest level
+    level: 2
+
+    ignoreErrors:
+        - '#Access to an undefined property App\\Http\\Controllers\\[a-zA-Z0-9\\_]+::\$(\w)+#'
+
+    excludePaths:
+        - ./*/*/FileToBeExcluded.php
+        - app/Http/Controllers/VerifyMobileController.php
+        - app/Http/Controllers/Admin/BillingController.php
+        - app/Http/Controllers/Admin/PaypalController.php
+        - app/Http/Controllers/PaypalIPNController.php
+        - app/Http/Controllers/Front/PaypalController.php
+
+    checkMissingIterableValueType: false
+    reportUnmatchedIgnoredErrors: false
+

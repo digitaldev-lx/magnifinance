@@ -1,0 +1,617 @@
+/*****************************************************
+                       MEDIAQUERIES
+*****************************************************/
+@media (min-width:1367px) and (max-width: 9000px){
+    #banner_slider .item-inner {
+        width: 60%;
+    }
+     #latest_coupon_modal_container .modal-background .modal{
+        width: 60%;
+    }
+    #banner_slider .item-inner.itemBox-right {
+        transform: translate(67%, 19%);
+
+    }
+}
+@media (min-width:1024px) and (max-width: 1365px){
+    .headerTopLeft .input-group input {
+        width: 77px;
+    }
+}
+@media (min-width:1024px) and (max-width: 1366px){
+
+    /* .company_account_detail{
+        margin-right: -48px;
+    } */
+    .payment_name{
+        font-size: 16px;
+    }
+    .booking_step_4_booking_summary p:nth-child(1){
+        font-size: 14px;
+    }
+    .booking_step_4_booking_summary p:nth-child(2){
+        font-size: 13px;
+    }
+    .deal_detail_box h2{
+        font-size: 20px;
+    }
+    #banner_slider .item-inner {
+        transform: translate(0%, 10%);
+        width: 513px;
+        padding: 30px 20px;
+    }
+    #banner_slider .item-inner.itemBox-right {
+        transform: translate(117%, 10%);
+        width: 513px;
+        padding: 30px 20px;
+    }
+    .banner_img1 {
+        min-height: 284px;
+    }
+    .footer_bottom a, .footer_bottom p {
+        font-size: 11px;
+    }
+    .footer_bottom h3 {
+        font-size: 12px;
+    }
+    .featuredDealDetail a {
+        font-size: 11px;
+        padding: 6px 0px;
+    }
+    .featuredDealDetail h1, .deal_detail_contact a, .deal_detail_contact i.star_icon{
+        font-size: 13px;
+    }
+    #banner_slider .item-inner p{
+        margin: 0px 0px 21px;
+    }
+    #banner_slider .item-inner h2{
+        margin-bottom: 10px;
+    }
+    #banner_slider .item-inner h1 {
+        font-size: 31px;
+    }
+}
+
+@media (max-width: 1023px) {
+    /* .company_account_detail{
+        margin-right: -48px;
+    } */
+    .headerTopLeft .select2-container--default {
+        width: 110px !important;
+    }
+
+     .featured_deal_imgBox {
+         height: 297px !important;
+     }
+    #latest_coupon_modal_container .modal-background .modal{
+        width: 95%;
+    }
+    .coupon_logo img{
+        width: auto;
+    }
+    .coupon_modal_detail {
+        padding: 50px;
+    }
+    .featuredDealDetail {
+        padding: 50px 39px 50px 39px;
+    }
+    .featuredDealDetail p {
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+    .featuredDealDetail h2 {
+        font-size: 17px;
+    }
+    .payment_options h2{
+        padding: 0px
+    }
+    .filter_types .card {
+        margin: 0px 10px 28px 10px;
+    }
+    .headerTopRight .select2-container--default .select2-selection--single .select2-selection__rendered{
+        padding: 0px 21px 0px 11px;
+    }
+    .headerBottom .navbar-nav li:nth-child(1) a {
+        padding: 19px 12px 19px 0px !important;
+    }
+    .available_time {
+        padding: 40px 35px;
+    }
+    .deal_detail_box h3{
+        margin-top: 30px;
+    }
+    .single_deal_box .card-body {
+        padding: 15px 15px !important;
+    }
+    .coupon_code_box p{
+        font-size: 10px;
+        line-height: 1;
+    }
+    .bannerSection{
+        overflow: hidden;
+    }
+    #banner_slider .owl-nav .owl-prev, #banner_slider .owl-nav .owl-next{
+        top: 38%;
+    }
+    .navbar-expand-lg .navbar-nav .dropdown-menu {
+        position: absolute;
+    }
+    #navbarSupportedContent{
+        display: -webkit-box!important;
+        display: -ms-flexbox!important;
+        display: flex!important;
+        -ms-flex-preferred-size: auto;
+        flex-basis: auto;
+    }
+    #navbarSupportedContent .navbar-nav{
+        flex-direction: row;
+    }
+    .headerTopRight a{
+        height: 100%;
+    }
+    .headerTopRight .select2-container {
+        margin-top: 18px;
+    }
+    .mobile_navbar span {
+        position: absolute;
+        top: -55px;
+        right: -30px;
+        cursor: pointer;
+        font-size: 20px;
+    }
+    .headerTopLeft img, .step_1_booking_date form, .available_appointments, .booking_detail_btn {
+        width: 100% !important;
+    }
+    .headerTopLeft .input-group{
+        margin-top: 0px;
+    }
+    #spotlight_slider .owl-stage-outer:before, #spotlight_slider .owl-stage-outer:after {
+        width: 23%;
+    }
+    #articles_slider .owl-stage-outer:before, #articles_slider .owl-stage-outer:after {
+        width: 23%;
+    }
+    .socialLinks br{
+        display: none;
+    }
+    .coupon_discount h2{
+        font-size: 15px;
+    }
+    .coupon_code_box a{
+        padding: 11px 21px;
+    }
+    .category_name {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+    #banner_slider .item-inner p {
+        font-size: 11px;
+        margin: 6px 0px 4px;
+    }
+    #banner_slider .item-inner h1 {
+        font-size: 21px;
+        line-height: 54px;
+    }
+    #banner_slider .item-inner h2 {
+        font-size: 18px;
+        line-height: 2;
+        margin-bottom: 0;
+    }
+    #banner_slider .item-inner .login{
+        width: 106px;
+    }
+    .banner_img1{
+        min-height: 205px;
+    }
+    .headerTopRight a i{
+        text-align: center;
+        font-size: 18px;
+        line-height: 1.21;
+    }
+    .headerTopRight a {
+        font-size: 15px;
+    }
+    .headerBottom .navbar-nav li a {
+        font-size: 10px;
+        padding: 19px 12px 19px 12px !important;
+    }
+    .cart_nav a {
+        font-size: 10px !important;
+    }
+    #banner_slider .item-inner {
+        position: absolute;
+        transform: translate(-11%, 4%);
+        width: 359px;
+        padding: 20px 15px;
+    }
+    .footer_bottom p, .footer_bottom a, .footer_bottom h3 {
+        font-size: 10px;
+    }
+    .headerTopLeft .input-group input {
+        width: 77px;
+    }
+    .footer_top h2 {
+        font-size: 16px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    /* .navbar .dropdown-menu {
+        width:90%;
+    } */
+    .price-tabs a {
+        width: 200px;
+        margin-bottom: 10px;
+    }
+    .price-top.title h3 {
+        padding: 37px 30px 36px;
+        margin-bottom: 0;
+        background-color: #F1F4FF;
+        font-size: 24px;
+        font-weight: 600;
+    }
+}
+
+@media (max-width: 767px) {
+    #prepend .select2-container--default .select2-selection--single .select2-selection__arrow b{
+        right: 0px;
+        left: auto;
+    }
+    #prepend, #prepend span{
+        width: 100% !important;
+        text-align: left;
+    }
+
+    .payment_name, .payment_icon_box span{
+        height: 50px !important;
+        font-size: 16px !important;
+    }
+    .payment_options h2{
+        font-size: 20px !important;
+    }
+    #personal-details .input-group input{
+        width : 100%;
+    }
+    .booking_step_3_personal_detail, .booking_step_4_booking_summary {
+        padding: 20px !important;
+    }
+    .booking_step_buttons button:nth-child(2), .booking_step_buttons button, .booking_detail_btn a{
+        width: auto !important;
+        padding: .375rem .75rem !important;
+        font-size: 13px !important;
+    }
+    .deal_detail_img{
+        height: 300px !important;
+    }
+    #coupon_code {
+        width: 100%;
+    }
+    .sort_box .select2-container{
+        width: 100% !important;
+    }
+    .sort_box .input-group{
+        width:100% !important;
+        margin-top: 20px;
+    }
+    /* .deal_detail_img {
+        height: auto !important;
+    } */
+    .form_wrapper .btn {
+        padding: 8px 7px !important;
+        font-size: 12px !important;
+
+    }
+    .input-group{
+        display: block ;
+    }
+    .active_code .input-group, .input-group-prepend, #registration-form input, #registration-form.input-group-text{
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+    }
+    .booking_step_buttons a {
+        font-size: 12px;
+        border-radius: 4px;
+        padding: 9px 7px;
+        opacity: 1;
+        transition: 0.3s;
+    }
+    .active_code .input-group {
+        width: 100%;
+    }
+    .coupon_modal_detail {
+        padding: 20px;
+    }
+    .remember_box a, .remember_box label{
+        font-size: 12px !important;
+    }
+    .remember_box input[type='checkbox'] + label > span {
+        margin-right: 9px !important;
+    }
+    .featuredDealDetail p{
+        margin-bottom: 10px;
+    }
+    #featured_deal_slider .owl-item .item{
+        margin: 10px 29px 10px 0px;
+    }
+    .spot_box {
+        margin: 15px;
+        box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16);
+    }
+    #spotlight_slider .owl-item, #featured_deal_slider .owl-item{
+        box-shadow: none;
+    }
+    #articles_slider .owl-item, #featured_deal_slider .owl-item{
+        box-shadow: none;
+    }
+    .my-controls-btns{
+        margin-right: 12px;
+    }
+    .booking_step_heading h1{
+        font-size: 25px;
+    }
+    .available_appointments_heading span{
+        display: block;
+    }
+    .available_appointments_heading i {
+        display: none;
+    }
+    .custom-control:nth-child(4){
+        margin-bottom: 27px;
+    }
+    .available_time {
+        /* padding: 20px 0px; */
+        padding: 20px 20px !important;
+    }
+    .available_time ul li {
+        list-style: none;
+        display: inline-block;
+        width: 43% !important;
+    }
+
+    .available_appointments_heading{
+        text-align: center;
+    }
+    .step_1_booking_date form{
+        /* padding: 0px; */
+        padding: 0px !important;
+    }
+    #deal_detail_slider .deal_detail_img{
+        height: auto;
+    }
+    .booking_step_buttons{
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .booking_step_3_personal_detail, .booking_step_3_booking_summary, .booking_step_4_booking_summary {
+        padding: 20px 20px;
+    }
+    .step_2_booking_summary p {
+        font-size: 16px;
+    }
+    .step_2_booking_summary {
+        padding: 30px 30px !important;
+        width: 92% !important;
+    }
+    .form_wrapper {
+        padding: 96px 30px 52px !important;
+        width: 92% !important;
+    }
+    .now_btn p a{
+        margin-left: 0px !important;
+        display: inline-block;
+        margin-top: 15px;
+    }
+    .form_wrapper span.form_icon {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    .deal_detail_contact i.star_icon, .deal_detail_contact a{
+        font-size: 13px;
+    }
+    #deal_detail_slider .owl-nav{
+        top: 43%;
+    }
+    .mobile-no-padding{
+        padding-left: 0px !important;
+        padding-right: 0px !important
+    }
+    .all_deals_section, .deal_detail_section, .booking_step_section {
+        padding: 50px 0px !important;
+    }
+    .breadcrumb_section h1{
+        text-align:center;
+    }
+    .mobSearch input:focus{
+        box-shadow: none;
+        border: 1px solid #00c1cf;
+    }
+    .mobSearch button{
+        background-color: var(--secondary-color);
+        border-radius: 0px 5px 5px 0px;
+        border-color: var(--secondary-color);
+    }
+    .mobSearch input{
+        font-family: 'Lato', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.21;
+        letter-spacing: normal;
+        text-align: left;
+        color: #b8b8b8;
+        padding: 0px 15px;
+        border-radius: 5px 0px 0px 5px;
+        border: 1px solid #e1e1e1;
+    }
+    .hide_desktop{
+        display: block !important;
+    }
+    .mob_login_nav_box span{
+        font-size: 15px;
+        color: #00c1cf;
+    }
+    .mob_login{
+        font-size: 17px;
+        margin-right: 13px;
+        color: #00c1cf;
+        line-height: 0px;
+    }
+    .mob_login_nav_box{
+        position: absolute;
+        right: 15px;
+        top: 27px;
+        align-items: center;
+        display: inline-flex;
+    }
+    .hide_mobile{
+        display: none !important;
+    }
+    .coupon_box{
+        margin: 0px 15px;
+    }
+    /* .categorySection .heading p{
+        padding-left: 0px;
+    } */
+    .coupon_discount {
+        width: 54%;
+        padding: 0px 15px;
+    }
+    .coupon_code_box h2 {
+        font-size: 22px !important;
+        margin-bottom: 24px;
+        line-height: 18px;
+    }
+    .coupon_code_box h2 span {
+        font-size: 15px;
+        line-height: 15px;
+        color: #CECECE;
+        display: block;
+    }
+    .mobile_navbar span{
+        position: absolute;
+        top: -33px;
+        right: 6px;
+        cursor: pointer;
+        font-size: 20px;
+    }
+    .featuredDealDetail h2{
+        padding-top: 12px;
+    }
+    #spotlight_slider .owl-stage-outer:before, #spotlight_slider .owl-stage-outer:after{
+        content: none;
+    }
+    #articles_slider .owl-stage-outer:before, #articles_slider .owl-stage-outer:after{
+        content: none;
+    }
+    #banner_slider .item-inner .login, #banner_slider .item-inner .learnMore {
+        width: 100px;
+        font-size: 10px;
+        height: 30px;
+        line-height: 9px;
+    }
+    .deal_detail_box h3 {
+        font-size: 15px !important;
+    }
+    #banner_slider .item-inner h1, .deal_detail_box h2 {
+        font-size: 18px !important;
+    }
+    #banner_slider .item-inner {
+        position: absolute;
+        transform: translate(0%, 10%);
+        width: 85%;
+        left: 0;
+        padding: 11px 4px 20px;
+        right: 0;
+        margin: 0 auto;
+    }
+    .banner_img1 {
+        min-height: 200px;
+    }
+    .headerBottom .navbar-toggler{
+        position: absolute;
+        right: -13px;
+        top: -39px;
+    }
+    .headerBottom .navbar-toggler span{
+        border: 1px solid #b9b9b9;
+        border-radius: 4px;
+    }
+    .headerBottom .navbar-toggler-icon::before {
+        display: inline-block;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        font-family: "Material-Design-Iconic-Font";
+        font-weight: 900;
+        content: "\f197";
+        line-height: 31px;
+        font-size: 15px;
+        color: #3a3a3a;
+    }
+    .headerBottom .navbar-toggler {
+        position: absolute;
+        right: -13px;
+        top: -36px;
+    }
+    .headerBottom .navbar-nav li a {
+        font-size: 10px;
+        padding: 5px 0px;
+    }
+    #featured_deal_slider .item .media {
+        display: block;
+        width: 100% !important;
+    }
+    .featured_deal_imgBox {
+        overflow: hidden;
+        border-radius: 8px;
+        width: 100%;
+    }
+    .featuredDealDetail {
+        padding: 22px 20px 22px 20px;
+    }
+    .headerTopRight a {
+        margin-left: 6px;
+        width: 57.5%;
+        height: auto;
+        border-radius: 5px;
+    }
+    #featured_deal_slider .owl-nav .owl-prev, #latest_coupon_slider .owl-nav .owl-prev, #spotlight_slider .owl-nav .owl-prev, #articles_slider .owl-nav .owl-prev {
+        right: 52px;
+        top: -71px;
+    }
+    #featured_deal_slider .owl-nav .owl-next, #latest_coupon_slider .owl-nav .owl-next, #spotlight_slider .owl-nav .owl-next, #articles_slider .owl-nav .owl-next {
+        right: 12px;
+        top: -71px;
+    }
+
+    .headerTopLeft img{
+        width: 75%;
+    }
+    .featuredSection {
+        padding: 50px 0px 50px 0px;
+    }
+    .heading p {
+        font-size: 26px;
+        /* padding-left: 15px; */
+        padding-bottom: 40px;
+    }
+    .spotlightSection, .couponSection, .categorySection {
+        padding-bottom: 50px;
+        padding-top: 50px;
+    }
+    .footer_top ul li a, .booking_step_3_personal_detail input {
+        font-size: 12px;
+    }
+    .footer_top .col-6{
+        margin-bottom: 17px;
+    }
+    .footer_top {
+        padding: 40px 0px 20px;
+    }
+    .footer_bottom p {
+        text-align: center;
+    }
+}

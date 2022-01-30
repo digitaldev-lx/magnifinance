@@ -1,0 +1,102 @@
+/*****************************
+         BOOKING STEP 3
+******************************/
+.checkout_detail{
+	  border-radius: 15px;
+    border: solid 2px #f5f5f5;
+    background-color: #fff; 
+    overflow: hidden;
+}
+.booking_step_3_personal_detail{
+	  padding: 43px 40px;
+}
+.booking_step_3_personal_detail h2, .booking_step_3_booking_summary h2{
+	  font-size: 20px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.1;
+    letter-spacing: normal;
+    color: #232323;
+    padding-bottom: 24px;
+    margin: 0;
+}
+.booking_step_3_booking_summary h2{
+	  border-bottom: 1px solid #d8d8d8;
+	  margin-bottom: 37.5px;
+}
+.booking_step_3_personal_detail input {
+	  border-radius: 5px;
+    border: solid 1px #d8d8d8;
+    height: 47px;
+    padding: 13px 19px;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.47;
+    letter-spacing: normal;
+    color: #919191;
+}
+.booking_step_3_personal_detail textarea{
+	  border-radius: 5px;
+    border: solid 1px #d8d8d8;
+    padding: 13px 19px;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.47;
+    letter-spacing: normal;
+    color: #919191;
+}
+input:focus, textarea:focus{
+	  box-shadow: none !important;
+}
+.booking_step_3_booking_summary{
+	  background-color: #f9f9f9;
+	  padding: 43px 40px;
+}
+.booking_step_3_booking_summary p:nth-child(1){
+	  font-size: 16px;
+	  font-weight: normal;
+	  font-stretch: normal;
+	  font-style: normal;
+	  line-height: 1.38;
+	  letter-spacing: normal;
+	  color: #3b3b3b;
+}
+.booking_step_3_booking_summary p:nth-child(2){
+	  font-size: 16px;
+	  font-weight: 600;
+	  font-stretch: normal;
+    font-style: normal;
+	  line-height: 1.38;
+	  letter-spacing: normal;
+	  text-align: right;
+	  color: #434343;
+}
+
+
+/* SELECT */
+#personal-details .select2-container--default .select2-selection--single .select2-selection__rendered{
+font-size: 15px;
+    color: #919191;
+    text-align: left;
+    padding: 0px 17px;
+}
+
+#personal-details .input-group-text{
+padding: 0;
+    background-color: #fff;
+    height: 47px;
+}
+
+#personal-details .input-group-prepend{
+width: 200px;
+    display: block;
+}
+
+#personal-details .select2-container--default .select2-selection--single .select2-selection__rendered:focus, .select2-container--default .select2-selection--single:focus{
+outline: none; 
+} 

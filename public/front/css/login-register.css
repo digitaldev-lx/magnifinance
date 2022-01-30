@@ -1,0 +1,177 @@
+.form_wrapper{
+    padding: 96px 60px 52px;
+    width: 589px;
+    border-radius: 15px;
+    border: solid 2px #eef1f5;
+    background-color: #fff;
+    margin-top: 60px;
+}
+.form_wrapper span.form_icon{
+	width: 122px;
+    height: 122px;
+    border-radius: 100%;
+    background-color: var(--primary-color);
+    position: absolute;
+    top: -65px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    display: inline-grid;
+}
+.form_wrapper span.form_icon i{
+	font-size: 35px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form_wrapper input {
+    border: solid 1px #d8d8d8;
+    padding: 13px 19px;
+    font-size: 15px;
+    line-height: 1.47;
+    color: #919191;
+}
+.input-group-text{
+	background-color: #fcfcfc;
+	color: #919191;
+}
+::placeholder{
+	color: #919191;
+}
+.form_wrapper .btn {
+    padding: 17px 68px;
+    transition: 1s ease;
+}
+.login_url{
+	color: #919191;
+	font-size: 15px;
+}
+.login_url a{
+	color: #232323;
+	transition: 1s ease;
+}
+.login_url a:hover{
+	color: var(--primary-color);
+	transition: 1s ease;
+}
+.now_btn p{
+	font-size: 15px;
+	color: #919191;
+}
+.now_btn button {
+    padding: 17px 38px;
+    transition: 1s ease;
+}
+.now_btn button:hover{
+	background-color: var(--primary-color);
+	color: #fff;
+}
+.sendLinkBtn button {
+    font-size: 1rem;
+    padding: 16px 68px;
+}
+.backToHome a {
+    color: #232323;
+    font-size: 1rem;
+}
+.backToHome a:hover{
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-underline-position: under;
+    transition: 1s ease;
+}
+.form-control:focus, .form-control:focus .input-group-text{
+	box-shadow: none;
+	border-color: #d8d8d8;
+}
+.booking_step_heading span{
+	color: var(--primary-color);
+}
+.remember_box label {
+    font-size: 15px;
+    color: #919191;
+    line-height: 1;
+}
+.remember_box input[type='checkbox'] + label > span {
+    margin-right: 7px;
+    width: 13px;
+    height: 13px;
+    background: transparent;
+    border: solid 1px #707070;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 250ms cubic-bezier(.4,.0,.23,1);
+    position: relative;
+}
+.remember_box input[type='checkbox']:checked + label > span{
+    border: 0.4em solid #707070;
+    animation: shrink-bounce 200ms cubic-bezier(.4,.0,.23,1);
+    background-color: #707070;
+}
+.remember_box input[type='checkbox'] + label{
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: color 250ms cubic-bezier(.4,.0,.23,1);
+    cursor: pointer;
+}
+.remember_box input[type='checkbox']:checked + label > span:before {
+    content: "";
+    position: absolute;
+    top: 0.09em;
+    left: -0.20em;
+    margin: 0 auto;
+    border-right: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    transform: rotate(45deg);
+    transform-origin: 0% 100%;
+    animation: checkbox-check 125ms 250ms cubic-bezier(.4,.0,.23,1) forwards;
+}
+.remember_box input[type='checkbox'] {
+    height: 0;
+    width: 0;
+    display: none;
+}
+@keyframes shrink-bounce{
+  0%{
+    transform: scale(1);
+  }
+  33%{
+    transform: scale(.85);
+  }
+  100%{
+    transform: scale(1);
+  }
+}
+@keyframes checkbox-check{
+  0%{
+    width: 0;
+    height: 0;
+    border-color: #fff;
+    transform: translate3d(0,0,0) rotate(45deg);
+  }
+  33%{
+    width: .2em;
+    height: 0;
+    transform: translate3d(0,0,0) rotate(45deg);
+  }
+  100%{
+    width: .2em;
+    height: .5em;
+    border-color: #fff;
+    transform: translate3d(0,-.5em,0) rotate(45deg);
+  }
+}
+.remember_box a{
+	line-height: 1;
+	color: #232323;
+	font-size: 15px;
+	text-align: right;
+	transition: 1s ease;
+}
+.remember_box a:hover{
+	color: var(--primary-color);
+	text-decoration: underline;
+    text-underline-position: under;
+}

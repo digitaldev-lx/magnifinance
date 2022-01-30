@@ -1,0 +1,110 @@
+.booking_step_4_booking_summary{
+	border-radius: 15px;
+	border: solid 2px #f5f5f5;
+	background-color: #fff;
+	padding: 43px 52px;
+}
+.booking_step_4_booking_summary h2{
+	font-size: 20px;
+	font-weight: 500;
+	font-stretch: normal;
+	font-style: normal;
+	line-height: 1.1;
+	letter-spacing: normal;
+	color: #232323;
+	border-bottom: 1px solid #d8d8d8;
+    margin-bottom: 37.5px;
+    padding-bottom: 22.5px;
+}
+.booking_step_4_booking_summary p:nth-child(1){
+	font-size: 16px;
+  	font-weight: normal;
+  	font-stretch: normal;
+  	font-style: normal;
+  	line-height: 1.38;
+  	letter-spacing: normal;
+  	color: #3b3b3b;
+}
+.booking_step_4_booking_summary p:nth-child(2){
+	  font-size: 16px;
+  	font-weight: 600;
+  	font-stretch: normal;
+  	font-style: normal;
+  	line-height: 1.38;
+  	letter-spacing: normal;
+  	color: #434343;
+    text-align: right;
+}
+.payment_options h2{
+	font-size: 25px;
+  	font-weight: 500;
+ 	font-stretch: normal;
+  	font-style: normal;
+  	line-height: 1.72;
+  	letter-spacing: normal;
+  	color: #232323;
+  	margin-bottom: 33px;
+    /* padding-left: 15px; */
+}
+.payment_options{
+	padding-left: 30px;
+}
+.payment_icon_name:hover .payment_name{
+    /* color: #ffd514; */
+    transition: 1s ease;
+}
+.payment_name {
+	  height: 63px;
+    border-radius: 0px 5px 5px 0px;
+    background-color: #2d2d2d;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-size: 20px;
+  	font-weight: 400;
+  	font-stretch: normal;
+  	font-style: normal;
+  	line-height: 1.1;
+  	letter-spacing: normal;
+  	color: #fff;
+    transition: 1s ease;
+}
+.payment_icon_box{
+	margin-right: -4px;
+	display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    z-index: 1;
+    float: left;
+}
+.payment_icon_box span{
+	 width: 70px;
+    height: 63px;
+    border-radius: 5px 5px 5px 5px;
+      background-color: #2d2d2de6;
+      /* background-color: var(--primary-color); */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: .375rem .75rem;
+    margin-bottom: 0;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    justify-content: center;
+}
+.payment_icon_box span i {
+    color: #fff;
+    height: 18px;
+    font-size: 20px;
+    line-height: 0.11;
+    letter-spacing: 1.8px;
+    position: absolute;
+    text-align: center;
+    /* border: 3px solid #fff; */
+    border-radius: 4px;
+    padding: 14px 6px;
+}

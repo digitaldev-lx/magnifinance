@@ -1,0 +1,82 @@
+/*!
+ *   AdminLTE v3.0.0-alpha
+ *   Author: Abdullah Almsaeed
+ *	 Website: AdminLTE.io <http://adminlte.io>
+ *   License: Open source - MIT <http://opensource.org/licenses/MIT>
+ */
+// Bootstrap
+// ---------------------------------------------------
+
+$fa-font-path:        "../fonts/vendor/font-awesome" !default;
+$ti-font-path:        "../fonts/vendor/themify-icons-sass/themify-icons" !default;
+
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "bootstrap-variables";
+@import "../../../node_modules/summernote/dist/summernote-bs4.css";
+@import "../../../node_modules/font-awesome/scss/font-awesome";
+@import "../../../node_modules/themify-icons-sass/themify-icons/themify-icons";
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+@import "../../../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+@import "../../../node_modules/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css";
+@import "../../../node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css";
+@import "../../../node_modules/daterangepicker/daterangepicker.css";
+@import "../../../node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css";
+@import "../../../node_modules/bootstrap-colorpicker/src/sass/colorpicker";
+@import "../../../node_modules/dropify/src/sass/dropify";
+@import "../../../node_modules/select2/src/scss/core";
+@import "../../../node_modules/dropzone/dist/min/dropzone.min.css";
+
+// VARIABLES AND MIXINS
+// ---------------------------------------------------
+@import "variables";
+@import "mixins";
+@import "select2";
+// Core
+// ---------------------------------------------------
+@import "layout";
+// COMPONENTS
+// ---------------------------------------------------
+@import "main-header";
+@import "brand";
+@import "main-sidebar";
+@import "sidebar-mini";
+@import "control-sidebar";
+@import "dropdown";
+@import "forms";
+@import "progress-bars";
+@import "small-box";
+@import "cards";
+@import "info-box";
+@import "timeline";
+@import "buttons";
+@import "callout";
+@import "alerts";
+@import "navs";
+@import "products";
+@import "table";
+@import "labels";
+@import "direct-chat";
+@import "users-list";
+@import "carousel";
+@import "social-widgets";
+// PAGES
+// ---------------------------------------------------
+@import "mailbox";
+@import "lockscreen";
+@import "login_and_register";
+@import "404_500_errors";
+@import "invoice";
+@import "profile";
+// Plugins
+// ---------------------------------------------------
+@import "fullcalendar";
+// Miscellaneous
+// ---------------------------------------------------
+@import "miscellaneous";
+@import "print";
+@import "text";
+@import "elevation";
+@import "../../../node_modules/toastr/build/toastr.min.css";
+@import "../../../node_modules/sweetalert2/src/sweetalert2";
+@import "helper";
+@import "custom";

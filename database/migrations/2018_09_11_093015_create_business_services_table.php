@@ -17,7 +17,7 @@ class CreateBusinessServicesTable extends Migration
         Schema::create('business_services', function (Blueprint $table) {
             $table->id();
 
-            $table->big('company_id')->nullable();
+            $table->unsignedInteger('company_id')->nullable();
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedInteger('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->onUpdate('cascade')->onDelete('cascade');

@@ -87,7 +87,7 @@ class GlobalSetting extends Model
     public function getLogoUrlAttribute()
     {
         if (is_null($this->logo)) {
-            return asset_url('storage/images/logo/logo.png');
+            return asset('storage/images/logo/logo.png');
         }
 
         return asset($this->logo);

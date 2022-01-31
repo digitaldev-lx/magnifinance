@@ -50,7 +50,7 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => '/mnt/block-storage',
+            'root' => '/mnt/volume_lon1_01',
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],

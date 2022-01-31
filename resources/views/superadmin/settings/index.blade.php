@@ -142,7 +142,7 @@
                                                     <label for="exampleInputPassword1">@lang('app.logo')</label>
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <input type="file" id="input-file-now" name="logo"
+                                                            <input type="file" id="input-file-now" name="image"
                                                                    accept=".png,.jpg,.jpeg" class="dropify"
                                                                    data-default-file="{{ $settings->logo_url }}"/>
                                                         </div>
@@ -207,9 +207,7 @@
                                                     <select name="timezone" id="timezone"
                                                             class="form-control form-control-lg select2">
                                                         @foreach($timezones as $tz)
-                                                            <option @if($settings->timezone == $tz) selected @endif>{{
-                                            $tz }}
-                                                            </option>
+                                                            <option @if($settings->timezone == $tz) selected @endif>{{ $tz }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -1497,7 +1495,16 @@
                 url: '{{route('superadmin.settings.update', $settings->id)}}',
                 container: '#general-form',
                 type: "POST",
-                file: true
+                file: true,
+                success: function (response) {
+                    console.log(response);
+                    /*if (response.status === 'success') {
+                        window.location.reload();
+                    }*/
+                },
+                error: function (error) {
+                    console.log(error);
+                }
             })
         });
 

@@ -51,20 +51,20 @@ class SuperAdminSettingSeeder extends Seeder
             'primary_color' => '#00c1cf',
             'secondary_color' => '#373737',
             'custom_css' => '/* Coupon Box */
-.coupon_code_box a {
-    background-color: #ffcc00;
-}
-/* Deals Flag */
-.featuredDealDetail .tag {
-    background-color: #ffcc00;
-}
-/* Cart itme quantity number */
-.cart-badge {
-    background-color: #f72222;
-}',
+            .coupon_code_box a {
+                background-color: #ffcc00;
+            }
+            /* Deals Flag */
+            .featuredDealDetail .tag {
+                background-color: #ffcc00;
+            }
+            /* Cart itme quantity number */
+            .cart-badge {
+                background-color: #f72222;
+            }',
             'seo_description' => 'Meta descriptions can have a surprisingly large impact on your search marketing campaigns; find out how...',
-            'seo_keywords' => 'Appointo Multi Vendor,Saas,Manicure',
-            'title' => 'Appointo Multi Vendor',
+            'seo_keywords' => 'Manicure',
+            'title' => 'Spot-B',
 
         ]);
 

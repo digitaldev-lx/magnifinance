@@ -34,33 +34,17 @@ class SuperAdminBaseController extends Controller
         $this->smsSettings = Cache::remember('smsSettings', 60*60*24, function (){
             return SmsSetting::first();
         });
-        $this->global = $this->settings = Cache::remember('global', 60*60*24, function (){
-            return GlobalSetting::first();
-        });
-        $this->activeCompanies = Cache::remember('activeCompanies', 60*60*24, function (){
-            return Company::where('status', 'active')->count();
-        });
-        $this->deActiveCompanies = Cache::remember('deActiveCompanies', 60*60*24, function (){
-            return Company::where('status', 'deactive')->count();
-        });
+        $this->global = $this->settings = GlobalSetting::first();
+        $this->activeCompanies = Company::where('status', 'active')->count();
+        $this->deActiveCompanies = Company::where('status', 'deactive')->count();
 
-        $this->googleCaptchaSettings = Cache::remember('googleCaptchaSettings', 60*60*24, function (){
-            return GoogleCaptchaSetting::first();
-        });
+        $this->googleCaptchaSettings = GoogleCaptchaSetting::first();
 
-        $this->languages = Cache::remember('languages', 60*60*24, function (){
-            return Language::where('status', 'enabled')->orderBy('language_name', 'asc')->get();
-        });
-        $this->frontThemeSettings = Cache::remember('frontThemeSettings', 60*60*24, function (){
-            return FrontThemeSetting::first();
-        });
-        $this->paymentGatewayCredential = Cache::remember('paymentGatewayCredential', 60*60*24, function (){
-            return PaymentGatewayCredentials::first();
-        });
+        $this->languages = Language::where('status', 'enabled')->orderBy('language_name', 'asc')->get();
+        $this->frontThemeSettings = FrontThemeSetting::first();
+        $this->paymentGatewayCredential = PaymentGatewayCredentials::first();
 
-        $this->pages = Cache::remember('pages', 60*60*24, function (){
-            return Page::all();
-        });
+        $this->pages = Page::all();
 
         view()->share('activeCompanies', $this->activeCompanies);
         view()->share('deActiveCompanies', $this->deActiveCompanies);

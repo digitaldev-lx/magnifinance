@@ -155,7 +155,6 @@ class SettingController extends SuperAdminBaseController
     // @codingStandardsIgnoreLine
     public function update(UpdateSetting $request, $id)
     {
-
         abort_if(!$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('manage_settings'), 403);
 
         $companyId = User::select('company_id')->where('id', Auth::user()->id)->first()->company_id;
@@ -172,10 +171,9 @@ class SettingController extends SuperAdminBaseController
         $setting->locale = $request->input('locale');
         $setting->currency_id = $request->currency_id;
 
-        if ($request->hasFile('logo')) {
+        if ($request->hasFile('image')) {
             $setting->logo = $this->image->storeImage($request, 'logo');
         }
-
 
         $setting->save();
 

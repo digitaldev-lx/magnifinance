@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Appointo'),
+    'name' => env('APP_NAME', 'SpotB'),
     'envato_item_id' => 22989501,
 
     /*
@@ -53,7 +53,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://spot-b.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -105,7 +105,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY', 'base64:J3+PJ9poHKjRrge1ByE3nN5dq73WCPZXymN4+8SlTk4='),
 
     'cipher' => 'AES-256-CBC',
 

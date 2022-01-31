@@ -17,7 +17,7 @@ return [
             'superadmin' => 'c,r,u,d'
         ],
         'category' => [
-            /** 'administrator' => 'c,r,u,d', */
+            'administrator' => 'c,r,u,d',
             'superadmin' => 'c,r,u,d'
         ],
         'business_service' => [
@@ -30,7 +30,7 @@ return [
             'administrator' => 'c,r,u,d',
         ],
         'coupon' => [
-            /** 'administrator' => 'c,r,u,d', */
+            'administrator' => 'c,r,u,d',
             'superadmin' => 'c,r,u,d'
         ],
         'deal' => [

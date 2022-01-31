@@ -14,23 +14,25 @@ class Permissions
         $config = config('laratrust_seeder.modules');
         $mapPermission = collect(config('laratrust_seeder.permissions_map'));
 
-        $reqModule = array_filter($config, function ($mod) use ($module) {
+        $reqModules = array_filter($config, function ($mod) use ($module) {
             return $mod === $module->name;
         }, ARRAY_FILTER_USE_KEY);
-
-        if (count($reqModule) > 0) {
+        if (count($reqModules) > 0) {
             // create permissions
-            $permissions = current($reqModule[$module->name]);
+//            $permissions = current($reqModules[$module->name]);
+            foreach ($reqModules as $reqModule) {
+                foreach ($reqModule as $permissions) {
+                    foreach (explode(',', $permissions) as $p => $perm) {
+                        $permissionValue = $mapPermission->get($perm);
 
-            foreach (explode(',', $permissions) as $p => $perm) {
-                $permissionValue = $mapPermission->get($perm);
-
-                Permission::firstOrCreate([
-                    'name' => strtolower($permissionValue . '_' . $module->name),
-                    'display_name' => ucfirst($permissionValue) . ' ' . ucwords(str_replace('_', ' ', $module->name)),
-                    'description' => ucfirst($permissionValue) . ' ' . ucwords(str_replace('_', ' ', $module->name)),
-                    'module_id' => $module->id
-                ]);
+                        Permission::firstOrCreate([
+                            'name' => strtolower($permissionValue . '_' . $module->name),
+                            'display_name' => ucfirst($permissionValue) . ' ' . ucwords(str_replace('_', ' ', $module->name)),
+                            'description' => ucfirst($permissionValue) . ' ' . ucwords(str_replace('_', ' ', $module->name)),
+                            'module_id' => $module->id
+                        ]);
+                    }
+                }
             }
         }
     }

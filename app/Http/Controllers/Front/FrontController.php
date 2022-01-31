@@ -6,6 +6,8 @@ use App\Advertise;
 use App\Article;
 use App\Country;
 use App\Helper\Permissions;
+use App\Module;
+use App\Permission;
 use App\Rules\BusinessServiceUniqueSlug;
 use App\Tax;
 use App\Deal;
@@ -76,20 +78,19 @@ class FrontController extends FrontBaseController
             setcookie('couponData', '', time() - 3600);
         }
 
-        if (request()->ajax())
-        {
+        if (request()->ajax()) {
             /* LOCATION */
             $location_id = request()->location_id;
 
             /* CATRGORIES */
             $categories = Category::active()->withoutGlobalScope(CompanyScope::class)
                 ->activeCompanyService()
-                ->with(['services' => function ($query)  use($location_id) {
+                ->with(['services' => function ($query) use ($location_id) {
                     $query->active()->withoutGlobalScope(CompanyScope::class)->where('location_id', $location_id);
                 }])
-            ->withCount(['services' => function ($query) use($location_id) {
-                $query->withoutGlobalScope(CompanyScope::class)->where('location_id', $location_id);
-            }]);
+                ->withCount(['services' => function ($query) use ($location_id) {
+                    $query->withoutGlobalScope(CompanyScope::class)->where('location_id', $location_id);
+                }]);
 
             $total_categories_count = $categories->count();
             $categories = $categories->take(8)->get();
@@ -99,28 +100,29 @@ class FrontController extends FrontBaseController
             $deals = Deal::withoutGlobalScope(CompanyScope::class)
                 ->active()
                 ->activeCompany()
-                ->with(['location', 'services', 'company' => function($q) {
+                ->with(['location', 'services', 'company' => function ($q) {
                     $q->withoutGlobalScope(CompanyScope::class);
-                } ])
-            ->where('start_date_time', '<=', Carbon::now()->setTimezone($this->settings->timezone))
-            ->where('end_date_time', '>=', Carbon::now()->setTimezone($this->settings->timezone))
-            ->where('location_id', $location_id);
+                }])
+                ->where('start_date_time', '<=', Carbon::now()->setTimezone($this->settings->timezone))
+                ->where('end_date_time', '>=', Carbon::now()->setTimezone($this->settings->timezone))
+                ->where('location_id', $location_id);
 
             $total_deals_count = $deals->count();
             $deals = $deals->take(10)->get();
 
-            $spotlight = Spotlight::with(['deal', 'company' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-            } ])
-            ->activeCompany()
-            ->whereHas('deal', function($q) use($location_id){
-                $q->whereHas('location', function ($q) use($location_id) {
-                    $q->where('location_id', $location_id);
-                });
-            })->orderBy('sequence', 'asc')->get();
+            $spotlight = Spotlight::with(['deal', 'company' => function ($q) {
+                $q->withoutGlobalScope(CompanyScope::class);
+            }])
+                ->activeCompany()
+                ->whereHas('deal', function ($q) use ($location_id) {
+                    $q->whereHas('location', function ($q) use ($location_id) {
+                        $q->where('location_id', $location_id);
+                    });
+                })->orderBy('sequence', 'asc')->get();
 
             $articles = Article::published()->withoutGlobalScope(CompanyScope::class)
                 ->with([
-                    'category' => function($q) {
+                    'category' => function ($q) {
                         $q->withoutGlobalScope(CompanyScope::class);
                     },
                 ])
@@ -142,7 +144,7 @@ class FrontController extends FrontBaseController
 
     public function addOrUpdateProduct(Request $request)
     {
-        if($request->type == 'service'){
+        if ($request->type == 'service') {
             $service = BusinessService::whereId($request->id)->first();
         }
 
@@ -160,13 +162,13 @@ class FrontController extends FrontBaseController
         $tax = [];
         $quantity = $request->quantity ?? 1;
 
-        if($request->type == 'deal')
-        {
+        if ($request->type == 'deal') {
             $deals = Deal::withoutGlobalScope(CompanyScope::class)->where('id', $request->id)
                 ->with([
-                'dealTaxes' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-                }
-            ])->first();
+                    'dealTaxes' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
+                    }
+                ])->first();
 
             if (($deals->uses_limit != null) && ($deals->uses_limit <= $deals->used_time)) {
                 return Reply::error(__('app.maxDealUses'));
@@ -185,13 +187,13 @@ class FrontController extends FrontBaseController
             $newProduct = Arr::add($newProduct, 'max_order', $request->max_order);
         }
 
-        if ($request->type == 'service')
-        {
+        if ($request->type == 'service') {
             $services = BusinessService::withoutGlobalScope(CompanyScope::class)->where('id', $request->id)
                 ->with([
-                'taxServices' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-                }
-            ])->first();
+                    'taxServices' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
+                    }
+                ])->first();
 
             $tax = [];
 
@@ -214,20 +216,19 @@ class FrontController extends FrontBaseController
 //                $deals = Booking::where('user_id', Auth::user()->id)->with(['deal'])->count();
 
                 $deals = Booking::where('user_id', Auth::id())->with([
-                    'items' => function($q) use ($dealId){
+                    'items' => function ($q) use ($dealId) {
                         $q->where('deal_id', $dealId);
                     },
                 ])->count();
 
                 /* if type is deal and max_order_per_customer is exceeded then block increasing quantity */
-                if($request->max_order <= $deals) {
+                if ($request->max_order <= $deals) {
                     return Reply::error(__('app.maxDealMessage', ['quantity' => $this->checkDealQuantity($request->id)]));
                 }
             }
         }
 
-        if (!$request->hasCookie('products'))
-        {
+        if (!$request->hasCookie('products')) {
             $newProduct = Arr::add($newProduct, 'quantity', $quantity);
             $newProduct = Arr::add($newProduct, 'quantity', $quantity);
             $products = Arr::add($products, $request->unique_id, $newProduct);
@@ -242,7 +243,7 @@ class FrontController extends FrontBaseController
         $products = json_decode($request->cookie('products'), true);
 
         /* if type is deal and max_order_per_customer is exceeded then block increasing quantity */
-        if($request->type == 'deal' && array_key_exists($request->unique_id, $products) && $this->checkDealQuantity($request->id) !== 0 && $this->checkDealQuantity($request->id) <= $products[$request->unique_id]['quantity']) {
+        if ($request->type == 'deal' && array_key_exists($request->unique_id, $products) && $this->checkDealQuantity($request->id) !== 0 && $this->checkDealQuantity($request->id) <= $products[$request->unique_id]['quantity']) {
             return Reply::error(__('app.maxDealMessage', ['quantity' => $this->checkDealQuantity($request->id)]));
         }
 
@@ -250,26 +251,22 @@ class FrontController extends FrontBaseController
         $companyIds = [];
         $types = [];
 
-        foreach ($products as $key => $product)
-        {
+        foreach ($products as $key => $product) {
             $companyIds[] = $product['companyId'];
             $types[] = $product['type'];
         }
 
         /* check if incoming service belong to same company as cart has */
-        if (!in_array($request->companyId, $companyIds))
-        {
+        if (!in_array($request->companyId, $companyIds)) {
             return response(['result' => 'fail', 'message' => __('messages.front.errors.differentItemFound')])->cookie('products', json_encode($products));
         }
 
         /* Checking if item has different type then cart item */
-        if (!in_array($request->type, $types))
-        {
+        if (!in_array($request->type, $types)) {
             return response(['result' => 'fail', 'message' => __('messages.front.errors.addOneItemAtATime')])->cookie('products', json_encode($products));
         }
 
-        if (!array_key_exists($request->unique_id, $products))
-        {
+        if (!array_key_exists($request->unique_id, $products)) {
             $newProduct = Arr::add($newProduct, 'quantity', $quantity);
             $newProduct = Arr::add($newProduct, 'tax', json_encode($tax));
             $products = Arr::add($products, $request->unique_id, $newProduct);
@@ -279,13 +276,10 @@ class FrontController extends FrontBaseController
                 'message' => __('messages.front.success.productAddedToCart'),
                 'productsCount' => count($products)
             ])->cookie('products', json_encode($products));
-        }
-        else
-        {
+        } else {
             if ($request->quantity) {
                 $products[$request->unique_id]['quantity'] = $request->quantity;
-            }
-            else {
+            } else {
                 $products[$request->unique_id]['quantity'] += 1;
             }
         }
@@ -330,15 +324,14 @@ class FrontController extends FrontBaseController
 
     public function cartPage(Request $request)
     {
-        $products       = json_decode($request->cookie('products'), true);
+        $products = json_decode($request->cookie('products'), true);
         $bookingDetails = json_decode($request->cookie('bookingDetails'), true);
-        $couponData     = json_decode($request->cookie('couponData'), true);
-        $taxes          = Tax::active()->get();
-        $commission     = PaymentGatewayCredentials::first();
+        $couponData = json_decode($request->cookie('couponData'), true);
+        $taxes = Tax::active()->get();
+        $commission = PaymentGatewayCredentials::first();
         $type = '';
 
-        if(!is_null(json_decode($request->cookie('products'), true)))
-        {
+        if (!is_null(json_decode($request->cookie('products'), true))) {
             $product = (array)json_decode(request()->cookie('products', true));
             $keys = array_keys($product);
             $type = $product[$keys[0]]->type == 'deal' ? 'deal' : 'booking';
@@ -352,8 +345,7 @@ class FrontController extends FrontBaseController
 
         if ($id != 'all') {
             Arr::forget($products, $id);
-        }
-        else {
+        } else {
 
             $productsCount = is_null($products) ? 0 : count($products);
 
@@ -375,8 +367,7 @@ class FrontController extends FrontBaseController
     {
         $product = $request->products;
 
-        if($request->type == 'deal' && $request->currentValue > $request->max_order)
-        {
+        if ($request->type == 'deal' && $request->currentValue > $request->max_order) {
             $product[$request->unique_id]['quantity'] = $request->max_order;
 
             return response(Reply::error(__('app.maxDealMessage', ['quantity' => $request->max_order])));
@@ -399,7 +390,7 @@ class FrontController extends FrontBaseController
         }
 
         $bookingDetails = request()->hasCookie('bookingDetails') ? json_decode(request()->cookie('bookingDetails'), true) : [];
-        $couponData     = request()->hasCookie('couponData') ? json_decode(request()->cookie('couponData'), true) : [];
+        $couponData = request()->hasCookie('couponData') ? json_decode(request()->cookie('couponData'), true) : [];
 
         $Amt = 0;
         $tax = 0;
@@ -416,14 +407,14 @@ class FrontController extends FrontBaseController
                     $tax += $value->tax->percent;
                 }
 
-                if($service->tax_on_price_status == 'active'){
+                if ($service->tax_on_price_status == 'active') {
                     $net_price = round($service->price / (1 + $tax / 100) * $service->quantity, 2);
 //                    $Amt += ($service->price * $service->quantity);
                     $Amt += $net_price;
                     $taxAmount += ($service->price * $service->quantity) - $net_price;
 
 
-                }else{
+                } else {
                     $parcel = $service->price * $service->quantity;
                     $Amt += $parcel;
 
@@ -433,7 +424,7 @@ class FrontController extends FrontBaseController
 
             $totalAmount = $Amt + $taxAmount;
 
-        }else {
+        } else {
 
             foreach ($products as $key => $deal) {
                 $taxes = ItemTax::with('tax')->where('deal_id', $deal->id)->get();
@@ -457,8 +448,7 @@ class FrontController extends FrontBaseController
         if ($couponData) {
             if ($totalAmount <= $couponData['applyAmount']) {
                 $totalAmount = 0;
-            }
-            else {
+            } else {
                 $totalAmount -= $couponData['applyAmount'];
             }
         }
@@ -478,8 +468,7 @@ class FrontController extends FrontBaseController
             ])
                 ->latest()
                 ->first();
-        }
-        else {
+        } else {
             $booking = Booking::where(['id' => $bookingId, 'user_id' => $this->user->id])->first();
         }
 
@@ -500,8 +489,7 @@ class FrontController extends FrontBaseController
             ])
                 ->latest()
                 ->first();
-        }
-        else {
+        } else {
             $booking = Booking::where(['id' => $bookingId, 'user_id' => $this->user->id])->first();
         }
 
@@ -518,7 +506,7 @@ class FrontController extends FrontBaseController
 
     public function paymentGateway(Request $request)
     {
-        if(!Auth::user()){
+        if (!Auth::user()) {
             return $this->logout();
         }
 
@@ -551,9 +539,8 @@ class FrontController extends FrontBaseController
     public function offlinePayment($bookingId = null, $return_url = null)
     {
         if ($bookingId == null) {
-            $booking = Booking::where([ 'user_id' => $this->user->id ])->latest()->first();
-        }
-        else {
+            $booking = Booking::where(['user_id' => $this->user->id])->latest()->first();
+        } else {
             $booking = Booking::where(['id' => $bookingId, 'user_id' => $this->user->id])->first();
         }
 
@@ -578,23 +565,72 @@ class FrontController extends FrontBaseController
         return view('front.booking_success');
     }
 
-    public function teste(){
+    public function teste()
+    {
 
-        $bookings = Booking::find(12);
-        $items = $bookings->items->map(function ($item){
-            return $item->businessService->name;
-        });
-        return $items;
-        return $bookings = $company->bookingNotNotify->whereIn('status', ['approved'])->whereBetween('date_time', [Carbon::now()->timezone($company->timezone), Carbon::now()->timezone($company->timezone)->addMinutes(convertToMinutes($company->duration, $company->duration_type))]);
+        $config = config('laratrust_seeder.modules');
+        $mapPermission = collect(config('laratrust_seeder.permissions_map'));
+        $module = Module::where('name', 'article')->first();
 
+        $reqModules = array_filter($config, function ($mod) use ($module) {
+            return $mod === $module->name;
+        }, ARRAY_FILTER_USE_KEY);
+        if (count($reqModules) > 0) {
+            // create permissions
+//            $permissions = current($reqModules[$module->name]);
+            foreach ($reqModules as $reqModule) {
+                foreach ($reqModule as $permissions) {
+                    foreach (explode(',', $permissions) as $p => $perm) {
+                        $permissionValue = $mapPermission->get($perm);
+
+                        Permission::firstOrCreate([
+                            'name' => strtolower($permissionValue . '_' . $module->name),
+                            'display_name' => ucfirst($permissionValue) . ' ' . ucwords(str_replace('_', ' ', $module->name)),
+                            'description' => ucfirst($permissionValue) . ' ' . ucwords(str_replace('_', ' ', $module->name)),
+                            'module_id' => $module->id
+                        ]);
+                    }
+                }
+            }
+        }
+
+
+        /*$role = Role::select('id', 'name')->withoutGlobalScopes()->where('name', 'administrator')->first();
+
+        $config = config('laratrust_seeder.modules');
+        $mapPermission = collect(config('laratrust_seeder.permissions_map'));
+
+        $permissionsArr = [];
+
+        foreach ($config as $module => $rolePermission)
+        {
+            if (Arr::has($rolePermission, $role->name)) {
+                $permissions = $rolePermission[$role->name];
+                foreach (explode(',', $permissions) as $p => $perm) {
+                    $permissionValue = $mapPermission->get($perm);
+
+                    $permission = Permission::where([
+                        'name' => strtolower($permissionValue . '_' . $module),
+                    ])->first();
+
+                    if($permission){
+                        $permissionsArr[] = $permission->id;
+                    }else{
+                        dd(strtolower($permissionValue . '_' . $module));
+                    }
+
+                }
+            }
+        }
+
+        $role->syncPermissions($permissionsArr);*/
     }
 
     public function bookingSlots(Request $request)
     {
         $company = $this->getCartCompanyDetail();
 
-        if (!is_null($this->user) && $company->booking_per_day != (0 || '') && $company->booking_per_day <= $this->user->userBookingCount(Carbon::createFromFormat('Y-m-d', $request->bookingDate)))
-        {
+        if (!is_null($this->user) && $company->booking_per_day != (0 || '') && $company->booking_per_day <= $this->user->userBookingCount(Carbon::createFromFormat('Y-m-d', $request->bookingDate))) {
             $msg = __('messages.reachMaxBooking') . Carbon::createFromFormat('Y-m-d', $request->bookingDate)->format('Y-m-d');
             return Reply::dataOnly(['status' => 'fail', 'msg' => $msg]);
         }
@@ -608,26 +644,24 @@ class FrontController extends FrontBaseController
             ->where('company_id', $company->id)
             ->whereDate('date_time', '=', $bookingDate->format('Y-m-d'));
 
-        $officeLeaves = OfficeLeave::where('start_date', '<=', $bookingDate )
+        $officeLeaves = OfficeLeave::where('start_date', '<=', $bookingDate)
             ->where('end_date', '>=', $bookingDate)
             ->get();
 
-        if($officeLeaves->count() > 0){
+        if ($officeLeaves->count() > 0) {
             $msg = __('messages.ShopClosed');
             return Reply::dataOnly(['status' => 'shopclosed', 'msg' => $msg]);
 
         }
 
-        if ($bookingTime->per_day_max_booking != (0 || '') && $bookingTime->per_day_max_booking <= $bookings->count())
-        {
+        if ($bookingTime->per_day_max_booking != (0 || '') && $bookingTime->per_day_max_booking <= $bookings->count()) {
             $msg = __('messages.reachMaxBookingPerDay') . Carbon::createFromFormat('Y-m-d', $request->bookingDate)->format('Y-m-d');
             return Reply::dataOnly(['status' => 'fail', 'msg' => $msg]);
         }
 
         if ($bookingTime->multiple_booking == 'no') {
             $bookings = $bookings->get();
-        }
-        else {
+        } else {
             $bookings = $bookings->whereRaw('DAYOFWEEK(date_time) = ' . ($bookingDate->dayOfWeek + 1))->get();
         }
 
@@ -640,8 +674,7 @@ class FrontController extends FrontBaseController
                 while ($startTime->lessThan(Carbon::now())) {
                     $startTime = $startTime->addMinutes($bookingTime->slot_duration);
                 }
-            }
-            else {
+            } else {
 //                $startTime = Carbon::createFromFormat($this->settings->time_format, $bookingTime->utc_start_time);
                 $startTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_start_time);
             }
@@ -691,22 +724,18 @@ class FrontController extends FrontBaseController
         /* if user is registered then login else do register */
         if ($this->user) {
             $user = $this->user;
-        }
-        else
-        {
+        } else {
             // User type from email/username
             $user = User::where($this->user, $request->{$this->user})->first();
 
             // Check google recaptcha if setting is enabled
-            if ($this->googleCaptchaSettings->status == 'active' && $this->googleCaptchaSettings->v2_status == 'active' && (is_null($user) || ($user && !$user->hasRole('admin'))))
-            {
+            if ($this->googleCaptchaSettings->status == 'active' && $this->googleCaptchaSettings->v2_status == 'active' && (is_null($user) || ($user && !$user->hasRole('admin')))) {
                 // Checking is google recaptcha is valid
                 $gReCaptchaResponseInput = 'g-recaptcha-response';
                 $gReCaptchaResponse = $request->{$gReCaptchaResponseInput};
                 $validateRecaptcha = $this->validateGoogleReCaptcha($gReCaptchaResponse);
 
-                if (!$validateRecaptcha)
-                {
+                if (!$validateRecaptcha) {
                     return $this->googleRecaptchaMessage();
                 }
             }
@@ -746,10 +775,10 @@ class FrontController extends FrontBaseController
         $type = $products[$keys[0]]->type == 'deal' ? 'deal' : 'booking';
 
         // get products and bookingDetails
-        $products       = json_decode($request->cookie('products'), true);
+        $products = json_decode($request->cookie('products'), true);
 
         // Get Applied Coupon Details
-        $couponData     = request()->hasCookie('couponData') ? json_decode(request()->cookie('couponData'), true) : [];
+        $couponData = request()->hasCookie('couponData') ? json_decode(request()->cookie('couponData'), true) : [];
 
         /* booking details having bookingDate, bookingTime, selected_user, emp_name */
         $bookingDetails = json_decode($request->cookie('bookingDetails'), true);
@@ -758,8 +787,7 @@ class FrontController extends FrontBaseController
             return response(Reply::redirect(route('front.index')));
         }
 
-        if($type == 'booking')
-        {
+        if ($type == 'booking') {
             // get bookings and bookingTime as per bookingDetails date
             $bookingDate = Carbon::createFromFormat('Y-m-d', $bookingDetails['bookingDate']);
             $day = $bookingDate->format('l');
@@ -785,10 +813,9 @@ class FrontController extends FrontBaseController
 
         foreach ($products as $key => $product) {
 
-            if ($type !== 'deal'){
+            if ($type !== 'deal') {
                 $taxes = ItemTax::with('tax')->where('service_id', $product['id'])->get();
-            }
-            else {
+            } else {
                 $taxes = ItemTax::with('tax')->where('deal_id', $product['id'])->get();
             }
 
@@ -802,7 +829,7 @@ class FrontController extends FrontBaseController
 
             $companyId = $product['companyId'];
 
-            if($product['tax_on_price_status'] == 'active'){
+            if ($product['tax_on_price_status'] == 'active') {
                 $net_price = round($product['price'] / (1 + $tax / 100) * $product['quantity'], 2);
                 $amount = convertedOriginalPrice($companyId, ($product['quantity'] * $product['price']));
 
@@ -810,7 +837,7 @@ class FrontController extends FrontBaseController
 //                $Amt += $net_price;
 //                $taxAmount += ($product['price'] * $product['quantity']) - $net_price;
                 $taxAmount += 0;
-            }else{
+            } else {
 
                 $amount = convertedOriginalPrice($companyId, ($product['quantity'] * $product['price']));
                 $parcel = $product['price'] * $product['quantity'];
@@ -836,11 +863,9 @@ class FrontController extends FrontBaseController
         $amountToPay = ($originalAmount + $taxAmount);
 
         if ($couponData) {
-            if ($amountToPay <= $couponData['applyAmount'])
-            {
+            if ($amountToPay <= $couponData['applyAmount']) {
                 $amountToPay = 0;
-            }
-            else {
+            } else {
                 $amountToPay -= $couponData['applyAmount'];
             }
 
@@ -915,14 +940,12 @@ class FrontController extends FrontBaseController
 
         $booking->save();*/
 
-        if($type !== 'deal')
-        {
+        if ($type !== 'deal') {
             /* Assign Suggested User To Booking */
             if (!empty(json_decode($request->cookie('bookingDetails'))->selected_user)) {
                 $booking->users()->attach(json_decode($request->cookie('bookingDetails'))->selected_user);
                 setcookie('selected_user', '', time() - 3600);
-            }
-            else {
+            } else {
                 if ($this->suggestEmployee($booking->date_time)) {
                     $booking->users()->attach($this->suggestEmployee($booking->date_time));
                     setcookie('user_id', '', time() - 3600);
@@ -957,16 +980,14 @@ class FrontController extends FrontBaseController
         $search = strtolower($request->q);
         $route = Route::currentRouteName();
 
-        if ($search != '')
-        {
+        if ($search != '') {
             $universalSearches = UniversalSearch::withoutGlobalScope(CompanyScope::class)->where('title', $search)->first();
 
-            if($universalSearches != null) {
+            if ($universalSearches != null) {
                 $universalSearch = UniversalSearch::withoutGlobalScope(CompanyScope::class)->findOrFail($universalSearches->id);
                 $universalSearch->count += 1;
                 $universalSearch->save();
-            }
-            elseif($universalSearches == null) {
+            } elseif ($universalSearches == null) {
                 $universalSearch = new UniversalSearch();
                 $universalSearch->location_id = $request->l;
                 $universalSearch->searchable_id = 'keywords';
@@ -990,39 +1011,39 @@ class FrontController extends FrontBaseController
         $globalSetting = GlobalSetting::select('id', 'contact_email', 'company_name')->first();
 
         Notification::route('mail', $globalSetting->contact_email)
-        ->notify(new ContactUs());
+            ->notify(new ContactUs());
 
         return Reply::success(__('messages.front.success.emailSent'));
     }
 
     public function serviceDetail(Request $request, $companyId, $serviceSlug)
     {
-       $service = BusinessService::where('slug', $serviceSlug)
+        $service = BusinessService::where('slug', $serviceSlug)
             ->activeCompany()
             ->withoutGlobalScope(CompanyScope::class)
             ->with([
-                'company' => function($q) use($companyId){
+                'company' => function ($q) use ($companyId) {
                     $q->withoutGlobalScope(CompanyScope::class);
                     $q->where('id', $companyId);
                 },
-                'location' => function($q){
+                'location' => function ($q) {
                     $q->withoutGlobalScope(CompanyScope::class);
                 },
-                'ratings' => function($q) {
+                'ratings' => function ($q) {
                     $q->withoutGlobalScope('company');
                     $q->active();
                 },
             ])
-        ->first();
+            ->first();
 
         visitor()->visit($service);
 
         $products = json_decode($request->cookie('products'), true) ?: [];
         $reqProduct = array_filter($products, function ($product) use ($service) {
-            return $product['unique_id'] == 'service'.$service->id;
+            return $product['unique_id'] == 'service' . $service->id;
         });
 
-        if($service){
+        if ($service) {
             return view('front.service_detail', compact('service', 'reqProduct'));
         }
 
@@ -1034,21 +1055,21 @@ class FrontController extends FrontBaseController
         $deal = Deal::withoutGlobalScope(CompanyScope::class)
             ->activeCompany()
             ->with([
-            'company' => function($q){
-                $q->withoutGlobalScope(CompanyScope::class);
-            },
-            'location' => function($q){
-                $q->withoutGlobalScope(CompanyScope::class);
-            },
-        ])->where('slug', $dealSlug)->first();
+                'company' => function ($q) {
+                    $q->withoutGlobalScope(CompanyScope::class);
+                },
+                'location' => function ($q) {
+                    $q->withoutGlobalScope(CompanyScope::class);
+                },
+            ])->where('slug', $dealSlug)->first();
 
         /* to show update cart and delete item */
         $products = json_decode($request->cookie('products'), true) ?: [];
         $reqProduct = array_filter($products, function ($product) use ($deal) {
-            return $product['unique_id'] == 'deal'.$deal->id;
+            return $product['unique_id'] == 'deal' . $deal->id;
         });
 
-        if($deal){
+        if ($deal) {
             return view('front.deal_detail', compact('deal', 'reqProduct'));
         }
 
@@ -1084,11 +1105,11 @@ class FrontController extends FrontBaseController
 
     public function applyCoupon(ApplyRequest $request)
     {
-        $couponCode         = strtolower($request->coupon);
-        $products           = json_decode($request->cookie('products'), true);
-        $tax                = Tax::active()->first();
-        $couponCompanyIds   = [];
-        $productAmount      = 0;
+        $couponCode = strtolower($request->coupon);
+        $products = json_decode($request->cookie('products'), true);
+        $tax = Tax::active()->first();
+        $couponCompanyIds = [];
+        $productAmount = 0;
 
         if (!$products) {
             return Reply::error(__('messages.coupon.addProduct'));
@@ -1100,18 +1121,17 @@ class FrontController extends FrontBaseController
         }
 
         /* check if coupon code exist. */
-        if(is_null($couponCompanyIds) && $couponCompanyIds == null) {
+        if (is_null($couponCompanyIds) && $couponCompanyIds == null) {
             return Reply::error(__('messages.coupon.invalidCode'));
         }
 
         if ($tax == null) {
             $percentAmount = 0;
-        }
-        else {
+        } else {
             $percentAmount = ($tax->percent / 100) * $productAmount;
         }
 
-        $totalAmount   = ($productAmount + $percentAmount);
+        $totalAmount = ($productAmount + $percentAmount);
 
         $currentDate = Carbon::now()->format('Y-m-d H:i:s');
 
@@ -1146,12 +1166,10 @@ class FrontController extends FrontBaseController
                     }
 
                     return response(Reply::dataOnly(['amount' => $percentAmnt, 'couponData' => $couponData]))->cookie('couponData', json_encode([$couponData, 'applyAmount' => $percentAmnt]));
-                }
-                elseif (!is_null($couponData->amount) && $couponData->amount !== 0 && $couponData->discount_type === 'amount') {
+                } elseif (!is_null($couponData->amount) && $couponData->amount !== 0 && $couponData->discount_type === 'amount') {
                     return response(Reply::dataOnly(['amount' => $couponData->amount, 'couponData' => $couponData]))->cookie('couponData', json_encode([$couponData, 'applyAmount' => $couponData->amount]));
                 }
-            }
-            else {
+            } else {
                 return response(
                     Reply::error(__(
                         'messages.coupon.notValidToday',
@@ -1167,8 +1185,8 @@ class FrontController extends FrontBaseController
     public function updateCoupon(Request $request)
     {
         $couponTitle = strtolower($request->coupon);
-        $products    = json_decode($request->cookie('products'), true);
-        $tax         = Tax::active()->first();
+        $products = json_decode($request->cookie('products'), true);
+        $tax = Tax::active()->first();
 
         $productAmount = 0;
 
@@ -1177,7 +1195,7 @@ class FrontController extends FrontBaseController
         }
 
         $percentAmount = ($tax->percent / 100) * $productAmount;
-        $totalAmount   = ($productAmount + $percentAmount);
+        $totalAmount = ($productAmount + $percentAmount);
 
         $currentDate = Carbon::now()->format('Y-m-d H:i:s');
 
@@ -1212,12 +1230,10 @@ class FrontController extends FrontBaseController
                     }
 
                     return response(Reply::dataOnly(['amount' => $percentAmnt, 'couponData' => $couponData]))->cookie('couponData', json_encode([$couponData, 'applyAmount' => $percentAmnt]));
-                }
-                elseif (!is_null($couponData->amount) && (is_null($couponData->percent) || $couponData->percent == 0)) {
+                } elseif (!is_null($couponData->amount) && (is_null($couponData->percent) || $couponData->percent == 0)) {
                     return response(Reply::dataOnly(['amount' => $couponData->amount, 'couponData' => $couponData]))->cookie('couponData', json_encode([$couponData, 'applyAmount' => $couponData->amount]));
                 }
-            }
-            else {
+            } else {
                 return Reply::errorWithoutMessage();
             }
         }
@@ -1244,8 +1260,8 @@ class FrontController extends FrontBaseController
 
         $all_users_of_particular_services = array();
 
-        foreach($user_lists as $user_list) {
-            foreach($user_list->users as $user) {
+        foreach ($user_lists as $user_list) {
+            foreach ($user_list->users as $user) {
                 $all_users_of_particular_services[] = $user->id;
             }
         }
@@ -1256,23 +1272,21 @@ class FrontController extends FrontBaseController
         $time = $dateTime->format('H:i:s');
         $date = $dateTime->format('Y-m-d');
         $bookingTime = BookingTime::where('day', strtolower($day))->first();
-        $slot_select = $date.' '.$time;
+        $slot_select = $date . ' ' . $time;
 
 
-        $booking_slot = DB::table('bookings')->whereBetween('date_time', [$slot_select,$dateTime->addMinutes($bookingTime->slot_duration)])
+        $booking_slot = DB::table('bookings')->whereBetween('date_time', [$slot_select, $dateTime->addMinutes($bookingTime->slot_duration)])
             ->get();
 
 
-
         /* Maximum Number of Booking Allowed Per Slot check */
-        if ($bookingTime->per_slot_max_booking != (0 || '') && $bookingTime->per_slot_max_booking <= $booking_slot->count() )
-        {
+        if ($bookingTime->per_slot_max_booking != (0 || '') && $bookingTime->per_slot_max_booking <= $booking_slot->count()) {
 
             return response(Reply::dataOnly(['status' => 'fail']));
         }
 
         /* if no employee for that particular service is found then allow booking with null employee assignment  */
-        if(empty($all_users_of_particular_services)) {
+        if (empty($all_users_of_particular_services)) {
             return response(Reply::dataOnly(['continue_booking' => 'yes']));
         }
 
@@ -1284,8 +1298,8 @@ class FrontController extends FrontBaseController
 
         $working_employee = array();
 
-        foreach($employeeWorking as $employeeWorkings) {
-                $working_employee[] = $employeeWorkings->employee->id;
+        foreach ($employeeWorking as $employeeWorkings) {
+            $working_employee[] = $employeeWorkings->employee->id;
         }
 
 
@@ -1313,8 +1327,8 @@ class FrontController extends FrontBaseController
 
         $users_on_halfday_leave = array();
 
-        foreach($halfday_leave as $halfday_leaves) {
-                $users_on_halfday_leave[] = $halfday_leaves->employee->id;
+        foreach ($halfday_leave as $halfday_leaves) {
+            $users_on_halfday_leave[] = $halfday_leaves->employee->id;
         }
 
         /* check for full day */
@@ -1323,8 +1337,8 @@ class FrontController extends FrontBaseController
 
         $users_on_fullday_leave = array();
 
-        foreach($fullday_leave as $fullday_leaves) {
-                $users_on_fullday_leave[] = $fullday_leaves->employee->id;
+        foreach ($fullday_leave as $fullday_leaves) {
+            $users_on_fullday_leave[] = $fullday_leaves->employee->id;
         }
 
         $employees_not_on_halfday_leave = array_diff($free_employee_list, array_intersect($free_employee_list, $users_on_halfday_leave));
@@ -1336,35 +1350,30 @@ class FrontController extends FrontBaseController
 
         $employee = User::allEmployees()->where('company_id', $companyId)->select('id', 'name')->whereIn('id', $employees_not_on_fullday_leave)->whereIn('id', $employees_not_on_halfday_leave)->get();
 
-        if($this->getCartCompanyDetail()->employee_selection == 'enabled')
-        {
+        if ($this->getCartCompanyDetail()->employee_selection == 'enabled') {
             $i = 0;
 
-            foreach($employee_lists as $employee_list)
-            {
+            foreach ($employee_lists as $employee_list) {
                 $user_schedule = $this->checkUserSchedule($employee_list->id, $request->date);
 
-                if($this->getCartCompanyDetail()->disable_slot == 'enabled')
-                {
+                if ($this->getCartCompanyDetail()->disable_slot == 'enabled') {
                     foreach ($employee as $key => $employees) {
 
-                        if($user_schedule == true) {
-                            $select_user .= '<option value="'.$employees->id.'">'.$employees->name.'</option>';
+                        if ($user_schedule == true) {
+                            $select_user .= '<option value="' . $employees->id . '">' . $employees->name . '</option>';
                             $i++;
                             $select_user .= '</select>';
                         }
 
-                        if($i > 0) {
+                        if ($i > 0) {
                             return response(Reply::dataOnly(['continue_booking' => 'yes', 'select_user' => $select_user]));
                         }
 
                         return response(Reply::dataOnly(['continue_booking' => 'no']));
                     }
-                }
-                else
-                {
+                } else {
                     foreach ($employee as $key => $employees) {
-                        $select_user .= '<option value="'.$employees->id.'">'.$employees->name.'</option>';
+                        $select_user .= '<option value="' . $employees->id . '">' . $employees->name . '</option>';
                     }
 
                     $select_user .= '</select>';
@@ -1375,36 +1384,35 @@ class FrontController extends FrontBaseController
 
         /* if no employee found of that particular service */
 
-        if(empty($free_employee_list)) {
+        if (empty($free_employee_list)) {
 
-            if($this->getCartCompanyDetail()->multi_task_user == 'enabled') {
+            if ($this->getCartCompanyDetail()->multi_task_user == 'enabled') {
                 /* give dropdown of all users */
 
-                if($this->getCartCompanyDetail()->employee_selection == 'enabled') {
+                if ($this->getCartCompanyDetail()->employee_selection == 'enabled') {
                     $employee_lists = User::allEmployees()->select('id', 'name')->whereIn('id', $all_users_of_particular_services)->get();
 
                     foreach ($employee_lists as $key => $employee_list) {
-                        $select_user .= '<option value="'.$employee_list->id.'">'.$employee_list->name.'</option>';
+                        $select_user .= '<option value="' . $employee_list->id . '">' . $employee_list->name . '</option>';
                     }
 
                     $select_user .= '</select>';
                     return response(Reply::dataOnly(['continue_booking' => 'yes', 'select_user' => $select_user]));
                 }
-            }
-            else {
+            } else {
                 /* block booking here  */
                 return response(Reply::dataOnly(['continue_booking' => 'no']));
             }
         }
 
         /* if multitasking and allow employee selection is enabled */
-        if($this->getCartCompanyDetail()->multi_task_user == 'enabled') {
+        if ($this->getCartCompanyDetail()->multi_task_user == 'enabled') {
             /* give dropdown of all users */
-            if($this->getCartCompanyDetail()->employee_selection == 'enabled') {
+            if ($this->getCartCompanyDetail()->employee_selection == 'enabled') {
                 $employee_lists = User::allEmployees()->select('id', 'name')->whereIn('id', $all_users_of_particular_services)->get();
 
                 foreach ($employee_lists as $key => $employee_list) {
-                    $select_user .= '<option value="'.$employee_list->id.'">'.$employee_list->name.'</option>';
+                    $select_user .= '<option value="' . $employee_list->id . '">' . $employee_list->name . '</option>';
                 }
 
                 $select_user .= '</select>';
@@ -1415,22 +1423,21 @@ class FrontController extends FrontBaseController
         /* select of all remaining employees */
         $employee_lists = User::allEmployees()->select('id', 'name')->whereIn('id', $free_employee_list)->get();
 
-        if($this->getCartCompanyDetail()->employee_selection == 'enabled') {
+        if ($this->getCartCompanyDetail()->employee_selection == 'enabled') {
             $i = 0;
 
             foreach ($employee_lists as $key => $employee_list) {
                 $user_schedule = $this->checkUserSchedule($employee_list->id, $request->date);
 
-                if($this->getCartCompanyDetail()->disable_slot == 'enabled') {
+                if ($this->getCartCompanyDetail()->disable_slot == 'enabled') {
                     // call function which will see employee schedules
-                    if($user_schedule == true) {
-                        $select_user .= '<option value="'.$employee_list->id.'">'.$employee_list->name.'</option>';
+                    if ($user_schedule == true) {
+                        $select_user .= '<option value="' . $employee_list->id . '">' . $employee_list->name . '</option>';
                         $i++;
                     }
-                }
-                else {
-                    if($user_schedule == true) {
-                        $select_user .= '<option value="'.$employee_list->id.'">'.$employee_list->name.'</option>';
+                } else {
+                    if ($user_schedule == true) {
+                        $select_user .= '<option value="' . $employee_list->id . '">' . $employee_list->name . '</option>';
                         $i++;
                     }
                 }
@@ -1438,7 +1445,7 @@ class FrontController extends FrontBaseController
 
             $select_user .= '</select>';
 
-            if($i > 0) {
+            if ($i > 0) {
                 return response(Reply::dataOnly(['continue_booking' => 'yes', 'select_user' => $select_user]));
             }
 
@@ -1451,12 +1458,12 @@ class FrontController extends FrontBaseController
             // call function which will see employee schedules
             $user_schedule = $this->checkUserSchedule($employee_list->id, $request->date);
 
-            if($user_schedule == true) {
+            if ($user_schedule == true) {
                 $user_check_array[] = $employee_list->id;
             }
         }
 
-        if(empty($user_check_array)) {
+        if (empty($user_check_array)) {
             return response(Reply::dataOnly(['continue_booking' => 'no']));
         }
     }
@@ -1467,19 +1474,19 @@ class FrontController extends FrontBaseController
         $time = $this->calculateCartItemTime();
         $end_time1 = Carbon::parse($dateTime)->addMinutes($time - 1);
 
-        $userBooking = Booking::whereIn('status', ['pending','in progress', 'approved'])->with('users')->whereHas('users', function($q)use($userid){
+        $userBooking = Booking::whereIn('status', ['pending', 'in progress', 'approved'])->with('users')->whereHas('users', function ($q) use ($userid) {
             $q->where('user_id', $userid);
         });
         $bookings = $userBooking->get();
 
-        if($userBooking->count() > 0) {
+        if ($userBooking->count() > 0) {
             foreach ($bookings as $key => $booking) {
                 /* previous booking start date and time */
                 $start_time = Carbon::parse($booking->date_time)->format('Y-m-d H:i');
                 $booking_time = $this->calculateBookingTime($booking->id);
                 $end_time = $booking->date_time->addMinutes($booking_time - 1);
 
-                if( Carbon::parse($new_booking_start_time)->between($start_time, Carbon::parse($end_time)->format('Y-m-d H:i'), true) || Carbon::parse($start_time)->between($new_booking_start_time, Carbon::parse($end_time1)->format('Y-m-d H:i'), true) ) {
+                if (Carbon::parse($new_booking_start_time)->between($start_time, Carbon::parse($end_time)->format('Y-m-d H:i'), true) || Carbon::parse($start_time)->between($new_booking_start_time, Carbon::parse($end_time1)->format('Y-m-d H:i'), true)) {
                     return false;
                 }
             }
@@ -1497,37 +1504,39 @@ class FrontController extends FrontBaseController
         $max = 0;
         $min = 0;
 
-        foreach ($booking_items as $key => $item)
-        {
+        foreach ($booking_items as $key => $item) {
             if ($item->businessService->time_type == 'minutes') {
                 $time = $item->businessService->time;
-            }
-            elseif ($item->businessService->time_type == 'hours') {
+            } elseif ($item->businessService->time_type == 'hours') {
                 $time = $item->businessService->time * 60;
-            }
-            elseif ($item->businessService->time_type == 'days') {
+            } elseif ($item->businessService->time_type == 'days') {
                 $time = $item->businessService->time * 24 * 60;
             }
 
             $total_time += $time;
 
-            if ($key == 0) { $min = $time; $max = $time;
+            if ($key == 0) {
+                $min = $time;
+                $max = $time;
             }
 
-            if ($time < $min) { $min = $time;
+            if ($time < $min) {
+                $min = $time;
             }
 
-            if ($time > $max) { $max = $time;
+            if ($time > $max) {
+                $max = $time;
             }
         }
 
-        if ($booking_time_type == 'sum') { return $total_time;
-        }
-        elseif ($booking_time_type == 'max') { return $max;
-        }
-        elseif ($booking_time_type == 'min') { return $min;
-        }
-        elseif ($booking_time_type == 'avg') { return $total_time / $booking_items->count();
+        if ($booking_time_type == 'sum') {
+            return $total_time;
+        } elseif ($booking_time_type == 'max') {
+            return $max;
+        } elseif ($booking_time_type == 'min') {
+            return $min;
+        } elseif ($booking_time_type == 'avg') {
+            return $total_time / $booking_items->count();
         }
     }
 
@@ -1554,33 +1563,36 @@ class FrontController extends FrontBaseController
 
             if ($booking_item->time_type == 'minutes') {
                 $time = $booking_item->time;
-            }
-            elseif ($booking_item->time_type == 'hours') {
+            } elseif ($booking_item->time_type == 'hours') {
                 $time = $booking_item->time * 60;
-            }
-            elseif ($booking_item->time_type == 'days') {
+            } elseif ($booking_item->time_type == 'days') {
                 $time = $booking_item->time * 24 * 60;
             }
 
             $total_time += $time;
 
-            if ($key == 0) { $min = $time; $max = $time;
+            if ($key == 0) {
+                $min = $time;
+                $max = $time;
             }
 
-            if ($time < $min) {  $min = $time;
+            if ($time < $min) {
+                $min = $time;
             }
 
-            if ($time > $max) { $max = $time;
+            if ($time > $max) {
+                $max = $time;
             }
         }
 
-        if ($booking_time_type == 'sum') { return $total_time;
-        }
-        elseif ($booking_time_type == 'max') { return $max;
-        }
-        elseif ($booking_time_type == 'min') { return $min;
-        }
-        elseif ($booking_time_type == 'avg') { return $total_time / $booking_items->count();
+        if ($booking_time_type == 'sum') {
+            return $total_time;
+        } elseif ($booking_time_type == 'max') {
+            return $max;
+        } elseif ($booking_time_type == 'min') {
+            return $min;
+        } elseif ($booking_time_type == 'avg') {
+            return $total_time / $booking_items->count();
         }
     }
 
@@ -1600,7 +1612,7 @@ class FrontController extends FrontBaseController
         return response([
             'status' => 'success',
             'message' => 'deal added successfully',
-            ])->cookie('deal', json_encode($deal));
+        ])->cookie('deal', json_encode($deal));
     }
 
     public function suggestEmployee($date)
@@ -1625,20 +1637,20 @@ class FrontController extends FrontBaseController
             return '';
         }
 
-          /* Employee schedule: */
-          $day = $dateTime->format('l');
-          $time = $dateTime->format('H:i:s');
-          $date = $dateTime->format('Y-m-d');
+        /* Employee schedule: */
+        $day = $dateTime->format('l');
+        $time = $dateTime->format('H:i:s');
+        $date = $dateTime->format('Y-m-d');
 
-          /* Check for employees working on that day: */
-          $employeeWorking = EmployeeSchedule::with('employee')->where('days', $day)
-              ->whereTime('start_time', '<=', $time)->whereTime('end_time', '>=', $time)
-              ->where('is_working', 'yes')->whereIn('employee_id', $all_users_of_particular_services)->get();
+        /* Check for employees working on that day: */
+        $employeeWorking = EmployeeSchedule::with('employee')->where('days', $day)
+            ->whereTime('start_time', '<=', $time)->whereTime('end_time', '>=', $time)
+            ->where('is_working', 'yes')->whereIn('employee_id', $all_users_of_particular_services)->get();
 
-          $working_employee = array();
+        $working_employee = array();
 
-        foreach($employeeWorking as $employeeWorkings) {
-                $working_employee[] = $employeeWorkings->employee->id;
+        foreach ($employeeWorking as $employeeWorkings) {
+            $working_employee[] = $employeeWorkings->employee->id;
         }
 
         $assigned_user_list_array = array();
@@ -1663,8 +1675,8 @@ class FrontController extends FrontBaseController
 
         $users_on_halfday_leave = array();
 
-        foreach($halfday_leave as $halfday_leaves) {
-                $users_on_halfday_leave[] = $halfday_leaves->employee->id;
+        foreach ($halfday_leave as $halfday_leaves) {
+            $users_on_halfday_leave[] = $halfday_leaves->employee->id;
         }
 
         /* check for full day*/
@@ -1673,8 +1685,8 @@ class FrontController extends FrontBaseController
 
         $users_on_fullday_leave = array();
 
-        foreach($fullday_leave as $fullday_leaves) {
-                $users_on_fullday_leave[] = $fullday_leaves->employee->id;
+        foreach ($fullday_leave as $fullday_leaves) {
+            $users_on_fullday_leave[] = $fullday_leaves->employee->id;
         }
 
         $employees_not_on_halfday_leave = array_diff($free_employee_list, array_intersect($free_employee_list, $users_on_halfday_leave));
@@ -1685,7 +1697,7 @@ class FrontController extends FrontBaseController
         $company = Company::where('id', $companyId)->first();
 
         /* if any employee is on leave on that day */
-        if($this->getCartCompanyDetail()->employee_selection == 'enabled') {
+        if ($this->getCartCompanyDetail()->employee_selection == 'enabled') {
 
             return User::allEmployees()->select('id', 'name')->whereIn('id', $employees_not_on_fullday_leave)->whereIn('id', $employees_not_on_halfday_leave)->get();
 
@@ -1722,35 +1734,35 @@ class FrontController extends FrontBaseController
 
         $article = Article::withoutGlobalScope(CompanyScope::class)->whereSlug($slug)
             ->with([
-            'category' => function($q) {
-                $q->withoutGlobalScope(CompanyScope::class);
-            },
-        ])->first();
+                'category' => function ($q) {
+                    $q->withoutGlobalScope(CompanyScope::class);
+                },
+            ])->first();
 
         visitor()->visit($article);
 
         $service = BusinessService::find(3);
 
-        if($request->ajax()){
+        if ($request->ajax()) {
             $advertises = Advertise::paid()
-                ->where(function ($q) use($request){
+                ->where(function ($q) use ($request) {
                     $q->where('location_id', $request->location);
                     $q->orWhere('location_id', null);
                 })
-                ->where(function ($q) use ($article){
-                    $q->whereHas('category', function($q) use ($article){
+                ->where(function ($q) use ($article) {
+                    $q->whereHas('category', function ($q) use ($article) {
                         $q->where('id', $article->category_id);
                     });
-                    $q->orWhereHas('article', function($q) use ($article){
+                    $q->orWhereHas('article', function ($q) use ($article) {
                         $q->where('id', $article->id);
                     });
                 })->orderByDesc('amount')->orderByDesc('avg_amount')->get();
 
             $professionals = BusinessService::where('location_id', $request->location)
-                ->whereHas('category', function($q) use ($article){
+                ->whereHas('category', function ($q) use ($article) {
                     $q->where('id', $article->category_id);
                 })
-                ->with(['ratings', 'company', 'category'])->withCount(['ratings as average_rating' => function($query) {
+                ->with(['ratings', 'company', 'category'])->withCount(['ratings as average_rating' => function ($query) {
                     $query->select(DB::raw('coalesce(avg(rating),0)'));
                 }])->orderByDesc('average_rating')
                 ->take(12)->get();
@@ -1758,9 +1770,9 @@ class FrontController extends FrontBaseController
 
             $articles = Article::published()->withoutGlobalScope(CompanyScope::class)
                 ->with([
-                    'category' => function($q) use($article) {
+                    'category' => function ($q) use ($article) {
                         $q->withoutGlobalScope(CompanyScope::class);
-                        $q->where('id','=',$article->category_id);
+                        $q->where('id', '=', $article->category_id);
                     },
                 ])->where('id', '<>', $article->id)
                 ->latest()->take(8)->get();
@@ -1773,7 +1785,7 @@ class FrontController extends FrontBaseController
             $view = view('front.filtered_professionals', compact('professionals', 'article'))->render();
             $viewAds = view('front.filtered_advertises', compact('advertises'))->render();
 
-            return Reply::dataOnly(['view' => $view, 'viewAds' =>$viewAds, 'articles' => $articles,'article' => $article, 'location' => $location, 'professionals' => $professionals, 'advertises' => $advertises]);
+            return Reply::dataOnly(['view' => $view, 'viewAds' => $viewAds, 'articles' => $articles, 'article' => $article, 'location' => $location, 'professionals' => $professionals, 'advertises' => $advertises]);
         }
 
         return view('front.article_detail', compact('article', 'service'));
@@ -1783,23 +1795,23 @@ class FrontController extends FrontBaseController
     public function allArticles(Request $request)
     {
 
-        if($request->ajax()){
+        if ($request->ajax()) {
             $articles = Article::published()->withoutGlobalScope(CompanyScope::class)
                 ->with([
-                    'category' => function($q) {
+                    'category' => function ($q) {
                         $q->withoutGlobalScope(CompanyScope::class);
                     },
                 ])
-            ->where('status', 'approved');
+                ->where('status', 'approved');
 
-            if(!is_null($request->categories)) {
+            if (!is_null($request->categories)) {
                 $categories = explode(',', $request->categories);
-                $articles->WhereHas('category', function($query) use($categories) {
+                $articles->WhereHas('category', function ($query) use ($categories) {
                     $query->WhereIn('id', $categories);
                 });
             }
 
-            if(!is_null($request->companies)) {
+            if (!is_null($request->companies)) {
                 $companies = explode(',', $request->companies);
                 $articles->orWhereIn('company_id', $companies);
             }
@@ -1812,44 +1824,47 @@ class FrontController extends FrontBaseController
 
         $companies = Company::withoutGlobalScope(CompanyScope::class)->get();
         $categories = Category::withoutGlobalScope(CompanyScope::class)->has('articles', '>', 0)->get();
-        return view('front.all_articles', compact( 'categories', 'companies'));
+        return view('front.all_articles', compact('categories', 'companies'));
     }
 
     public function allDeals(Request $request)
     {
 
-        if($request->ajax()){
+        if ($request->ajax()) {
             $deals = Deal::active()->withoutGlobalScope(CompanyScope::class)
                 ->activeCompany()
                 ->with([
-                        'company' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-                        },
-                        'location' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-                        },
-                        'services' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-                        },
-                    ]);
+                    'company' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
+                    },
+                    'location' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
+                    },
+                    'services' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
+                    },
+                ]);
 
-            if(!is_null($request->locations)) {
+            if (!is_null($request->locations)) {
                 $locations = explode(',', $request->locations);
-                $deals->WhereHas('location', function($query) use($locations) {
+                $deals->WhereHas('location', function ($query) use ($locations) {
                     $query->WhereIn('id', $locations);
                 });
             }
 
-            if(!is_null($request->categories)) {
+            if (!is_null($request->categories)) {
                 $categories = explode(',', $request->categories);
-                $deals->WhereHas('services.businessService.category', function($query) use($categories) {
+                $deals->WhereHas('services.businessService.category', function ($query) use ($categories) {
                     $query->WhereIn('id', $categories);
                 });
             }
 
-            if(!is_null($request->companies)) {
+            if (!is_null($request->companies)) {
                 $companies = explode(',', $request->companies);
                 $deals->WhereIn('company_id', $companies);
             }
 
-            if(!is_null($request->price)) {
+            if (!is_null($request->price)) {
                 $prices = $request->price;
 
                 $firstPrice = explode('-', array_shift($prices));
@@ -1865,14 +1880,14 @@ class FrontController extends FrontBaseController
                     ];
                 }
 
-                $deals = $deals->whereBetween('deal_amount', [$low,$high]);
+                $deals = $deals->whereBetween('deal_amount', [$low, $high]);
 
                 foreach ($priceArr as $price) {
                     $deals = $deals->orWhereBetween('deal_amount', [$price[0], $price[1]]);
                 }
             }
 
-            if(!is_null($request->discounts)) {
+            if (!is_null($request->discounts)) {
                 $discounts = $request->discounts;
 
                 $firstDiscount = explode('-', array_shift($discounts));
@@ -1888,7 +1903,7 @@ class FrontController extends FrontBaseController
                     ];
                 }
 
-                $deals = $deals->where('discount_type', 'percentage')->whereBetween('percentage', [$low,$high]);
+                $deals = $deals->where('discount_type', 'percentage')->whereBetween('percentage', [$low, $high]);
 
                 foreach ($discountArr as $discount) {
 
@@ -1896,14 +1911,12 @@ class FrontController extends FrontBaseController
                 }
             }
 
-            if(!is_null($request->sort_by)) {
-                if($request->sort_by == 'newest') {
+            if (!is_null($request->sort_by)) {
+                if ($request->sort_by == 'newest') {
                     $deals->orderBy('id', 'DESC');
-                }
-                elseif($request->sort_by == 'low_to_high') {
+                } elseif ($request->sort_by == 'low_to_high') {
                     $deals->orderBy('deal_amount');
-                }
-                elseif($request->sort_by == 'high_to_low') {
+                } elseif ($request->sort_by == 'high_to_low') {
                     $deals->orderBy('deal_amount', 'DESC');
                 }
             }
@@ -1923,89 +1936,90 @@ class FrontController extends FrontBaseController
     public function allServices(Request $request)
     {
 
-        if($request->ajax())
-        {
+        if ($request->ajax()) {
             $services = BusinessService::withoutGlobalScope(CompanyScope::class)
                 ->activeCompany()
                 ->with([
-                    'location' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-                    } ,
-                    'category' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-                    } ,
-                    'company' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
+                    'location' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
                     },
-                    'ratings' => function($q) {
+                    'category' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
+                    },
+                    'company' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
+                    },
+                    'ratings' => function ($q) {
                         $q->withoutGlobalScope(CompanyScope::class);
                         $q->active();
                     },
                 ])->active();
 
-            if(!is_null($request->service_name)) {
-                $services = $services->where('name', 'like', '%'.$request->service_name.'%');
+            if (!is_null($request->service_name)) {
+                $services = $services->where('name', 'like', '%' . $request->service_name . '%');
             }
 
-            if(is_null($request->company_id) && !is_null($request->term)) {
-                $services = $services->where('name', 'like', '%'.$request->term.'%');
+            if (is_null($request->company_id) && !is_null($request->term)) {
+                $services = $services->where('name', 'like', '%' . $request->term . '%');
             }
 
-            if(!is_null($request->company_id)) {
+            if (!is_null($request->company_id)) {
                 $company_id = $request->company_id;
-                $services = $services->whereHas('company', function($q) use($company_id){
+                $services = $services->whereHas('company', function ($q) use ($company_id) {
                     $q->where('id', $company_id);
                 });
             }
 
-            if(!is_null($request->locations)) {
+            if (!is_null($request->locations)) {
                 $locations = explode(',', $request->locations);
                 $services->whereIn('location_id', $locations);
             }
 
-            if(!is_null($request->categories)) {
+            if (!is_null($request->categories)) {
                 $categories = explode(',', $request->categories);
                 $services->whereIn('category_id', $categories);
 
                 $advertises = Advertise::paid()
-                    ->where(function ($q) use($request){
+                    ->where(function ($q) use ($request) {
                         $q->where('location_id', $request->location);
                         $q->orWhere('location_id', null);
                     })
-                    ->where(function ($q) use ($categories){
-                        $q->whereHas('category', function($q) use ($categories){
+                    ->where(function ($q) use ($categories) {
+                        $q->whereHas('category', function ($q) use ($categories) {
                             $q->whereIn('id', $categories);
                         });
                     })->orderByDesc('amount')->orderByDesc('avg_amount')->get();
 
                 $professionals = BusinessService::where('location_id', $request->location)
-                    ->whereHas('category', function($q) use ($categories){
+                    ->whereHas('category', function ($q) use ($categories) {
                         $q->whereIn('id', $categories);
                     })
-                    ->with(['ratings', 'company', 'category'])->withCount(['ratings as average_rating' => function($query) {
+                    ->with(['ratings', 'company', 'category'])->withCount(['ratings as average_rating' => function ($query) {
                         $query->select(DB::raw('coalesce(avg(rating),0)'));
                     }])->orderByDesc('average_rating')
                     ->take(12)->get();
 
-            }else{
+            } else {
                 $advertises = Advertise::paid()
-                    ->where(function ($q) use($request){
+                    ->where(function ($q) use ($request) {
                         $q->where('location_id', $request->location);
                         $q->orWhere('location_id', null);
                     })
                     ->orderByDesc('amount')->orderByDesc('avg_amount')->get();
 
                 $professionals = BusinessService::where('location_id', $request->location)
-
-                    ->with(['ratings', 'company', 'category'])->withCount(['ratings as average_rating' => function($query) {
+                    ->with(['ratings', 'company', 'category'])->withCount(['ratings as average_rating' => function ($query) {
                         $query->select(DB::raw('coalesce(avg(rating),0)'));
                     }])->orderByDesc('average_rating')
                     ->take(12)->get();
             }
 
-            if(!is_null($request->companies)) {
+            if (!is_null($request->companies)) {
                 $companies = explode(',', $request->companies);
                 $services->whereIn('company_id', $companies);
             }
 
-            if(!is_null($request->price)) {
+            if (!is_null($request->price)) {
                 $prices = $request->price;
 
                 $firstPrice = explode('-', array_shift($prices));
@@ -2021,14 +2035,14 @@ class FrontController extends FrontBaseController
                     ];
                 }
 
-                $services = $services->whereBetween('price', [$low,$high]);
+                $services = $services->whereBetween('price', [$low, $high]);
 
                 foreach ($priceArr as $price) {
                     $services = $services->orWhereBetween('price', [$price[0], $price[1]]);
                 }
             }
 
-            if(!is_null($request->discounts)) {
+            if (!is_null($request->discounts)) {
                 $discounts = $request->discounts;
 
                 $firstDiscount = explode('-', array_shift($discounts));
@@ -2044,21 +2058,19 @@ class FrontController extends FrontBaseController
                     ];
                 }
 
-                $services = $services->where('discount_type', 'percent')->whereBetween('discount', [$low,$high]);
+                $services = $services->where('discount_type', 'percent')->whereBetween('discount', [$low, $high]);
 
                 foreach ($discountArr as $discount) {
                     $services = $services->where('discount_type', 'percent')->orWhereBetween('discount', [$discount[0], $discount[1]]);
                 }
             }
 
-            if(!is_null($request->sort_by)) {
-                if($request->sort_by == 'newest') {
+            if (!is_null($request->sort_by)) {
+                if ($request->sort_by == 'newest') {
                     $services->orderBy('id', 'DESC');
-                }
-                elseif($request->sort_by == 'low_to_high') {
+                } elseif ($request->sort_by == 'low_to_high') {
                     $services->orderBy('net_price');
-                }
-                elseif($request->sort_by == 'high_to_low') {
+                } elseif ($request->sort_by == 'high_to_low') {
                     $services->orderBy('net_price', 'DESC');
                 }
             }
@@ -2073,7 +2085,7 @@ class FrontController extends FrontBaseController
             $viewAds = view('front.filtered_advertises', compact('advertises'))->render();
 
             $view = view('front.filtered_services', compact('services'))->render();
-            return Reply::dataOnly(['view' => $view, 'viewAds' => $viewAds, 'viewProfessionals' =>$viewProfessionals, 'service_count' => $services->count(), 'service_total' => $services->total(), 'location' => $location]);
+            return Reply::dataOnly(['view' => $view, 'viewAds' => $viewAds, 'viewProfessionals' => $viewProfessionals, 'service_count' => $services->count(), 'service_total' => $services->total(), 'location' => $location]);
 
         }
 
@@ -2083,20 +2095,20 @@ class FrontController extends FrontBaseController
 
         $category_id = '';
 
-        if($request->category_id && $request->category_id != 'all'){
+        if ($request->category_id && $request->category_id != 'all') {
             $category_id = Category::where('slug', $request->category_id)->first();
 
-            if(!$category_id) {
+            if (!$category_id) {
                 abort(404);
             }
 
             $category_id = $category_id->id;
         }
 
-        $categories = Category::withoutGlobalScope(CompanyScope::class)->has('services', '>', 0)->withCount(['services' => function($q) {
+        $categories = Category::withoutGlobalScope(CompanyScope::class)->has('services', '>', 0)->withCount(['services' => function ($q) {
             $q->withoutGlobalScope(CompanyScope::class);
         }])
-        ->get();
+            ->get();
 
         return view('front.all_services', compact('categories', 'category_id', 'company_id'));
     }
@@ -2104,40 +2116,37 @@ class FrontController extends FrontBaseController
     public function allCoupons(Request $request)
     {
         $coupons = Coupon::withoutGlobalScope(CompanyScope::class)
-            ->with(['company' => function($q) {
-                    $q->withoutGlobalScope(CompanyScope::class);
+            ->with(['company' => function ($q) {
+                $q->withoutGlobalScope(CompanyScope::class);
             }
             ]);
 
-        if($request->ajax())
-        {
-            if(!is_null($request->companies)) {
+        if ($request->ajax()) {
+            if (!is_null($request->companies)) {
                 $companies = explode(',', $request->companies);
                 $coupons->WhereIn('company_id', $companies);
             }
 
-            if(!is_null($request->discounts)) {
+            if (!is_null($request->discounts)) {
                 $price = explode('-', $request->discounts[0]);
                 $low = $price[0];
                 $high = $price[1];
-                $coupons->whereBetween('percent', array($low,$high));
+                $coupons->whereBetween('percent', array($low, $high));
             }
 
-            if(!is_null($request->sort_by)) {
-                if($request->sort_by == 'newest') {
+            if (!is_null($request->sort_by)) {
+                if ($request->sort_by == 'newest') {
                     $coupons->orderBy('id', 'DESC');
-                }
-                elseif($request->sort_by == 'low_to_high') {
+                } elseif ($request->sort_by == 'low_to_high') {
                     $coupons->orderBy('percent');
-                }
-                elseif($request->sort_by == 'high_to_low') {
+                } elseif ($request->sort_by == 'high_to_low') {
                     $coupons->orderBy('percent', 'DESC');
                 }
             }
 
             $coupons = $coupons->paginate(10);
             $view = view('front.filtered_coupons', compact('coupons'))->render();
-            return Reply::dataOnly(['view' => $view, 'coupon_total' => $coupons->total() , 'coupon_count' => $coupons->count()]);
+            return Reply::dataOnly(['view' => $view, 'coupon_total' => $coupons->total(), 'coupon_count' => $coupons->count()]);
         }
 
         $companies = Company::withoutGlobalScope(CompanyScope::class)->get();
@@ -2162,7 +2171,7 @@ class FrontController extends FrontBaseController
             $companyIds[] = $product['companyId'];
         }
 
-        if(count($companyIds) > 0) {
+        if (count($companyIds) > 0) {
             return Company::where('id', $companyIds[0])->first();
         }
 
@@ -2176,51 +2185,53 @@ class FrontController extends FrontBaseController
         $location = !is_null($request->location) ? $request->location : '';
         $filterItem = [];
 
-        $categories = Category::where('name', 'LIKE', '%'.$search.'%')->orderBy('id', 'DESC')->limit(2)->get();
+        $categories = Category::where('name', 'LIKE', '%' . $search . '%')->orderBy('id', 'DESC')->limit(2)->get();
 
         $services = BusinessService::withoutGlobalScope(CompanyScope::class)
             ->activeCompany()
             ->with([
-            'location' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-            }
-        ])
-        ->Where('location_id', $location)
-        ->where('name', 'LIKE', '%'.$search.'%')
-        ->orderBy('id', 'DESC')
-        ->limit(2)->get();
+                'location' => function ($q) {
+                    $q->withoutGlobalScope(CompanyScope::class);
+                }
+            ])
+            ->Where('location_id', $location)
+            ->where('name', 'LIKE', '%' . $search . '%')
+            ->orderBy('id', 'DESC')
+            ->limit(2)->get();
 
         $deals = Deal::withoutGlobalScope(CompanyScope::class)
             ->activeCompany()
             ->with([
-            'location' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-            }
-        ])
-        ->WhereHas('location', function($query) use($location) {
-            $query->Where('id', $location);
-        })
-        ->where('title', 'LIKE', '%'.$search.'%')
-        ->orderBy('id', 'DESC')
-        ->limit(2)->get();
+                'location' => function ($q) {
+                    $q->withoutGlobalScope(CompanyScope::class);
+                }
+            ])
+            ->WhereHas('location', function ($query) use ($location) {
+                $query->Where('id', $location);
+            })
+            ->where('title', 'LIKE', '%' . $search . '%')
+            ->orderBy('id', 'DESC')
+            ->limit(2)->get();
 
 
         $companies = Company::withoutGlobalScope(CompanyScope::class)
             ->active()
-            ->where('company_name', 'LIKE', '%'.$search.'%')
+            ->where('company_name', 'LIKE', '%' . $search . '%')
             ->orderBy('id', 'DESC')
             ->limit(2)->get();
 
-        if(!$categories->isEmpty()) {
-            foreach($categories as $category) {
+        if (!$categories->isEmpty()) {
+            foreach ($categories as $category) {
                 $filteredRes['title'] = $category->name;
                 $filteredRes['image'] = $category->category_image_url;
-                $filteredRes['url'] = url($category->slug.'/services');
+                $filteredRes['url'] = url($category->slug . '/services');
                 $filteredRes['category'] = 'Category';
                 $filterItem[] = $filteredRes;
             }
         }
 
-        if(!$services->isEmpty()) {
-            foreach($services as $service) {
+        if (!$services->isEmpty()) {
+            foreach ($services as $service) {
                 $filteredRes['title'] = $service->name;
                 $filteredRes['image'] = $service->service_image_url;
                 $filteredRes['url'] = $service->service_detail_url;
@@ -2229,8 +2240,8 @@ class FrontController extends FrontBaseController
             }
         }
 
-        if(!$deals->isEmpty()) {
-            foreach($deals as $deal) {
+        if (!$deals->isEmpty()) {
+            foreach ($deals as $deal) {
                 $filteredRes['title'] = $deal->title;
                 $filteredRes['image'] = $deal->deal_image_url;
                 $filteredRes['url'] = $deal->deal_detail_url;
@@ -2239,8 +2250,8 @@ class FrontController extends FrontBaseController
             }
         }
 
-        if(!$companies->isEmpty()) {
-            foreach($companies as $company) {
+        if (!$companies->isEmpty()) {
+            foreach ($companies as $company) {
                 $filteredRes['title'] = $company->company_name;
                 $filteredRes['image'] = $company->logo_url;
                 $filteredRes['url'] = route('front.search', ['c' => $company->id]);
@@ -2264,19 +2275,16 @@ class FrontController extends FrontBaseController
 
     public function storeCompany(RegisterCompany $request)
     {
-        if(request()->ajax())
-        {
-            try{
+        if (request()->ajax()) {
+            try {
 // Check google recaptcha if setting is enabled
-                if ($this->googleCaptchaSettings->status == 'active' && $this->googleCaptchaSettings->v2_status == 'active')
-                {
+                if ($this->googleCaptchaSettings->status == 'active' && $this->googleCaptchaSettings->v2_status == 'active') {
                     // Checking is google recaptcha is valid
                     $gReCaptchaResponseInput = 'g-recaptcha-response';
                     $gReCaptchaResponse = $request->{$gReCaptchaResponseInput};
                     $validateRecaptcha = $this->validateGoogleReCaptcha($gReCaptchaResponse);
 
-                    if (!$validateRecaptcha)
-                    {
+                    if (!$validateRecaptcha) {
                         return $this->googleRecaptchaMessage();
                     }
                 }
@@ -2300,7 +2308,7 @@ class FrontController extends FrontBaseController
                 DB::beginTransaction();
                 $location = Location::updateOrCreate(
                     [
-                        'name' => Str::title($request->city). ', ' . Str::title($country->name),
+                        'name' => Str::title($request->city) . ', ' . Str::title($country->name),
                     ],
                     [
                         'country_id' => $request->country_id
@@ -2318,7 +2326,7 @@ class FrontController extends FrontBaseController
                 ]);
                 $user->attachRole(Role::withoutGlobalScope(CompanyScope::class)->select('id', 'name')->where(['name' => 'administrator', 'company_id' => $company->id])->first()->id);
                 DB::commit();
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 DB::rollBack();
                 return response()->json(['message' => $e->getMessage()]);
             }
@@ -2338,7 +2346,7 @@ class FrontController extends FrontBaseController
 
         $company = User::with('company')->where('email', Crypt::decryptString($request->email))->first();
 
-        $superadmin = User::with('company', 'roles')->whereHas('roles', function($q){
+        $superadmin = User::with('company', 'roles')->whereHas('roles', function ($q) {
             $q->where('name', 'superadmin');
         })->first();
 
@@ -2355,7 +2363,7 @@ class FrontController extends FrontBaseController
     {
         $frontFaqsCount = FrontFaq::select('id', 'language_id')->where('language_id', $this->localeLanguage ? $this->localeLanguage->id : null)->count();
 
-        $frontFaqs = FrontFaq::where('language_id', $frontFaqsCount > 0 ? ( $this->localeLanguage ? $this->localeLanguage->id : null ) : null)->get();
+        $frontFaqs = FrontFaq::where('language_id', $frontFaqsCount > 0 ? ($this->localeLanguage ? $this->localeLanguage->id : null) : null)->get();
 
         $packages = Package::where('type', null)->get();
         return view('front.pricing', compact('packages', 'frontFaqs'));
@@ -2381,17 +2389,17 @@ class FrontController extends FrontBaseController
             ->active()->verified()->firstOrFail();
         $this->vendorPage = VendorPage::withoutGlobalScope(CompanyScope::class)->where('company_id', $this->company->id)->first();
         $this->bookingTimes = BookingTime::withoutGlobalScope(CompanyScope::class)->where('company_id', $this->company->id)->get();
-        $this->categories = Category::withoutGlobalScope(CompanyScope::class)->has('services', '>', 0)->withCount(['services' => function($q) {
+        $this->categories = Category::withoutGlobalScope(CompanyScope::class)->has('services', '>', 0)->withCount(['services' => function ($q) {
             $q->withoutGlobalScope(CompanyScope::class);
         }])
-        ->get();
+            ->get();
         visitor()->visit($this->vendorPage);
-        if(!is_null($this->vendorPage->lat_long)){
+        if (!is_null($this->vendorPage->lat_long)) {
             $this->lat_long = [
                 'latitude' => $this->vendorPage->lat_long->getLat(),
                 'longitude' => $this->vendorPage->lat_long->getLng()
             ];
-        }else{
+        } else {
             $this->lat_long = [
                 'latitude' => 38.752100015409326,
                 'longitude' => -9.200870017148958
@@ -2406,16 +2414,19 @@ class FrontController extends FrontBaseController
     {
         $company = Company::withoutGlobalScope(CompanyScope::class)->whereSlug($slug)->firstOrFail();
 
-        if($request->ajax()){
+        if ($request->ajax()) {
             $this->deals = Deal::withoutGlobalScope(CompanyScope::class)->where('company_id', $company->id)
                 ->with([
-                        'company' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-                        },
-                        'location' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-                        },
-                        'services' => function($q) { $q->withoutGlobalScope(CompanyScope::class);
-                        },
-                    ])->paginate(10);
+                    'company' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
+                    },
+                    'location' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
+                    },
+                    'services' => function ($q) {
+                        $q->withoutGlobalScope(CompanyScope::class);
+                    },
+                ])->paginate(10);
             $view = view('front.vendor_deals', $this->data)->render();
 
             return Reply::dataOnly(['view' => $view]);

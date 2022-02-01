@@ -4,12 +4,10 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\BusinessService;
 use App\Category;
-use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Category\StoreCategory;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use App\Services\ImagesManager;
 
 class CategoryController extends SuperAdminBaseController
@@ -136,20 +134,27 @@ class CategoryController extends SuperAdminBaseController
         if(!isset($request->only_blog)){
             $data['only_blog'] = 'no';
         }
+        try {
+            DB::beginTransaction();
+            if ($request->hasFile('image')) {
 
-        if ($request->hasFile('image')) {
+                $this->image->deleteImage($category->image,'category');
 
-            $this->image->deleteImage($category->image,'category');
+                $filePath = $this->image->storeImage($request, 'category');
+                $data['image'] = $filePath;
+            }
 
-            $filePath = $this->image->storeImage($request, 'category');
-            $data['image'] = $filePath;
+            $category->update($data);
+
+            // Update business services status for the category
+            BusinessService::where('category_id', $id)->update(['status' => $request->status]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            abort_and_log(403, $e->getMessage());
         }
 
-        $category->update($data);
-
-        // Update business services status for the category
-        BusinessService::where('category_id', $id)->update(['status' => $request->status]);
-
+return $category;
         return Reply::redirect(route('superadmin.categories.index'), __('messages.updatedSuccessfully'));
     }
 

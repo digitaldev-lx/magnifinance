@@ -123,7 +123,13 @@
                 type: "POST",
                 redirect: true,
                 file:true,
-                data: $('#createForm').serialize()
+                data: $('#createForm').serialize(),
+                success: function (response){
+                    console.log(response);
+                },
+                error: function (error){
+                    console.log(error);
+                }
             })
         });
     </script>

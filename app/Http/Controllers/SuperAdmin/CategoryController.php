@@ -14,6 +14,7 @@ class CategoryController extends SuperAdminBaseController
 {
 
     private $image;
+
     public function __construct()
     {
         parent::__construct();
@@ -28,7 +29,7 @@ class CategoryController extends SuperAdminBaseController
      */
     public function index()
     {
-        abort_403(!$this->user->is_superadmin_employee || !$this->user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_category','create_category', 'update_category', 'delete_category']));
+        abort_403(!$this->user->is_superadmin_employee || !$this->user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_category', 'create_category', 'update_category', 'delete_category']));
 
         if (\request()->ajax()) {
             $categories = Category::all();
@@ -58,8 +59,7 @@ class CategoryController extends SuperAdminBaseController
                 ->editColumn('status', function ($row) {
                     if ($row->status == 'active') {
                         return '<label class="badge badge-success">' . __('app.active') . '</label>';
-                    }
-                    elseif ($row->status == 'deactive') {
+                    } elseif ($row->status == 'deactive') {
                         return '<label class="badge badge-danger">' . __('app.deactive') . '</label>';
                     }
                 })
@@ -91,18 +91,24 @@ class CategoryController extends SuperAdminBaseController
     public function store(StoreCategory $request)
     {
         abort_403(!$this->user->is_superadmin_employee || !$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('create_category'));
+        try {
+            DB::beginTransaction();
+            $category = new Category();
+            $data = $request->all();
 
-        $category = new Category();
-        $data = $request->all();
+            if ($request->hasFile('image')) {
 
-        if ($request->hasFile('image')) {
+                $filePath = $this->image->storeImage($request, 'category');
 
-            $filePath = $this->image->storeImage($request, 'category');
+                $data['image'] = $filePath;
+            }
 
-            $data['image'] = $filePath;
+            $category->create($data);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            abort_and_log(403, $e->getMessage());
         }
-
-        $category->create($data);
 
         return Reply::redirect($request->redirect_url, __('messages.createdSuccessfully'));
     }
@@ -110,7 +116,7 @@ class CategoryController extends SuperAdminBaseController
     /**
      * edit
      *
-     * @param  Category $category
+     * @param Category $category
      * @return \Illuminate\Http\Response
      */
     public function edit(Category $category)
@@ -131,14 +137,14 @@ class CategoryController extends SuperAdminBaseController
         abort_403(!$this->user->is_superadmin_employee || !$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('update_category'));
         $category = Category::find($id);
         $data = $request->all();
-        if(!isset($request->only_blog)){
+        if (!isset($request->only_blog)) {
             $data['only_blog'] = 'no';
         }
         try {
             DB::beginTransaction();
             if ($request->hasFile('image')) {
 
-                $this->image->deleteImage($category->image,'category');
+                $this->image->deleteImage($category->image, 'category');
 
                 $filePath = $this->image->storeImage($request, 'category');
                 $data['image'] = $filePath;
@@ -154,15 +160,14 @@ class CategoryController extends SuperAdminBaseController
             abort_and_log(403, $e->getMessage());
         }
 
-return $category;
         return Reply::redirect(route('superadmin.categories.index'), __('messages.updatedSuccessfully'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return array
      */
     public function destroy($id)
     {

@@ -567,63 +567,8 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-
-        $config = config('laratrust_seeder.modules');
-        $mapPermission = collect(config('laratrust_seeder.permissions_map'));
-        $module = Module::where('name', 'article')->first();
-
-        $reqModules = array_filter($config, function ($mod) use ($module) {
-            return $mod === $module->name;
-        }, ARRAY_FILTER_USE_KEY);
-        if (count($reqModules) > 0) {
-            // create permissions
-//            $permissions = current($reqModules[$module->name]);
-            foreach ($reqModules as $reqModule) {
-                foreach ($reqModule as $permissions) {
-                    foreach (explode(',', $permissions) as $p => $perm) {
-                        $permissionValue = $mapPermission->get($perm);
-
-                        Permission::firstOrCreate([
-                            'name' => strtolower($permissionValue . '_' . $module->name),
-                            'display_name' => ucfirst($permissionValue) . ' ' . ucwords(str_replace('_', ' ', $module->name)),
-                            'description' => ucfirst($permissionValue) . ' ' . ucwords(str_replace('_', ' ', $module->name)),
-                            'module_id' => $module->id
-                        ]);
-                    }
-                }
-            }
-        }
-
-
-        /*$role = Role::select('id', 'name')->withoutGlobalScopes()->where('name', 'administrator')->first();
-
-        $config = config('laratrust_seeder.modules');
-        $mapPermission = collect(config('laratrust_seeder.permissions_map'));
-
-        $permissionsArr = [];
-
-        foreach ($config as $module => $rolePermission)
-        {
-            if (Arr::has($rolePermission, $role->name)) {
-                $permissions = $rolePermission[$role->name];
-                foreach (explode(',', $permissions) as $p => $perm) {
-                    $permissionValue = $mapPermission->get($perm);
-
-                    $permission = Permission::where([
-                        'name' => strtolower($permissionValue . '_' . $module),
-                    ])->first();
-
-                    if($permission){
-                        $permissionsArr[] = $permission->id;
-                    }else{
-                        dd(strtolower($permissionValue . '_' . $module));
-                    }
-
-                }
-            }
-        }
-
-        $role->syncPermissions($permissionsArr);*/
+//        $app->useStoragePath(__DIR__ . '/../new_storage_location');
+        dd(__DIR__ . '/../');
     }
 
     public function bookingSlots(Request $request)

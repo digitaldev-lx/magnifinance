@@ -193,11 +193,15 @@ $uploadCrop = $('#uploaded-image').croppie({
                 redirect: true,
                 data: {"images":resp, "data":form.serialize()},
                 success: function (response) {
+                    // console.log(response);
                     if(response.status == 'success'){
                         $('#application-lg-modal').modal('hide');
                         sliderTable._fnDraw();
                         location.reload();
                     }
+                },
+                error: function (error) {
+                    console.log(error);
                 }
             });
         });

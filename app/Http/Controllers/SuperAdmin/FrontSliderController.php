@@ -8,9 +8,18 @@ use App\Helper\Reply;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\CreateFrontSlider;
 use App\Http\Requests\Front\UpdateFrontSlider;
+use App\Services\ImagesManager;
 
 class FrontSliderController extends Controller
 {
+
+    private $image;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->image = new ImagesManager();
+    }
 
     /**
      * Display a listing of the resource.
@@ -69,22 +78,10 @@ class FrontSliderController extends Controller
      */
     public function store(CreateFrontSlider $request)
     {
-        $image_name = time().'.png';
-
-        if ($request->images) {
-            $data = $request->images;
-
-            list(, $data) = explode(',', $data);
-            $data = base64_decode($data);
-            $path = public_path() . '/user-uploads/sliders/' . $image_name;
-
-            file_put_contents($path, $data);
-        }
-
         $media = new Media();
 
         if ($request->images) {
-            $media->image = $image_name;
+            $media->image = $this->image->storeImageBase64($request->images, 'sliders');
         }
 
         $media->have_content = $request->have_content;
@@ -142,21 +139,12 @@ class FrontSliderController extends Controller
      */
     public function update(UpdateFrontSlider $request, $id)
     {
-        $image_name = time().'.png';
-
-        if ($request->images && $request->images !== 'data:,') {
-            $data = $request->images;
-            list(, $data)      = explode(',', $data);
-            $data = base64_decode($data);
-            $path = public_path() . '/user-uploads/sliders/' . $image_name;
-
-            file_put_contents($path, $data);
-        }
 
         $media = Media::where('id', $id)->first();
 
         if ($request->images && $request->images !== 'data:,') {
-            $media->image = $image_name;
+            $this->image->deleteImage($media->image);
+            $media->image = $this->image->storeImageBase64($request->images, 'sliders');
         }
 
         $media->have_content = $request->have_content;

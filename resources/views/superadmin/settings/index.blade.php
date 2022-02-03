@@ -139,7 +139,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="exampleInputPassword1">@lang('app.logo')</label>
+                                                    <label for="input-file-now">@lang('app.logo')</label>
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <input type="file" id="input-file-now" name="image"
@@ -1492,7 +1492,7 @@
 
         $('body').on('click', '#save-general', function () {
             $.easyAjax({
-                url: '{{route('superadmin.settings.update', $settings->id)}}',
+                url: '{{ route('superadmin.settings.update', $settings->id) }}',
                 container: '#general-form',
                 type: "POST",
                 file: true,

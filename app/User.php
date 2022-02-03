@@ -144,10 +144,9 @@ class User extends Authenticatable
     public function getUserImageUrlAttribute()
     {
         if (is_null($this->image)) {
-            return asset('img/default-avatar-user.png');
+            return cdn_storage_url("images/default-avatar-user.png");
         }
-
-        return asset_url('avatar/' . $this->image);
+        return cdn_storage_url($this->image);
     }
 
     public function setPasswordAttribute($value)

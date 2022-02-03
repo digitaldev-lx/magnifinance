@@ -165,6 +165,17 @@ class Company extends Model
         });
     }
 
+    public function getLogoUrlAttribute()
+    {
+        $globalSetting = GlobalSetting::first();
+
+        if (is_null($this->logo)) {
+            return $globalSetting->logo_url;
+        }
+
+        return asset_url('company-logo/' . $this->logo);
+    }
+
     public function currency()
     {
         return $this->belongsTo(Currency::class);
@@ -223,17 +234,6 @@ class Company extends Model
     public function getCompanyVerificationUrlAttribute()
     {
         return Crypt::encryptString($this->company_email);
-    }
-
-    public function getLogoUrlAttribute()
-    {
-        $globalSetting = GlobalSetting::first();
-
-        if (is_null($this->logo)) {
-            return $globalSetting->logo_url;
-        }
-
-        return asset_url('company-logo/' . $this->logo);
     }
 
     public function getFormattedPhoneNumberAttribute()

@@ -89,8 +89,7 @@ class GlobalSetting extends Model
         if (is_null($this->logo)) {
             return asset('storage/images/logo/logo.png');
         }
-
-        return asset($this->logo);
+        return cdn_storage_url($this->logo);
     }
 
     public function getFormattedPhoneNumberAttribute()

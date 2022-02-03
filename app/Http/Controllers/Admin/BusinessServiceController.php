@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Service\UpdateService;
+use App\Services\ImagesManager;
 use App\Tax;
 use App\User;
 use App\ItemTax;
@@ -18,14 +19,17 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Service\StoreService;
 use App\Http\Requests\Service\CreateService;
 use App\Http\Controllers\AdminBaseController;
+use Illuminate\Support\Facades\DB;
 
 class BusinessServiceController extends AdminBaseController
 {
 
+    private $image;
     public function __construct()
     {
         parent::__construct();
         view()->share('pageTitle', __('menu.services'));
+        $this->image = new ImagesManager();
     }
 
     /**
@@ -276,8 +280,8 @@ class BusinessServiceController extends AdminBaseController
         if ($businessService->image) {
             foreach ($businessService->image as $image) {
                 $reqImage['name'] = $image;
-                $reqImage['size'] = filesize(public_path('/user-uploads/service/'.$businessService->id.'/'.$image));
-                $reqImage['type'] = mime_content_type(public_path('/user-uploads/service/'.$businessService->id.'/'.$image));
+                $reqImage['size'] = \Storage::disk('digitalocean')->size($image);
+                $reqImage['type'] = \Storage::disk('digitalocean')->mimeType($image);
                 $images[] = $reqImage;
             }
         }
@@ -297,11 +301,6 @@ class BusinessServiceController extends AdminBaseController
 
         $selectedTax = array();
         $taxServices = ItemTax::where('service_id', $businessService->id)->first();
-//        dd($taxServices);
-        /*foreach ($taxServices as $key => $taxService)
-        {
-            array_push($selectedTax, $taxService->tax_id);
-        }*/
 
         $taxes = Tax::active()->get();
 
@@ -419,25 +418,20 @@ class BusinessServiceController extends AdminBaseController
 
     public function storeImages(Request $request)
     {
-        if ($request->hasFile('file')) {
-            $service = BusinessService::where('id', $request->service_id)->first();
-            $service_images_arr = [];
-            $default_image_index = 0;
-
-            foreach ($request->file as $fileData) {
-                array_push($service_images_arr, Files::upload($fileData, 'service/'.$service->id));
-
-                if ($fileData->getClientOriginalName() == $request->default_image) {
-                    $default_image_index = array_key_last($service_images_arr);
-                }
-
+        try {
+            DB::beginTransaction();
+            if ($request->hasFile('file')) {
+                $service = BusinessService::where('id', $request->service_id)->first();
+                $images = $this->image->multiUpload($request, 'service/'.$service->id);
+                $service->image = json_encode($images["images"]);
+                $service->default_image = $images["default_image"];
+                $service->save();
             }
-
-            $service->image = json_encode($service_images_arr);
-            $service->default_image = count($service_images_arr) > 0 ? $service_images_arr[$default_image_index] : null;
-            $service->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            abort_and_log(403, $e->getMessage());
         }
-
         return Reply::redirect(route('admin.business-services.index'), __('messages.createdSuccessfully'));
     }
 
@@ -451,14 +445,8 @@ class BusinessServiceController extends AdminBaseController
         if ($request->hasFile('file')) {
             if ($request->file[0]->getClientOriginalName() !== 'blob') {
 
-                foreach ($request->file as $fileData) {
-                    array_push($service_images_arr, Files::upload($fileData, 'service/'.$service->id));
+                $images = $this->image->multiUpload($request, 'service/'.$service->id);
 
-                    if ($fileData->getClientOriginalName() == $request->default_image) {
-                        $default_image_index = array_key_last($service_images_arr);
-                    }
-
-                }
 
             }
 
@@ -479,19 +467,24 @@ class BusinessServiceController extends AdminBaseController
 
                 if (count($arr_diff) > 0) {
                     foreach ($arr_diff as $file) {
-                        Files::deleteFile($file, 'service/'.$service->id);
+                        $this->image->deleteImage($file);
+//                        Files::deleteFile($file, 'service/'.$service->id);
                     }
                 }
             }
             else {
                 if (!is_null($service->image) && count($service->image) > 0) {
-                    Files::deleteFile($service->image[0], 'service/'.$service->id);
+                    $this->image->deleteImage($service->image[0]);
+//                    Files::deleteFile($service->image[0], 'service/'.$service->id);
                 }
             }
         }
 
-        $service->image = json_encode(array_values($service_images_arr));
-        $service->default_image = count($service_images_arr) > 0 ? $service_images_arr[$default_image_index] : null;
+        $service->image = json_encode(array_values($images["images"]));
+        $service->default_image = count($images["images"]) > 0 ? $images["images"][$default_image_index] : null;
+
+        /*$service->image = json_encode(array_values($service_images_arr));
+        $service->default_image = count($service_images_arr) > 0 ? $service_images_arr[$default_image_index] : null;*/
         $service->save();
 
         return Reply::redirect(route('admin.business-services.index'), __('messages.updatedSuccessfully'));

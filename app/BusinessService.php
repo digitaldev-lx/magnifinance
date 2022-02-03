@@ -99,10 +99,10 @@ class BusinessService extends Model
     public function getServiceImageUrlAttribute()
     {
         if(is_null($this->default_image)){
-            return asset('img/no-image.jpg');
+            return asset('img/default-avatar-user.png');
         }
 
-        return asset_url('service/'.$this->id.'/'.$this->default_image);
+        return cdn_storage_url($this->default_image);
     }
 
     public function getImageAttribute($value)

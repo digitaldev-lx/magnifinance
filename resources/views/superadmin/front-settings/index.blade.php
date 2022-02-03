@@ -968,9 +968,13 @@
                 type: "POST",
                 file: true,
                 success: function (response) {
+                    // console.log(response);
                     if (response.status == 'success') {
                         location.reload();
                     }
+                },
+                error: function (error) {
+                    // console.log(error);
                 }
             })
         });
@@ -980,7 +984,16 @@
                 url: "{{ route('superadmin.front-settings.update', $footerSetting->id) }}",
                 container: '#footerSetting',
                 type: 'POST',
-                data: $('#footerSetting').serialize()
+                data: $('#footerSetting').serialize(),
+                success: function (response) {
+                    // console.log(response);
+                    if (response.status == 'success') {
+                        location.reload();
+                    }
+                },
+                error: function (error) {
+                    // console.log(error);
+                }
             })
         })
 

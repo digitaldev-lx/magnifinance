@@ -8,6 +8,7 @@ use App\Helper\Reply;
 use App\Http\Requests\FrontTheme\StoreImagesRequest;
 use App\Http\Requests\FrontTheme\StoreTheme;
 use App\Media;
+use App\Services\ImagesManager;
 use Illuminate\Http\Request;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\FrontTheme\StoreSeoRequest;
@@ -15,6 +16,14 @@ use Illuminate\Support\Facades\File;
 
 class FrontThemeSettingController extends SuperAdminBaseController
 {
+    private $image;
+
+    public function __construct()
+    {
+        parent::__construct();
+        view()->share('pageTitle', __('menu.frontThemeSettings'));
+        $this->image = new ImagesManager();
+    }
 
     public function store(StoreImagesRequest $request)
     {
@@ -39,39 +48,22 @@ class FrontThemeSettingController extends SuperAdminBaseController
     {
         $theme = FrontThemeSetting::first();
 
-        if($request->front_logo != null){
-
-            $logo_path = base_path('public/user-uploads/front-logo/' . $theme->logo);
-
-            if(File::exists($logo_path)) {
-                File::delete($logo_path);
-            }
-        }
-
-        if($request->favicon != null){
-
-            $favicon_path = base_path('public/favicon/' . $theme->favicon);
-
-            if(File::exists($favicon_path)) {
-                File::delete($favicon_path);
-            }
-        }
-
         $theme->primary_color = $request->primary_color;
         $theme->secondary_color = $request->secondary_color;
         $theme->custom_css = $request->front_custom_css;
         $theme->title      = $request->front_title;
 
         if ($request->hasFile('front_logo')) {
-            $theme->logo = Files::upload($request->front_logo, 'front-logo');
+            $this->image->deleteImage($theme->logo);
+            $theme->logo = $this->image->storeImage($request, 'front_logo', 'front_logo');
         }
 
         if ($request->hasFile('favicon')) {
-            $theme->favicon = Files::upload($request->favicon, 'favicon');
+            $this->image->deleteImage($theme->logo);
+            $theme->favicon = $this->image->storeImage($request, 'favicon', 'favicon');
         }
 
         $theme->save();
-
         return Reply::success(__('messages.updatedSuccessfully'));
     }
 

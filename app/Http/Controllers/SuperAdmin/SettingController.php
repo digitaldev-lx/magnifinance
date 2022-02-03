@@ -172,6 +172,7 @@ class SettingController extends SuperAdminBaseController
         $setting->currency_id = $request->currency_id;
 
         if ($request->hasFile('image')) {
+            $this->image->deleteImage($setting->logo,'advertises');
             $setting->logo = $this->image->storeImage($request, 'logo');
         }
 

@@ -38,25 +38,24 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|FrontThemeSetting whereUpdatedAt($value)
  * @mixin \Eloquent
  */
+
 class FrontThemeSetting extends Model
 {
 
     public function getLogoUrlAttribute()
     {
-        if(is_null($this->logo)){
-            return asset('storage/images/logo/logo.png');
+        if (is_null($this->logo)) {
+            return asset('front/images/logo_white.png');
         }
-
-        return asset_url('front-logo/'.$this->logo);
+        return cdn_storage_url($this->logo);
     }
 
     public function getFaviconUrlAttribute()
     {
-        if(is_null($this->favicon)){
+        if (is_null($this->logo)) {
             return asset('favicon/apple-icon-57x57.png');
         }
-
-        return asset_url('favicon/'.$this->favicon);
+        return cdn_storage_url($this->favicon);
     }
 
 }

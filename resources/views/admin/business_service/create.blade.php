@@ -34,6 +34,9 @@
             margin-bottom: 10px;
             display: none
         }
+        /*.dropzone .dz-preview .dz-image img {
+            width: 168px;
+        }*/
     </style>
 @endpush
 
@@ -295,6 +298,12 @@
             uploadMultiple: true,
             addRemoveLinks:true,
             parallelUploads:10,
+            success: function (file, response) {
+                console.log(response);
+            },
+            error: function (error) {
+                console.log(error);
+            },
             init: function () {
                 myDropzone = this;
             },
@@ -303,6 +312,8 @@
         });
 
         myDropzone.on('sending', function(file, xhr, formData) {
+            console.log("sending____")
+            console.log(file)
             var id = $('#serviceID').val();
             formData.append('service_id', id);
             formData.append('default_image', defaultImage);
@@ -331,7 +342,7 @@
         myDropzone.on('completemultiple', function () {
             var msgs = "@lang('messages.createdSuccessfully')";
             $.showToastr(msgs, 'success');
-            window.location.href = '{{ route('admin.business-services.index') }}'
+            {{--window.location.href = '{{ route('admin.business-services.index') }}'--}}
         });
 
         const createSlug = function (str) {
@@ -392,7 +403,7 @@
                         $('#serviceID').val(response.serviceID);
                         myDropzone.processQueue();
                     }
-                    else{
+                    /*else{
                         var msgs = "@lang('messages.createdSuccessfully')";
                         var msg = "@lang('messages.maxServiceLimit')";
                         if (response.serviceID == '0') {
@@ -412,7 +423,7 @@
                                 return false;
                             }, 1000);
                         }
-                    }
+                    }*/
                 },
                 error: function (error){
                     if (error.status === 422) {

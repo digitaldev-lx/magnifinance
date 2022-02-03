@@ -6,7 +6,9 @@ use App\Scopes\CompanyScope;
 use App\Observers\CategoryObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
 use Shetabit\Visitor\Traits\Visitable;
+use function PHPUnit\Framework\isEmpty;
 
 /**
  * App\Category
@@ -59,8 +61,7 @@ class Category extends Model
         if (is_null($this->image)) {
             return asset('img/no-image.jpg');
         }
-
-        return asset($this->image);
+        return cdn_storage_url($this->image);
     }
 
     public function scopeActive($query)

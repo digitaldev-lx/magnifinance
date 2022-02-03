@@ -8,6 +8,15 @@ use App\Scopes\CompanyScope;
 use App\CurrencyFormatSetting;
 use Illuminate\Support\Facades\Artisan;
 
+if (!function_exists('cdn_storage_url')) {
+
+    function cdn_storage_url($path)
+    {
+       return "https://". env("DIGITALOCEAN_SPACES_BUCKET") .".". env("DIGITALOCEAN_SPACES_REGION") .".cdn.digitaloceanspaces.com/". $path;
+    }
+
+}
+
 if (!function_exists('abort_and_log')) {
 
     function abort_and_log($code, $message)

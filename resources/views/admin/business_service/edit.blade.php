@@ -31,6 +31,9 @@
         margin-bottom: 10px;
         display: none
     }
+    .dropzone .dz-preview .dz-image img {
+        width: 168px;
+    }
 </style>
     <div class="row">
         <div class="col-md-12">
@@ -293,7 +296,6 @@
         });
 
         myDropzone.on('sending', function(file, xhr, formData) {
-            console.log(file)
 
             var id = $('#serviceID').val();
 
@@ -339,9 +341,10 @@
 
         // Create the mock file:
         mockFile.forEach(file => {
-            var path = "{{ asset_url('service/'.$businessService->id.'/:file_name') }}";
-            path = path.replace(':file_name', file.name);
 
+            var path = "{{ cdn_storage_url(':file_name') }}";
+
+            path = path.replace(':file_name', file.name);
             myDropzone.emit('addedfile', file);
 
             myDropzone.emit('thumbnail', file, path);

@@ -291,12 +291,17 @@
             init: function () {
                 myDropzone = this;
             },
+            success: function (response){
+                console.log(response);
+            },
+            error:function (error){
+                console.log(error);
+            },
             dictDefaultMessage: "@lang('app.dropzone.defaultMessage')",
             dictRemoveFile: "@lang('app.dropzone.removeFile')"
         });
 
         myDropzone.on('sending', function(file, xhr, formData) {
-
             var id = $('#serviceID').val();
 
             formData.append('service_id', id);
@@ -405,9 +410,10 @@
                 type: "POST",
                 redirect: true,
                 file:true,
-                data: $('#createForm').serialize(),
+                data: {data: $('#createForm').serialize()
+        },
                 success: function (response) {
-                    console.log(response)
+                    console.log(response);
                     serviceID = response.serviceID;
                     $('#serviceID').val(response.serviceID);
                     defaultImage = response.defaultImage;
@@ -422,7 +428,10 @@
                     }
                     var msgs = "@lang('messages.updatedSuccessfully')";
                     $.showToastr(msgs, 'success');
-                    window.location.href = '{{ route('admin.business-services.index') }}'
+                    {{--window.location.href = '{{ route('admin.business-services.index') }}'--}}
+                },
+                error:function (error){
+                    console.log(error);
                 }
             })
         });

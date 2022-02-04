@@ -110,7 +110,7 @@
                                 if (response.status == "success") {
                                     $.unblockUI();
                                     table._fnDraw();
-                                    location.reload();
+                                    // location.reload();
                                 }
                             }
                         });

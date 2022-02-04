@@ -20,6 +20,7 @@ use App\Http\Requests\Service\StoreService;
 use App\Http\Requests\Service\CreateService;
 use App\Http\Controllers\AdminBaseController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class BusinessServiceController extends AdminBaseController
 {
@@ -279,10 +280,12 @@ class BusinessServiceController extends AdminBaseController
 
         if ($businessService->image) {
             foreach ($businessService->image as $image) {
-                $reqImage['name'] = $image;
-                $reqImage['size'] = \Storage::disk('digitalocean')->size($image);
-                $reqImage['type'] = \Storage::disk('digitalocean')->mimeType($image);
-                $images[] = $reqImage;
+                if (\Storage::disk('digitalocean')->exists($image)) {
+                    $reqImage['name'] = $image;
+                    $reqImage['size'] = \Storage::disk('digitalocean')->size($image);
+                    $reqImage['type'] = \Storage::disk('digitalocean')->mimeType($image);
+                    $images[] = $reqImage;
+                }
             }
         }
 
@@ -325,6 +328,7 @@ class BusinessServiceController extends AdminBaseController
         $service->time = $request->time;
         $service->time_type = $request->time_type;
         $service->discount = $request->discount;
+//        $service->default_image = $request->default_image;
 
         if($request->discount_type == 'fixed' && $request->discount > 0){
 
@@ -446,8 +450,11 @@ class BusinessServiceController extends AdminBaseController
             if ($request->file[0]->getClientOriginalName() !== 'blob') {
 
                 $images = $this->image->multiUpload($request, 'service/'.$service->id);
-
-
+                if (!is_null($service->image) && count($service->image) > 0) {
+                    array_push($service->image[0], $images['images']);
+                }else{
+                    $service->image = $images['images'];
+                }
             }
 
             if ($request->uploaded_files) {
@@ -457,34 +464,38 @@ class BusinessServiceController extends AdminBaseController
                 foreach ($files as $file) {
                     array_push($service_images_arr, $file['name']);
 
-                    if ($file['name'] == $request->default_image) {
+                    if (Str::contains($request->default_image, $file['name'])) {
                         $default_image_index = array_key_last($service_images_arr);
                     }
-
                 }
 
                 $arr_diff = array_diff($service->image, $service_images_arr);
-
+                $images = array_intersect($service->image, $service_images_arr);
                 if (count($arr_diff) > 0) {
                     foreach ($arr_diff as $file) {
                         $this->image->deleteImage($file);
-//                        Files::deleteFile($file, 'service/'.$service->id);
                     }
                 }
-            }
-            else {
+
+            }else {
+                $images = null;
                 if (!is_null($service->image) && count($service->image) > 0) {
                     $this->image->deleteImage($service->image[0]);
-//                    Files::deleteFile($service->image[0], 'service/'.$service->id);
                 }
             }
         }
 
-        $service->image = json_encode(array_values($images["images"]));
-        $service->default_image = count($images["images"]) > 0 ? $images["images"][$default_image_index] : null;
+        if(is_null($images)){
+            $service->image = null;
+            $service->default_image = $request->default_image;
+        }elseif(Arr::exists($images, 'images')){
+            $service->image = json_encode(array_values($images["images"]));
+            $service->default_image = count($images["images"]) > 0 ? $images["images"][$default_image_index] : null;
+        }else{
+            $service->image = json_encode(array_values($images));
+            $service->default_image = count($images) > 0 ? $images[$default_image_index] : null;
+        }
 
-        /*$service->image = json_encode(array_values($service_images_arr));
-        $service->default_image = count($service_images_arr) > 0 ? $service_images_arr[$default_image_index] : null;*/
         $service->save();
 
         return Reply::redirect(route('admin.business-services.index'), __('messages.updatedSuccessfully'));

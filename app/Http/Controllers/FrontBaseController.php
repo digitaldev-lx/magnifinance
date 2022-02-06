@@ -89,10 +89,10 @@ class FrontBaseController extends Controller
             view()->share('time_picker_format', Formats::timeFormats()[$this->settings->time_format]);
 
 
-            /*if (request()->hasCookie('appointo_multi_vendor_language_code
+            /*if (request()->hasCookie('localstorage_language_code
 
 ')) {
-                App::setLocale(Cookie::get('appointo_multi_vendor_language_code
+                App::setLocale(Cookie::get('localstorage_language_code
 
 '));
             }*/

@@ -1045,7 +1045,7 @@ class FrontController extends FrontBaseController
         $this->settings->save();
 
 
-        return response(Reply::dataOnly(['message' => __('messages.languageChangedSuccessfully')]))->withCookie(cookie('appointo_multi_vendor_language_code', $code));
+        return response(Reply::dataOnly(['message' => __('messages.languageChangedSuccessfully')]))->withCookie(cookie('localstorage_language_code', $code));
     }
 
     public function applyCoupon(ApplyRequest $request)

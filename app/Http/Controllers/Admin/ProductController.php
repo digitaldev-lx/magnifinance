@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\BusinessService;
 use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
@@ -9,17 +10,21 @@ use App\Http\Requests\Product\StoreProduct;
 use App\ItemTax;
 use App\Location;
 use App\Product;
+use App\Services\ImagesManager;
 use App\Tax;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends AdminBaseController
 {
 
+    private $image;
     public function __construct()
     {
         parent::__construct();
         view()->share('pageTitle', __('menu.products'));
+        $this->image = new ImagesManager();
     }
 
     /**
@@ -245,84 +250,84 @@ class ProductController extends AdminBaseController
 
     public function storeImages(Request $request)
     {
-        if ($request->hasFile('file')) {
-            $product = Product::where('id', $request->product_id)->first();
-            $product_images_arr = [];
-            $default_image_index = 0;
-
-            foreach ($request->file as $fileData) {
-                array_push($product_images_arr, Files::upload($fileData, 'product/'.$product->id));
-
-                if ($fileData->getClientOriginalName() == $request->default_image) {
-                    $default_image_index = array_key_last($product_images_arr);
-                }
+        try {
+            DB::beginTransaction();
+            if ($request->hasFile('file')) {
+                $product = Product::where('id', $request->product_id)->first();
+                $images = $this->image->multiUpload($request, 'product/'.$product->id);
+                $product->image = json_encode($images[0]);
+                $product->default_image = count($images[0]) > 0 ? $images[0][$images[1]] : null;
+                $product->save();
             }
-
-            $product->image = json_encode($product_images_arr);
-            $product->default_image = count($product_images_arr) > 0 ? $product_images_arr[$default_image_index] : null;
-            $product->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            abort_and_log(403, $e->getMessage());
         }
-
         return Reply::redirect(route('admin.products.index'), __('messages.createdSuccessfully'));
+
     }
 
     public function updateImages(Request $request)
     {
-        $product = Product::where('id', $request->product_id)->first();
 
-        $product_images_arr = [];
-        $default_image_index = 0;
+        try {
+            DB::beginTransaction();
+            $product = Product::where('id', $request->product_id)->first();
 
-        if ($request->hasFile('file')) {
+            $product_images_arr = [];
+            $default_image_index = 0;
 
-            if ($request->file[0]->getClientOriginalName() !== 'blob') {
+            if ($request->hasFile('file')) {
 
-                foreach ($request->file as $fileData) {
-                    array_push($product_images_arr, Files::upload($fileData, 'product/'.$product->id));
+                if ($request->file[0]->getClientOriginalName() !== 'blob') {
 
-                    if ($fileData->getClientOriginalName() == $request->default_image) {
-                        $default_image_index = array_key_last($product_images_arr);
+                    $images = $this->image->multiUpload($request, 'product/'.$product->id);
+                    $product_images_arr = $images[0];
+                    $default_image_index = $images[1];
+
+                }
+
+                if ($request->uploaded_files) {
+
+                    $files = json_decode($request->uploaded_files, true);
+
+                    foreach ($files as $file) {
+                        array_push($product_images_arr, $file['name']);
+
+                        if ($file['name'] == $request->default_image) {
+                            $default_image_index = array_key_last($product_images_arr);
+                        }
+
                     }
 
-                }
+                    $arr_diff = array_diff($product->image, $product_images_arr);
 
-            }
-
-            if ($request->uploaded_files) {
-                $files = json_decode($request->uploaded_files, true);
-
-                foreach ($files as $file) {
-                    array_push($product_images_arr, $file['name']);
-
-                    if ($file['name'] == $request->default_image) {
-                        $default_image_index = array_key_last($product_images_arr);
-                    }
-
-                }
-
-                $arr_diff = array_diff($product->image, $product_images_arr);
-
-                if (count($arr_diff) > 0) {
-                    foreach ($arr_diff as $file) {
-                        Files::deleteFile($file, 'service/'.$product->id);
+                    if (count($arr_diff) > 0) {
+                        foreach ($arr_diff as $file) {
+                            $this->image->deleteImage($file);
+                        }
                     }
                 }
-
-            }
-            else {
-
-                if (!is_null($product->image) && count($product->image) > 0) {
-                    Files::deleteFile($product->image[0], 'service/'.$product->id);
+                else {
+                    if (!is_null($product->image) && count($product->image) > 0) {
+                        $this->image->deleteImage($product->image[0]);
+                    }
                 }
-
             }
+
+            $product->image = json_encode(array_values($product_images_arr));
+            $product->default_image = count($product_images_arr) > 0 ? $product_images_arr[$default_image_index] : null;
+            $product->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            abort_and_log(403, $e->getMessage());
         }
 
-        $product->image = json_encode(array_values($product_images_arr));
-        $product->default_image = count($product_images_arr) > 0 ? $product_images_arr[$default_image_index] : null;
-        $product->save();
 
         return Reply::redirect(route('admin.products.index'), __('messages.updatedSuccessfully'));
+
     }
 
 }

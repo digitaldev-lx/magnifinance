@@ -113,11 +113,11 @@ class Product extends Model
 
     public function getProductImageUrlAttribute()
     {
-        if(is_null($this->default_image) || File::exists('user-uploads/product/'.$this->id.'/'.$this->default_image) == false ) {
-            return asset('img/no-image.jpg');
+        if(is_null($this->default_image)){
+            return "https://media.istockphoto.com/photos/set-of-decorative-cosmetic-picture-id493029628?k=20&m=493029628&s=612x612&w=0&h=5mU5Zh62ALWfhCciWpyHveY2PYw146tQjytYNvC7UFI=";
         }
 
-        return asset_url('product/'.$this->id.'/'.$this->default_image);
+        return cdn_storage_url($this->default_image);
     }
 
     public function getImageAttribute($value)

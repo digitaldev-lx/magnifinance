@@ -441,52 +441,61 @@ class BusinessServiceController extends AdminBaseController
 
     public function updateImages(Request $request)
     {
-        $service = BusinessService::where('id', $request->service_id)->first();
 
-        $service_images_arr = [];
-        $default_image_index = 0;
+        try {
+            DB::beginTransaction();
+            $service = BusinessService::where('id', $request->service_id)->first();
 
-        if ($request->hasFile('file')) {
+            $service_images_arr = [];
+            $default_image_index = 0;
 
-            if ($request->file[0]->getClientOriginalName() !== 'blob') {
+            if ($request->hasFile('file')) {
 
-                $images = $this->image->multiUpload($request, 'service/'.$service->id);
-                $service_images_arr = $images[0];
-                $default_image_index = $images[1];
+                if ($request->file[0]->getClientOriginalName() !== 'blob') {
 
-            }
+                    $images = $this->image->multiUpload($request, 'service/'.$service->id);
+                    $service_images_arr = $images[0];
+                    $default_image_index = $images[1];
 
-            if ($request->uploaded_files) {
+                }
 
-                $files = json_decode($request->uploaded_files, true);
+                if ($request->uploaded_files) {
 
-                foreach ($files as $file) {
-                    array_push($service_images_arr, $file['name']);
+                    $files = json_decode($request->uploaded_files, true);
 
-                    if ($file['name'] == $request->default_image) {
-                        $default_image_index = array_key_last($service_images_arr);
+                    foreach ($files as $file) {
+                        array_push($service_images_arr, $file['name']);
+
+                        if ($file['name'] == $request->default_image) {
+                            $default_image_index = array_key_last($service_images_arr);
+                        }
+
                     }
 
+                    $arr_diff = array_diff($service->image, $service_images_arr);
+
+                    if (count($arr_diff) > 0) {
+                        foreach ($arr_diff as $file) {
+                            $this->image->deleteImage($file);
+                        }
+                    }
                 }
-
-                $arr_diff = array_diff($service->image, $service_images_arr);
-
-                if (count($arr_diff) > 0) {
-                    foreach ($arr_diff as $file) {
-                        $this->image->deleteImage($file);
+                else {
+                    if (!is_null($service->image) && count($service->image) > 0) {
+                        $this->image->deleteImage($service->image[0]);
                     }
                 }
             }
-            else {
-                if (!is_null($service->image) && count($service->image) > 0) {
-                    $this->image->deleteImage($service->image[0]);
-                }
-            }
+
+            $service->image = json_encode(array_values($service_images_arr));
+            $service->default_image = count($service_images_arr) > 0 ? $service_images_arr[$default_image_index] : null;
+            $service->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            abort_and_log(403, $e->getMessage());
         }
 
-        $service->image = json_encode(array_values($service_images_arr));
-        $service->default_image = count($service_images_arr) > 0 ? $service_images_arr[$default_image_index] : null;
-        $service->save();
 
         return Reply::redirect(route('admin.business-services.index'), __('messages.updatedSuccessfully'));
     }

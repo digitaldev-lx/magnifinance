@@ -72,7 +72,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>@lang('app.select') @lang('app.tax')</label>
-                                        <select name="tax_ids[]" id="tax_ids" class="form-control form-control-lg select2" multiple="multiple">
+                                        <select name="tax_ids[]" id="tax_ids" class="form-control form-control-lg>
                                             <option value="0">@lang('app.select') @lang('app.tax')</option>
                                             @foreach($taxes as $tax)
                                                 <option value="{{ $tax->id }}">{{ $tax->name }} {{ $tax->percent }}%</option>

@@ -139,7 +139,7 @@ return array (
   'usefulLinks' => 'Links Uteis',
   'getSocial' => 'Redes Sociais',
   'register' => 'Registo',
-  'frontSearch' => 'Procurar médicos, terapeutas, estéticistas, cabeleireiros etc',
+  'frontSearch' => 'Procurar Esteticistas, spa´s, cabeleireiros etc',
   'name' => 'Nome',
   'message' => 'Mensagem',
   'pleaseWait' => 'Aguarde',

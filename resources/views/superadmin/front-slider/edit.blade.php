@@ -191,7 +191,7 @@ $uploadCrop = $('#uploaded-image').croppie({
                 type: "POST",
                 file: true,
                 redirect: true,
-                data: {"images":resp, "data":form.serialize()},
+                data: {"images":resp, "data": form.serialize()},
                 success: function (response) {
                     // console.log(response);
                     if(response.status == 'success'){

@@ -81,7 +81,7 @@
                     <h3 class="card-title">@lang('app.add') @lang('menu.deal')</h3>
                 </div>
                 <div class="card-body">
-                    <form role="form" id="createForm"  class="ajax-form" method="POST">
+                    <form role="form" id="createForm" class="ajax-form" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-md-6">
@@ -198,7 +198,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>@lang('app.select') @lang('app.tax')</label>
-                                        <select name="tax_ids[]" id="tax_ids" class="form-control form-control-lg select2" style="width: 100% !important;" multiple="multiple">
+                                        <select name="tax_ids[]" id="tax_ids" class="form-control form-control-lg" style="width: 100% !important;">
                                             <option value="">@lang('app.select') @lang('app.tax')</option>
                                             @foreach($taxes as $tax)
                                                 <option value="{{ $tax->id }}">{{ $tax->name }} {{ $tax->percent }}%</option>

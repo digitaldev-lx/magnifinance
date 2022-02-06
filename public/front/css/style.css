@@ -2038,8 +2038,8 @@ button:focus{
 
 @media (max-width: 767.98px) {
     .logo-image img {
-        max-width: 60%;
-        width: 140px;
+        max-width: 100%;
+        width: 170px;
         /*height: 51px;*/
         object-fit: contain;
     }

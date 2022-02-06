@@ -173,7 +173,7 @@ class Company extends Model
             return $globalSetting->logo_url;
         }
 
-        return asset_url('company-logo/' . $this->logo);
+        return cdn_storage_url($this->logo);
     }
 
     public function currency()

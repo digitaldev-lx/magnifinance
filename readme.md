@@ -1,4 +1,4 @@
-# Readme for Appointo multi-vendor
+# Readme for Spot-B
 
 ### Plugins used in the app
 

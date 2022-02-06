@@ -261,7 +261,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('reports/bookingPerYearChart', ['uses' => 'ReportController@bookingPerYearChart'])->name('reports.bookingPerYearChart');
             Route::post('reports/paymentPerYearChart', ['uses' => 'ReportController@paymentPerYearChart'])->name('reports.paymentPerYearChart');
 
-
             Route::get('reports/customer', ['uses' => 'ReportController@customer'])->name('reports.customer');
 
             Route::get('pos/select-customer', ['uses' => 'POSController@selectCustomer'])->name('pos.select-customer');

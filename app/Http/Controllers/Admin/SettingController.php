@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\ImagesManager;
+use App\Services\UrlManager;
 use App\Tax;
 use App\Role;
 use App\User;
@@ -37,9 +39,11 @@ use App\Http\Requests\Admin\Company\BookingSetting;
 class SettingController extends AdminBaseController
 {
 
+    private $image;
     public function __construct()
     {
         parent::__construct();
+        $this->image = new ImagesManager();
         view()->share('pageTitle', __('menu.settings'));
     }
 
@@ -101,34 +105,32 @@ class SettingController extends AdminBaseController
     public function update(UpdateSetting $request, $id)
     {
         abort_if(!$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('manage_settings'), 403);
-        $company = User::with('company')->where('id', auth()->user()->id)->first();
+        try {
+            DB::beginTransaction();
+            $company = User::with('company')->where('id', auth()->user()->id)->first();
 
-        $setting = Company::findOrFail($company->company->id);
-        $setting->company_name = $request->company_name;
-        $setting->company_email = $request->company_email;
-        $setting->company_phone = $request->company_phone;
-        $setting->address = $request->address;
-        $setting->date_format = $request->date_format;
-        $setting->time_format = $request->time_format;
-        $setting->website = $request->website;
-        $setting->timezone = $request->timezone;
-        $setting->locale = $request->input('locale');
-        $setting->currency_id = $request->currency_id;
+            $setting = Company::findOrFail($company->company->id);
+            $setting->company_name = $request->company_name;
+            $setting->company_email = $request->company_email;
+            $setting->company_phone = $request->company_phone;
+            $setting->address = $request->address;
+            $setting->date_format = $request->date_format;
+            $setting->time_format = $request->time_format;
+            $setting->website = $request->website;
+            $setting->timezone = $request->timezone;
+            $setting->locale = $request->input('locale');
+            $setting->currency_id = $request->currency_id;
 
-        if ($request->hasFile('logo')) {
-            $setting->logo = Files::upload($request->logo, 'company-logo');
-        }
-
-        $setting->save();
-
-        if ($setting->currency->currency_code !== 'INR') {
-            $credential = PaymentGatewayCredentials::first();
-
-            if ($credential->razorpay_status == 'active') {
-                $credential->razorpay_status = 'deactive';
-
-                $credential->save();
+            if ($request->hasFile('logo')) {
+                $this->image->deleteImage($setting->logo);
+                $setting->logo = $this->image->storeImage($request, 'company-logo','logo');
             }
+
+            $setting->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            abort_and_log(403, $e->getMessage());
         }
 
         return Reply::redirect(route('admin.settings.index'), __('messages.updatedSuccessfully'));

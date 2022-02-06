@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\ImagesManager;
+use App\Services\UrlManager;
 use App\Tax;
 use App\Deal;
 use App\ItemTax;
@@ -23,14 +25,11 @@ use App\Http\Controllers\AdminBaseController;
 class DealController extends AdminBaseController
 {
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    private $image;
     public function __construct()
     {
         parent::__construct();
+        $this->image = new ImagesManager();
         view()->share('pageTitle', __('menu.deals'));
     }
 
@@ -137,11 +136,11 @@ class DealController extends AdminBaseController
         abort_if(!$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('create_deal'), 403);
 
         $days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-        $locations = Location::withoutGlobalScope(CompanyScope::class)->groupBy('name')->get();
+//        $locations = Location::withoutGlobalScope(CompanyScope::class)->groupBy('name')->get();
         $services = BusinessService::with('location')->orderBy('name')->get();
         $taxes = Tax::active()->get();
 
-        $variables = compact('days', 'taxes', 'locations', 'services');
+        $variables = compact('days', 'taxes', 'services');
 
         if ($request->deal_id) {
             $deal = Deal::with('location', 'services')->findOrFail($request->deal_id);
@@ -215,7 +214,7 @@ class DealController extends AdminBaseController
         }
 
         if ($request->hasFile('feature_image')) {
-            $deal->image = Files::upload($request->feature_image, 'deal');
+            $deal->image = $this->image->storeImage($request, 'deal','feature_image');
         }
 
         /* Save deal */
@@ -390,7 +389,8 @@ class DealController extends AdminBaseController
         }
 
         if ($request->hasFile('feature_image')) {
-            $deal->image = Files::upload($request->feature_image, 'deal');
+            $this->image->deleteImage($deal->image);
+            $deal->image = $this->image->storeImage($request, 'deal','feature_image');
         }
 
         /* Save deal */

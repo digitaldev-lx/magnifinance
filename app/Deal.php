@@ -175,10 +175,10 @@ class Deal extends Model
     public function getDealImageUrlAttribute()
     {
         if(is_null($this->image)){
-            return asset('img/no-image.jpg');
+            return "https://media.istockphoto.com/photos/stylish-shopaholic-with-purchases-picture-id1169378197?k=20&m=1169378197&s=612x612&w=0&h=QuZ4laEcaxPzCVOt57C8cDiDgZPGU_9LrVkZ2OjPEsY=";
         }
 
-        return asset_url('deal/'.$this->image);
+        return cdn_storage_url($this->image);
     }
 
     public function getAppliedBetweenTimeAttribute()

@@ -89,7 +89,7 @@
                 <div class="col-lg-4 col-md-5 d-flex headerTopRight hide_mobile">
                     <select class="myselect align-items-center" id="language">
                         @foreach ($languages as $language)
-                            <option @if (\Cookie::get('appointo_multi_vendor_language_code')==$language->language_code) selected @endif value="{{ $language->language_code }}">{{ $language->language_name }}</option>
+                            <option @if (\Cookie::get('localstorage_language_code')==$language->language_code) selected @endif value="{{ $language->language_code }}">{{ $language->language_name }}</option>
                         @endforeach
                     </select>
 
@@ -134,6 +134,30 @@
                         </form>
                     </div>
                 </div>
+
+                <div class="col-6 mb-3 mobSearch hide_desktop input-group">
+                    <select class="myselect align-items-center" id="language_mobile">
+                        @foreach ($languages as $language)
+                            <option @if (\Cookie::get('localstorage_language_code')==$language->language_code) selected @endif value="{{ $language->language_code }}">{{ $language->language_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-6 mb-3 mobSearch hide_desktop input-group">
+                    <div class="input-group justify-content-end">
+                        <div class="input-group-append location_icon d-none d-lg-flex">
+                            <span class="input-group-text"><i class="zmdi zmdi-pin"></i></span>
+                        </div>
+                        <select class="myselect" id="location_mobile" name="location">
+                            @foreach ($locations as $location)
+                                <option value="{{ $location->id }}">{{ $location->name }}</option>
+                            @endforeach
+                        </select>
+
+                    </div>
+                </div>
+
+
+
             </div>
 
         </div>
@@ -287,6 +311,9 @@
                         $('#myModal').modal('show');
                     }
                 })
+            }else{
+                var locationId = localStorage.getItem('location')
+                $('#location_mobile option[value='+locationId+']').attr('selected','selected');
             }
 
             $('body').on('click', '.search-tags', function () {
@@ -301,10 +328,10 @@
                 $('#location').val(localStorage.getItem('location')).trigger('change');
             }
 
-            $('#location').on('change', function()
+            $('#location, #location_mobile').on('change', function()
             {
                 localStorage.setItem('location', $(this).val());
-
+                $('#location').val($(this).val());
                 if (localStorage.getItem('location') !== '' && location.protocol+'//'+location.hostname+location.pathname == '{{ route('front.search') }}') {
                     $('#searchForm').submit();
                 }
@@ -317,7 +344,7 @@
             }
         });
 
-        $('#language').on('change', function() {
+        $('#language, #language_mobile').on('change', function() {
             let code = $(this).val();
 
             let url = '{{ route('front.changeLanguage', ':code') }}';

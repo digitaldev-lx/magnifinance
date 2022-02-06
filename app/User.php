@@ -144,7 +144,8 @@ class User extends Authenticatable
     public function getUserImageUrlAttribute()
     {
         if (is_null($this->image)) {
-            return cdn_storage_url("images/default-avatar-user.png");
+            return "https://media.istockphoto.com/vectors/profile-picture-vector-illustration-vector-id587805156?k=20&m=587805156&s=612x612&w=0&h=Ok_jDFC5J1NgH20plEgbQZ46XheiAF8sVUKPvocne6Y=";
+//            return cdn_storage_url("images/default-avatar-user.png");
         }
         return cdn_storage_url($this->image);
     }

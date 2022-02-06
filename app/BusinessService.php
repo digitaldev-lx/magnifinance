@@ -99,6 +99,7 @@ class BusinessService extends Model
     public function getServiceImageUrlAttribute()
     {
         if(is_null($this->default_image)){
+            return "https://media.istockphoto.com/photos/closeup-portrait-of-her-she-nicelooking-attractive-cheerful-cheery-picture-id1206184490?k=20&m=1206184490&s=612x612&w=0&h=YkCMMkTl_5Q47TYcLjchum1jTzJYmzG7_8kom2DP3lo=";
             return asset('img/default-avatar-user.png');
         }
 

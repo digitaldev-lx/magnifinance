@@ -428,7 +428,7 @@
                     }
                     var msgs = "@lang('messages.updatedSuccessfully')";
                     $.showToastr(msgs, 'success');
-                    {{--window.location.href = '{{ route('admin.business-services.index') }}'--}}
+                    window.location.href = '{{ route('admin.business-services.index') }}'
                 },
                 error:function (error){
                     console.log(error);

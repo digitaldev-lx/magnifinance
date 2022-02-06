@@ -567,8 +567,8 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-//        $app->useStoragePath(__DIR__ . '/../new_storage_location');
-        dd(__DIR__ . '/../');
+        $service = BusinessService::where('id', 22)->first();
+        return count($service->image);
     }
 
     public function bookingSlots(Request $request)

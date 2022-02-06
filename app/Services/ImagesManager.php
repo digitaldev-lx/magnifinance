@@ -13,7 +13,9 @@ class ImagesManager
     {
         $extension = $request->file($input_name)->getClientOriginalExtension();
         $fileName = time().Str::uuid().'.'.$extension;
-        return Storage::disk('digitalocean')->putFileAs('images/'. $directory, $request->$input_name, $fileName ,'public');
+        $filePath = 'images/'. $directory . '/' . $fileName;
+        Storage::disk('digitalocean')->putFileAs('images/'. $directory, $request->$input_name, $fileName ,'public');
+        return $filePath;
     }
 
     public function multiUpload($request, $directory): array
@@ -24,17 +26,15 @@ class ImagesManager
         foreach ($request->file as $fileData) {
             $extension = $fileData->getClientOriginalExtension();
             $fileName = time().Str::uuid().'.'.$extension;
-            $imagePath = Storage::disk('digitalocean')->putFileAs('images/'. $directory, $fileData, $fileName ,'public');
+            $imagePath = 'images/'. $directory . '/'. $fileName;
+            Storage::disk('digitalocean')->putFileAs('images/'. $directory, $fileData, $fileName ,'public');
             array_push($service_images_arr, $imagePath);
-            if ($fileData->getClientOriginalName() == $imagePath) {
+            if ($imagePath == $request->default_image) {
                 $default_image_index = array_key_last($service_images_arr);
             }
         }
 
-        return [
-            "images" => $service_images_arr,
-            "default_image" => count($service_images_arr) > 0 ? $service_images_arr[$default_image_index] : null
-        ];
+        return [$service_images_arr, $default_image_index];
     }
 
     public function storeImageBase64($base64string, $directory): string

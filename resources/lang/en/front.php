@@ -139,7 +139,7 @@ return array (
   'usefulLinks' => 'Useful Links',
   'getSocial' => 'Get Social',
   'register' => 'Register',
-  'frontSearch' => 'Search restaurants, spa, events etc',
+  'frontSearch' => 'Search aesthetics, spa, personal trainers etc',
   'name' => 'Name',
   'message' => 'Message',
   'pleaseWait' => 'Please Wait',

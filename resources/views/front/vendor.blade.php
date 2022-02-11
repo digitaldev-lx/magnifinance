@@ -21,7 +21,7 @@
         @if ($vendorPage->default_image)
         /* Banner Image */
         .ven-banner {
-            background-image: url('{{ asset_url('vendor-page/' . $vendorPage->company_id . '/' . $vendorPage->default_image) }}');
+            background-image: url('{{ cdn_storage_url($vendorPage->default_image) }}');
         }
         @endif
         #map {
@@ -59,7 +59,7 @@
 
                 <div class="col-md-8 pr-auto pr-lg-3 pr-md-3 mt-3 mt-lg-0 mt-md-0">
                     @if ($vendorPage->default_image)
-                        <a href="{{ asset_url('vendor-page/' . $vendorPage->company_id . '/' . $vendorPage->default_image) }}"
+                        <a href="{{ cdn_storage_url($vendorPage->default_image) }}"
                             data-lightbox="photos">
                             <div class="ven-banner"></div>
                         </a>
@@ -77,10 +77,10 @@
                                 <div class="col-md-6 pl-0">
                                     <div class="col-md-12 p-0  mb-3">
                                         <div class="ven-small-banner">
-                                            <a href="{{ asset_url('vendor-page/' . $vendorPage->company_id . '/' . $photo) }}"
+                                            <a href="{{ cdn_storage_url($photo) }}"
                                                 data-lightbox="photos">
                                                 <img class="img-fluid" src="{{asset('front/images/pixel.gif')}}"
-                                                data-src="{{ asset_url('vendor-page/' . $vendorPage->company_id . '/' . $photo) }}">
+                                                data-src="{{ cdn_storage_url($photo) }}">
                                             </a>
                                         </div>
                                     </div>
@@ -88,7 +88,7 @@
                             @else
                                 <div class="col-md-6 pl-0">
                                     <div class="ven-small-banner ven-view">
-                                        <img src="{{asset('front/images/pixel.gif')}}" data-src="{{ asset_url('vendor-page/' . $vendorPage->company_id . '/' . $photo) }}"
+                                        <img src="{{asset('front/images/pixel.gif')}}" data-src="{{ cdn_storage_url($photo) }}"
                                             width="100%" />
                                         <a class="nav-link" id="openGallery" href="javascript:;">@lang('app.viewAll')</a>
                                     </div>
@@ -605,10 +605,10 @@
                             @if ($vendorPage->photos)
                                 @foreach ($vendorPage->photos as $photo)
                                     <div class="col-sm-6 col-md-4 col-lg-2 item">
-                                        <a href="{{ asset_url('vendor-page/' . $vendorPage->company_id . '/' . $photo) }}"
+                                        <a href="{{ cdn_storage_url($photo) }}"
                                             data-lightbox="photos">
                                             <img class="img-fluid" src="{{asset('front/images/pixel.gif')}}"
-                                            data-src="{{ asset_url('vendor-page/' . $vendorPage->company_id . '/' . $photo) }}">
+                                            data-src="{{ cdn_storage_url($photo) }}">
                                         </a>
                                     </div>
                                 @endforeach
@@ -638,12 +638,16 @@
 
     <script src="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.js"
             integrity="sha512-HrFUyCEtIpxZloTgEKKMq4RFYhxjJkCiF5sDxuAokklOeZ68U2NPfh4MFtyIVWlsKtVbK5GD2/JzFyAfvT5ejA=="
-            crossorigin=""></script>@endif
+            crossorigin=""></script>
+
+@endif
 
 
 <script src="{{asset('front/js/lightbox.min.js')}}"></script>
     <script>
-        initMap()
+        @if ($vendorPage->map_option == 'active' && $settings->map_option == 'active')
+            initMap()
+        @endif
 
         function setClipboard(value) {
             var tempInput = document.createElement("input");

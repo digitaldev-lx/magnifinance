@@ -77,11 +77,13 @@ class VendorPage extends Model
 
     public function getOgImageAttribute($og_image)
     {
-        if(is_null($og_image)){
-            return asset('storage/images/logo/9f1c8e217229102acd36ad709c784fc6.png');
+        $globalSetting = GlobalSetting::first();
+
+        if (is_null($og_image)) {
+            return $globalSetting->logo_url;
         }
 
-        return $og_image;
+        return cdn_storage_url($og_image);
     }
 
     public function getPhotosAttribute($value)
@@ -106,15 +108,18 @@ class VendorPage extends Model
 
     public function getImagesAttribute()
     {
+
         $images = [];
 
         if ($this->photos) {
 
             foreach ($this->photos as $image) {
-                $reqImage['name'] = $image;
-                $reqImage['size'] = filesize(public_path('/user-uploads/vendor-page/'.$this->id.'/'.$image));
-                $reqImage['type'] = mime_content_type(public_path('/user-uploads/vendor-page/'.$this->id.'/'.$image));
-                $images[] = $reqImage;
+                if (\Storage::disk('digitalocean')->exists($image)) {
+                    $reqImage['name'] = $image;
+                    $reqImage['size'] = \Storage::disk('digitalocean')->size($image);
+                    $reqImage['type'] = \Storage::disk('digitalocean')->mimeType($image);
+                    $images[] = $reqImage;
+                }
             }
 
         }

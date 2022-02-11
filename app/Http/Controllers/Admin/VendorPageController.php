@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\ImagesManager;
+use App\Services\UrlManager;
 use App\VendorPage;
 use App\Helper\Files;
 use Grimzy\LaravelMysqlSpatial\Types\Point;
@@ -12,6 +14,15 @@ use App\Http\Requests\VendorPage\UpdateVendorPageRequest;
 
 class VendorPageController extends AdminBaseController
 {
+
+    private $image;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->image = new ImagesManager();
+        view()->share('pageTitle', __('menu.vendorPage'));
+    }
 
     public function update(Request $request, $id)
     {
@@ -29,7 +40,7 @@ class VendorPageController extends AdminBaseController
         $vendorPage->longitude = $request->longitude ? $request->longitude : 0;*/
         $vendorPage->lat_long = new Point($request->latitude, $request->longitude);	// (lat, lng),
 
-        $vendorPage->og_image = $request->hasFile('og_image') ? Files::upload($request->og_image, 'vendor-page') : $vendorPage->og_image;
+        $vendorPage->og_image = $request->hasFile('og_image') ? $this->image->storeImage($request, 'vendor-page', 'og_image') : null;
 
         $vendorPage->save();
 
@@ -43,19 +54,17 @@ class VendorPageController extends AdminBaseController
         $default_image_index = 0;
 
         if ($request->hasFile('file')) {
+
             if ($request->file[0]->getClientOriginalName() !== 'blob') {
 
-                foreach ($request->file as $fileData) {
-                    array_push($vendor_page_images_arr, Files::upload($fileData, 'vendor-page/' . $vendor_page->id));
-
-                    if ($fileData->getClientOriginalName() == $request->default_image) {
-                        $default_image_index = array_key_last($vendor_page_images_arr);
-                    }
-                }
+                $images = $this->image->multiUpload($request, 'vendor-page/' . $vendor_page->id);
+                $vendor_page_images_arr = $images[0];
+                $default_image_index = $images[1];
 
             }
 
             if ($request->uploaded_files) {
+
                 $files = json_decode($request->uploaded_files, true);
 
                 foreach ($files as $file) {
@@ -64,20 +73,20 @@ class VendorPageController extends AdminBaseController
                     if ($file['name'] == $request->default_image) {
                         $default_image_index = array_key_last($vendor_page_images_arr);
                     }
+
                 }
 
                 $arr_diff = array_diff($vendor_page->photos, $vendor_page_images_arr);
 
                 if (count($arr_diff) > 0) {
-
                     foreach ($arr_diff as $file) {
-                        Files::deleteFile($file, 'vendor-page/' . $vendor_page->id);
+                        $this->image->deleteImage($file);
                     }
                 }
-
-            } else {
+            }
+            else {
                 if (!is_null($vendor_page->photos) && count($vendor_page->photos) > 0) {
-                    Files::deleteFile($vendor_page->photos[0], 'vendor-page/' . $vendor_page->id);
+                    $this->image->deleteImage($vendor_page->photos[0]);
                 }
             }
         }

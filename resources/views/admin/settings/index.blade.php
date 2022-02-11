@@ -75,6 +75,9 @@
             padding: 2px 5px;
             border-radius: 2px;
         }
+        .dropzone .dz-preview .dz-image img {
+            width: 128px;
+        }
     </style>
 @endpush
 
@@ -1118,7 +1121,7 @@
         mockFile.forEach(file => {
             //todo: alterar asset_url para quando o upload estiver a ser feito para a storage
 
-            var path = "{{ asset_url('vendor-page/'.$vendorPage->id.'/:file_name') }}";
+            var path = "{{ cdn_storage_url('/:file_name') }}";
             path = path.replace(':file_name', file.name);
             myDropzone.emit('addedfile', file);
             myDropzone.emit('thumbnail', file, path);

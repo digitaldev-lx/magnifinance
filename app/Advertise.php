@@ -31,7 +31,7 @@ class Advertise extends Model
         if (is_null($this->image) || $this->image == '') {
             return asset('img/no-image.jpg');
         }
-//
+
         return asset($this->image);
     }
 

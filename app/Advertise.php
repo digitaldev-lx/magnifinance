@@ -17,7 +17,7 @@ class Advertise extends Model
         parent::boot();
 
         static::addGlobalScope(new CompanyScope);
-
+//teste git
     }
 
     protected $appends = [

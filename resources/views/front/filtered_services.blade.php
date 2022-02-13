@@ -61,5 +61,5 @@
 </div>
 
 <div class="deals_pagination mt-4 d-flex justify-content-center" id="pagination">
-    {{ $services->links() }}
+    {!! $services->links() !!}
 </div>

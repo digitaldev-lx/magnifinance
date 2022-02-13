@@ -16,12 +16,12 @@ class GlobalSettingSeeder extends Seeder
     {
         $data = [
             'company_name' => 'SpotB Lda',
-            'company_email' => 'geral@spotb.com',
+            'company_email' => 'geral@spot-b.com',
             'company_phone' => '00351961546227',
-            'contact_email' => 'geral@spotb.com',
+            'contact_email' => 'geral@spot-b.com',
             'logo' => 'storage/images/logo/16382612809deab0e8-cb03-43ec-a17d-5b055dd244f9.png',
             'address' => 'Rua Santo António de Lisboa, AGS2 CV ESQ 2700-744 Amadora',
-            'website' => 'http://www.spotb.com',
+            'website' => 'http://www.spot-b.com',
             'locale' => 'en',
             'sign_up_note' => 'Thank you for registration. Please verify your account via the verification link sent to your email',
             'terms_note' => 'By creating this account, I agree to Term and conditions',

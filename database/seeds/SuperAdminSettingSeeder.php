@@ -132,10 +132,10 @@ class SuperAdminSettingSeeder extends Seeder
         $smtp->mail_driver = 'mail';
         $smtp->mail_host = 'smtp.gmail.com';
         $smtp->mail_port = '587';
-        $smtp->mail_username = 'myemail@gmail.com';
+        $smtp->mail_username = 'info@spot-b.com';
         $smtp->mail_password = '123456';
-        $smtp->mail_from_name = 'Appointo-multi-vendor';
-        $smtp->mail_from_email = 'myemail@gmail.com';
+        $smtp->mail_from_name = 'Spot-B';
+        $smtp->mail_from_email = 'info@spot-b.com';
         $smtp->mail_encryption = 'none';
 
         $smtp->save();

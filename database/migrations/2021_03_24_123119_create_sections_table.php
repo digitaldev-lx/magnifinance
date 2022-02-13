@@ -37,6 +37,9 @@ class CreateSectionsTable extends Migration
             [
                 'name' => 'Spotlight Section'
             ],
+            [
+                'name' => 'Blog Section'
+            ],
         ];
 
         Section::insert($sections);

@@ -45,7 +45,7 @@ class StripeController extends Controller
     public function createAccountLink()
     {
         $account = \Stripe\Account::create([
-            'country' => 'US',
+            'country' => 'PT',
             'type' => 'express',
             'capabilities' => [
                 'card_payments' => ['requested' => true],
@@ -78,9 +78,9 @@ class StripeController extends Controller
         $details->connection_status = 'not_connected';
         $details->save();
 
-        $stripe_login_link = \Stripe\Account::createLoginLink($account->id);
+        /* $stripe_login_link = \Stripe\Account::createLoginLink($account->id);*/
 
-        return Reply::successWithData(__('messages.createdSuccessfully'), ['details' => $details, 'link_expire_at' => $link_expire_at, 'stripe_login_link' => $stripe_login_link]);
+        return Reply::successWithData(__('messages.createdSuccessfully'), ['details' => $account_links, 'link_expire_at' => $link_expire_at/*, 'stripe_login_link' => $stripe_login_link*/]);
     }
 
     /**

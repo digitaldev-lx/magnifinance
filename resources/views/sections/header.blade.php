@@ -366,6 +366,7 @@
             }
         });
 
+        @if(!request()->is('register'))
         $(document).ready(function()
         {
             $("#globalSearch").autocomplete({
@@ -424,6 +425,7 @@
 
         });
 
+        @endif
         /* this function will call on page reload */
         function ajax()
         {

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Front;
 use App\Advertise;
 use App\Article;
 use App\Country;
+use App\FooterSetting;
 use App\Helper\Permissions;
 use App\Module;
 use App\Permission;
 use App\Rules\BusinessServiceUniqueSlug;
+use App\SmsSetting;
 use App\Tax;
 use App\Deal;
 use App\Page;
@@ -2250,6 +2252,7 @@ class FrontController extends FrontBaseController
                     'currency_id' => Currency::first()->id,
                     'locale' => Language::first()->language_code,
                 ];
+
                 DB::beginTransaction();
                 $location = Location::updateOrCreate(
                     [
@@ -2283,23 +2286,21 @@ class FrontController extends FrontBaseController
 
     public function confirmEmail(Request $request)
     {
-        $company = Company::where(['company_email' => Crypt::decryptString($request->email), 'verified' => 'no', 'status' => 'inactive'])->firstOrFail();
 
+        $company = Company::where(['company_email' => Crypt::decryptString($request->email), 'verified' => 'no', 'status' => 'inactive'])->firstOrFail();
         $company->verified = 'yes';
         $company->status = 'active';
         $company->save();
 
-        $company = User::with('company')->where('email', Crypt::decryptString($request->email))->first();
+        $company = User::withoutGlobalScopes()->where('email', '=', Crypt::decryptString($request->email))->with('company')->first();
 
-        $superadmin = User::with('company', 'roles')->whereHas('roles', function ($q) {
-            $q->where('name', 'superadmin');
-        })->first();
+        $superadmins = User::notCustomer()->withoutGlobalScopes()->whereNull('company_id')->get();
 
         // send welcome email to admin
         $company->notify(new CompanyWelcome());
 
         // send email to superadmin
-        $superadmin->notify(new SuperadminNotificationAboutNewAddedCompany($company));
+        Notification::send($superadmins, new SuperadminNotificationAboutNewAddedCompany($company));
 
         return view('front/email_verified_success');
     }

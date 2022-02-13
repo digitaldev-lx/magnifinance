@@ -28,6 +28,7 @@ return array(
     'congratulationNote12' => 'Maintain client relationships with advanced appointment software management features with detailed client appointments history, booking preferences, future bookings and contact details',
     'congratulationNote13' => 'You are receiving this message because you recently signed up for a :name account, booking preferences, future bookings and contact details',
     'welcomeEmail' => 'Welcome to',
+    'excitedToHaveYou' => "We're excited to have you with us",
     'newCompanyRegistered' => 'New company registered',
     'newAdvertiseRegistered' => 'New Advertise Registered',
     'congratsForYourNewAdvertising' => 'Congratulations for your new advertising',

@@ -60,6 +60,11 @@
         #password-label {
             width: 100%;
         }
+        .logo-image img {
+            max-width: 100%;
+            width: unset;
+            object-fit: contain;
+        }
     </style>
 @endpush
 

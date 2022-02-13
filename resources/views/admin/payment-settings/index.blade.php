@@ -23,7 +23,7 @@
                     <span>{{ $stripePaymentSetting->account_id ?? '' }}</span>
                 </h5>
                 <h5 class="text-default">{{__('app.login')}}:
-                    <a href="{{$stripePaymentSetting->stripe_login_link->url}}" target="_blank">Stripe Login</a>
+                    <a href="{{$stripePaymentSetting->stripe_login_link->url ?? ''}}" target="_blank">Stripe Login</a>
                 </h5>
             </div>
         </div>
@@ -38,6 +38,7 @@
     </div>
     <br>
     <div id="stripe-verification"
+
         class="{{ $stripePaymentSetting && $stripePaymentSetting->connection_status === 'not_connected' ? '' : 'd-none' }} row">
         <div class="col-md-12">
             <div class="d-flex">

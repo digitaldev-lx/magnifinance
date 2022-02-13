@@ -230,6 +230,7 @@ return array(
     'dateRange' => 'Intervalo de Datas',
     'loadMore' => 'Carregar Mais',
     'paymentCredential' => 'Credenciais de Pagamento',
+    'paymentsAndInvoicing' => 'Pagamentos e Faturação',
     'paypalCredential' => 'Credenciais de Paypal',
     'stripeCredential' => 'Credenciais de Stripe',
     'paypal' => 'Paypal',

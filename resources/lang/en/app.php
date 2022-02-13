@@ -233,6 +233,7 @@ return array (
   'dateRange' => 'Date Range',
   'loadMore' => 'Load More',
   'paymentCredential' => 'Payment Credential',
+  'paymentsAndInvoicing' => 'Payments and Invoicing',
   'paypalCredential' => 'Paypal Credential',
   'stripeCredential' => 'Stripe Credential',
   'paypal' => 'Paypal',

@@ -29,6 +29,7 @@ class PaymentCredentialSettingController extends AdminBaseController
 
     public function refreshLink($id)
     {
+        return $id;
         $accountId = GatewayAccountDetail::where('id', $id)->first()->account_id;
 
         $account_links = \Stripe\AccountLink::create([

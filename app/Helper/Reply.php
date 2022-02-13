@@ -5,6 +5,7 @@ namespace App\Helper;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Support\Facades\Lang;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Reply
 {
@@ -21,6 +22,20 @@ class Reply
             'status' => 'success',
             'message' => Reply::getTranslated($message)
         ];
+    }
+
+    /**
+     * success
+     *
+     * @param  mixed $message
+     * @return JsonResponse
+     */
+    public static function jsonSuccess($message)
+    {
+        return JsonResponse::create([
+            'status' => 'success',
+            'message' => Reply::getTranslated($message)
+        ], 200, ['Content-Type'=>'application/json; charset=utf-8']);
     }
 
     public static function successWithData($message, $data)

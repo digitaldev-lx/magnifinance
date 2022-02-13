@@ -95,7 +95,7 @@
                 <a class="nav-link" href="#admin-theme" data-toggle="tab">@lang('menu.adminThemeSettings')</a>
                 <a class="nav-link module-setting" href="javascript:;">@lang('menu.module') @lang('menu.settings')</a>
                 <a class="nav-link" href="#role-permission" data-toggle="tab">@lang('menu.rolesPermissions')</a>
-                <a class="nav-link" href="#payment" data-toggle="tab">@lang('app.paymentCredential') @lang('menu.settings')</a>
+                <a class="nav-link" href="#payment" data-toggle="tab">{{__('app.paymentsAndInvoicing')}}</a>
                 <a class="nav-link" href="#office-leaves" data-toggle="tab">@lang('menu.officeleaves')</a>
                 @if (in_array('Google Calendar',$user->modules))
                     <a class="nav-link" href="#googleCalendar" data-toggle="tab">@lang('menu.googleCalendar')</a>
@@ -653,7 +653,7 @@
     @endif
     <script>
 
-{{--        @if ($superadmin->map_option == 'active')--}}
+        @if ($superadmin->map_option == 'active')
 
         $(document).ready(function () {
 
@@ -705,7 +705,7 @@
             enableAutocomplete: true
 
         });--}}
-{{--        @endif--}}
+        @endif
 
         $(function () {
             $('.wrong-currency-message').hide();
@@ -919,17 +919,20 @@
                 url: "{{ route('front.createAccountLink') }}",
                 type: 'GET',
                 success: function (response) {
-
+                    console.log(response);
                     if (response.status === 'success') {
                         $('#stripe-get-started').addClass('d-none')
                         $('#account-id-display').removeClass('d-none')
-                        $('#account-id-display').find('span').html(response.details.account_id)
-                        $('#account-id-display').find('a').attr('href', response.stripe_login_link)
+                        /*$('#account-id-display').find('span').html(response.details.account_id)
+                        $('#account-id-display').find('a').attr('href', response.details.account_id)*/
 
                         $('#stripe-verification').removeClass('d-none')
-                        $('#stripe-verification').find('a').html(response.details.link).attr('href', response.details.link)
+                        $('#stripe-verification').find('a').html('{{__('app.verificationLink')}}').attr('href', response.details.url)
                         $('#stripe-verification').find('span').html(response.link_expire_at)
                     }
+                },
+                error: function(error){
+                    console.log(error);
                 }
             })
         })

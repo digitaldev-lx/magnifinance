@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Company;
 use App\FooterSetting;
 use App\GlobalSetting;
 use App\SmsSetting;
@@ -16,10 +17,10 @@ class SuperadminNotificationAboutNewAddedCompany extends BaseNotification
      */
     private $company;
 
-    public function __construct($company_data)
+    public function __construct($userCompany)
     {
         parent::__construct();
-        $this->company = $company_data;
+        $this->company = $userCompany;
     }
 
     /**

@@ -426,7 +426,7 @@
                         <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 50px; padding-left: 50px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
                         <div style="color: #4a4a4a; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 150%; padding-right: 50px; padding-left: 50px; padding-top: 10px; padding-bottom: 10px;">
                           <div style="font-size: 12px; line-height: 18px; color: #4a4a4a; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: left;">
-                            <p style="margin: 0; font-size: 14px; line-height: 21px; text-align: center;"><span style="font-size: 16px; line-height: 24px;">@lang('email.congratulationNote', ['name' => $globalSetting->company_name]), {{$user->name}}! We're excited to have you with us&#160;😄</span></p>
+                            <p style="margin: 0; font-size: 14px; line-height: 21px; text-align: center;"><span style="font-size: 16px; line-height: 24px;">@lang('email.congratulationNote', ['name' => $globalSetting->company_name]), {{$user->name}}! {{__('email.excitedToHaveYou')}}&#160;😄</span></p>
                             <p style="margin: 0; font-size: 14px; line-height: 21px; text-align: center;">&#160;<br style="line-height: inherit;"></p>
                             <p style="margin: 0; font-size: 14px; line-height: 21px; text-align: center;"><span style="font-size: 16px; line-height: 24px;">@lang('email.congratulationNote1')!&#160;</span></p>
                           </div>

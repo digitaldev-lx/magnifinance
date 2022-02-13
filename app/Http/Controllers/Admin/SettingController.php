@@ -97,7 +97,6 @@ class SettingController extends AdminBaseController
 
         $this->vendorPage = VendorPage::first();
         $this->companyBookingNotification = company()->bookingNotification;
-
         return view('admin.settings.index', $this->data);
     }
 

@@ -569,8 +569,7 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-        $service = BusinessService::where('id', 22)->first();
-        return count($service->image);
+        return Country::all();
     }
 
     public function bookingSlots(Request $request)
@@ -1263,7 +1262,7 @@ class FrontController extends FrontBaseController
 
         $free_employee_list = array_diff($working_employee, array_intersect($working_employee, $assigned_user_list_array));
 
-        $select_user = '<select name="" id="selected_user" name="selected_user" class="form-control mt-3"><option value="">--Select Employee--</option>';
+        $select_user = '<select id="selected_user" name="selected_user" class="form-control mt-3"><option value="">--Select Employee--</option>';
 
         /* Leave: */
 

@@ -154,6 +154,7 @@ return [
          * Package Service Providers...
          */
         Grimzy\LaravelMysqlSpatial\SpatialServiceProvider::class,
+        DigitalDevLX\Magnifinance\MagnifinanceServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -219,7 +220,7 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Zip' => Macellan\Zip\ZipFacade::class,
-
+        'Magnifinance' => DigitalDevLX\Magnifinance\MagnifinanceFacade::class
     ],
 
     'debug_blacklist' => [

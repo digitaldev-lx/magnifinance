@@ -5,15 +5,6 @@
         "framework",
         "laravel"
     ],
-    "repositories": {
-        "moloniapi": {
-            "type": "path",
-            "url": "packages/digitaldevlx/moloniapi",
-            "options": {
-                "symlink": true
-            }
-        }
-    },
     "license": "MIT",
     "type": "project",
     "require": {
@@ -60,7 +51,8 @@
             "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "DigitalDevLX\\Magnifinance\\": "packages/digitaldevlx/magnifinance/src"
         },
         "files": [
             "app/Helper/start.php"

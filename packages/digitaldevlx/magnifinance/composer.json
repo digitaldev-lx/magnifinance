@@ -1,11 +1,11 @@
 {
-    "name": "digitaldev-lx/moloni-api",
-    "description": "Integration package with Moloni API",
+    "name": "digitaldev-lx/magnifinance",
+    "description": "Magnifinance Api Laravel Package",
     "keywords": [
         "digitaldev-lx",
-        "moloni-api"
+        "magnifinance"
     ],
-    "homepage": "https://github.com/digitaldev-lx/moloni-api",
+    "homepage": "https://github.com/digitaldev-lx/magnifinance",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -16,16 +16,21 @@
         }
     ],
     "require": {
-        "php": "^7.1.3"
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
         "psr-4": {
-            "DigitaldevLx\\MoloniApi\\": "src"
+            "DigitaldevLx\\Magnifinance\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "DigitaldevLx\\MoloniApi\\Tests\\": "tests"
+            "DigitaldevLx\\Magnifinance\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -39,10 +44,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "DigitaldevLx\\MoloniApi\\MoloniApiServiceProvider"
+                "DigitaldevLx\\Magnifinance\\MagnifinanceServiceProvider"
             ],
             "aliases": {
-                "MoloniApi": "DigitaldevLx\\MoloniApi\\MoloniApiFacade"
+                "Magnifinance": "DigitaldevLx\\Magnifinance\\MagnifinanceFacade"
             }
         }
     }

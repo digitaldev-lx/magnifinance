@@ -1,13 +1,13 @@
 <?php
 
-namespace DigitaldevLx\MoloniApi;
+namespace DigitalDevLX\Magnifinance;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \DigitaldevLx\MoloniApi\Skeleton\SkeletonClass
+ * @see \DigitalDevLX\Magnifinance\Skeleton\SkeletonClass
  */
-class MoloniApiFacade extends Facade
+class MagnifinanceFacade extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -16,6 +16,6 @@ class MoloniApiFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'moloni-api';
+        return 'magnifinance';
     }
 }

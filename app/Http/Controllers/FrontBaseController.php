@@ -71,7 +71,6 @@ class FrontBaseController extends Controller
 
             if ($this->user) {
                 $this->todoItems = $this->user->todoItems()->groupBy('status', 'position')->get();
-//                config(['froiden_envato.allow_users_id' => true]);
             }
 
             config(['app.name' => $this->settings->company_name]);

@@ -563,7 +563,6 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-
         $data = array(
             "UserName" => "Paulo Serrano",
             "UserEmail" => "pauloamserrano@gmail.com",

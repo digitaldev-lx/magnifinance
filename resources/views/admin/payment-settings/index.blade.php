@@ -38,7 +38,6 @@
     </div>
     <br>
     <div id="stripe-verification"
-
         class="{{ $stripePaymentSetting && $stripePaymentSetting->connection_status === 'not_connected' ? '' : 'd-none' }} row">
         <div class="col-md-12">
             <div class="d-flex">
@@ -63,36 +62,3 @@
     </div>
 @endif
 
-@if ($paymentCredential->razorpay_status == 'active' && $paymentCredential->stripe_status == 'active')
-    <hr>
-@endif
-
-@if ($paymentCredential->razorpay_status == 'active')
-    <div class="row">
-        <div class="col-md-6">
-            <h5 class="text-info">@lang('app.razorpay')</h5>
-            @if (!$razoypayPaymentSetting && $paymentCredential->razorpay_status == 'active')
-                <button id="razorpay-get-started" type="button" class="btn btn-success"
-                    title="@lang('modules.paymentCredential.connectionDescription')">
-                    <i class="fa fa-play"></i> @lang('modules.paymentCredential.getStarted')
-                </button>
-            @else
-                <button id="razorpay-get-started" type="button" class="btn btn-success"
-                    title="@lang('modules.paymentCredential.connectionsDescription')"
-                    disabled>@lang('app.razorpay')</button>
-            @endif
-            <div id="razor-account-id-display" class="form-group @if (!$razoypayPaymentSetting) d-none @endif">
-                <h5 class="text-default">@lang('app.yourAccountId'):
-                    <span>{{ $razoypayPaymentSetting->account_id ?? '' }}</span>
-                </h5>
-            </div>
-        </div>
-        <div id="razor-status" class="col-md-3">
-            <h5 class="text-info">@lang('app.status')</h5>
-            <div class="form-group">
-                <span
-                    class="badge {{ $razoypayPaymentSetting && $razoypayPaymentSetting->connection_status === 'connected' ? 'badge-success' : 'badge-danger' }}">{{ $razoypayPaymentSetting && $razoypayPaymentSetting->connection_status === 'connected' ? __('app.connected') : __('app.notConnected') }}</span>
-            </div>
-        </div>
-    </div>
-@endif

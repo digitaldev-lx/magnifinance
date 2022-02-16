@@ -5,12 +5,6 @@ namespace App\Http\Controllers\Front;
 use App\Advertise;
 use App\Article;
 use App\Country;
-use App\FooterSetting;
-use App\Helper\Permissions;
-use App\Module;
-use App\Permission;
-use App\Rules\BusinessServiceUniqueSlug;
-use App\SmsSetting;
 use App\Tax;
 use App\Deal;
 use App\Page;
@@ -39,7 +33,7 @@ use App\GlobalSetting;
 use App\BusinessService;
 use App\UniversalSearch;
 use App\EmployeeSchedule;
-use App\Facades\Razorpay;
+use DigitalDevLX\Magnifinance\MagnifinanceFacade as Magnifinance;
 use Illuminate\Support\Arr;
 use App\Scopes\CompanyScope;
 use Illuminate\Http\Request;
@@ -569,7 +563,20 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-        return Country::all();
+
+        $data = array(
+            "UserName" => "Paulo Serrano",
+            "UserEmail" => "pauloamserrano@gmail.com",
+            "UserPhone" => "961546227",
+            "CompanyTaxId" => "239637712",
+            "CompanyLegalName" => "Nome da Empresa",
+            "CompanyAddress" => "Morada da empresa",
+            "CompanyCity" => "Amadora",
+            "CompanyPostCode" => "2700-744",
+            "CompanyCountry" => "Portugal"
+        );
+
+        return Magnifinance::addPartner($data);
     }
 
     public function bookingSlots(Request $request)

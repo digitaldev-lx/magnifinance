@@ -36,7 +36,8 @@
         "santigarcor/laratrust": "^6.4.0",
         "shetabit/visitor": "^3.1",
         "stripe/stripe-php": "^7.68",
-        "yajra/laravel-datatables-oracle": "^9.0"
+        "yajra/laravel-datatables-oracle": "^9.0",
+        "ext-curl": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

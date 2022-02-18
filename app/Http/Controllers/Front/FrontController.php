@@ -33,7 +33,7 @@ use App\GlobalSetting;
 use App\BusinessService;
 use App\UniversalSearch;
 use App\EmployeeSchedule;
-use DigitalDevLX\Magnifinance\MagnifinanceFacade as Magnifinance;
+use DigitalDevLX\Magnifinance\Facades\Magnifinance;
 use Illuminate\Support\Arr;
 use App\Scopes\CompanyScope;
 use Illuminate\Http\Request;
@@ -563,7 +563,8 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-        $data = array(
+
+        /*$data = array(
             "UserName" => "Paulo Serrano",
             "UserEmail" => "pauloamserrano@gmail.com",
             "UserPhone" => "961546227",
@@ -573,9 +574,50 @@ class FrontController extends FrontBaseController
             "CompanyCity" => "Amadora",
             "CompanyPostCode" => "2700-744",
             "CompanyCountry" => "Portugal"
+        );*/
+        $data = [];
+        $client = array(
+            "Name" => "Paulo Serrano",
+            "NIF" => "212655043",
+            "Email" => "pauloamserrano@gmail.com",
+            "Address" => "Morada do cliente",
+            "City" => "Amadora",
+            "PostCode" => "2700-744",
+            "CountryCode" => "PT",
+            "LegalName" => "Nome Legal",
+            "PhoneNumber" => "966666666"
         );
 
-        return Magnifinance::addPartner($data);
+        $list = [
+            "Code" => "04", // Service or Product ID, min lenght 2
+            "Description" => "Descrição",
+            "UnitPrice" => 34.5,
+            "Quantity" => 1,
+            "Unit" => "Service",
+            "Type" => "S", // S = Service P = Product
+            "TaxValue" => 23, // percentage
+            "ProductDiscount" => 0, // Percentage
+            "CostCenter" => ""
+        ];
+
+        $document = [
+            "Type" => "T", // T = Fatura/Recibo, I = Fatura, S = Fatura Simplificada, C - Nota de Credito, D = Nota de Debito
+            "Date" => "2022-02-18", // Data do Serviço format("Y-m-d")
+            "DueDate" => "2022-02-18", // Data do Pagamento
+            "Description" => "Descrição",
+//            "Serie" => "",
+//            "TaxExemptionReasonCode" => "",
+            "ExternalId" => 45, //payment Id
+            "Lines" => [$list]
+        ];
+
+        return Magnifinance::getDocument("143371309", "239637712");
+//        return Magnifinance::addDocument("239637712", $client, $document, "pauloamserrano@gmail.com");
+
+
+//        "143371309"
+//        return Magnifinance::getPartnerToken(239637712);
+//        return Magnifinance::addPartner($data);
     }
 
     public function bookingSlots(Request $request)

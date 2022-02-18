@@ -1,6 +1,6 @@
 <?php
 
-use DigitalDevLX\Magnifinance\MagnifinanceFacade as Magnifinance;
+use DigitalDevLX\Magnifinance\facades\MagnifinanceFacade as Magnifinance;
 
 Route::get('magnifinance', function(){
     $data = [

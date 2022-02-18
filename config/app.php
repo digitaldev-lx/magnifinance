@@ -220,7 +220,7 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Zip' => Macellan\Zip\ZipFacade::class,
-        'Magnifinance' => DigitalDevLX\Magnifinance\MagnifinanceFacade::class
+        'Magnifinance' => \DigitalDevLX\Magnifinance\facades\MagnifinanceFacade::class
     ],
 
     'debug_blacklist' => [

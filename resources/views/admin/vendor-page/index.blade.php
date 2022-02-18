@@ -29,7 +29,7 @@
                         <label for="tax_name" class="control-label">@lang('app.company') @lang('app.secondary')
                             @lang('app.phone')</label>
                         <input type="text" class="form-control  form-control-lg" id="secondary_contact"
-                            name="secondary_contact" value="{{ $calling_codes[0]['dial_code'] .' '. $vendorPage->secondary_contact }}">
+                            name="secondary_contact" value="{{ $vendorPage->secondary_contact }}">
                     </div>
                 </div>
                 <div class="col-md-12">

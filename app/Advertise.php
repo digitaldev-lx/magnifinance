@@ -4,10 +4,14 @@ namespace App;
 
 use App\Scopes\CompanyScope;
 use App\Services\UrlManager;
+use DigitalDevLX\Magnifinance\models\Document;
+use DigitalDevLX\Magnifinance\traits\Documentable;
 use Illuminate\Database\Eloquent\Model;
 
 class Advertise extends Model
 {
+    use Documentable;
+
     protected $guarded = [];
 
     protected $dates = ['paid_on'];
@@ -17,7 +21,6 @@ class Advertise extends Model
         parent::boot();
 
         static::addGlobalScope(new CompanyScope);
-//teste git
     }
 
     protected $appends = [
@@ -28,11 +31,11 @@ class Advertise extends Model
 
     public function getAdvertiseImageUrlAttribute()
     {
-        if (is_null($this->image) || $this->image == '') {
-            return asset('img/no-image.jpg');
+        if(is_null($this->image)){
+            return "https://media.istockphoto.com/photos/multi-racial-ethnic-group-of-womans-with-diffrent-types-of-skin-and-picture-id1193184402?k=20&m=1193184402&s=612x612&w=0&h=cXQVcuS46oM0ya0OVH7hpjxPSwW_NdOKb5pM7zLJ2Sw=";
         }
 
-        return asset($this->image);
+        return cdn_storage_url($this->image);
     }
 
     public function getConvertedAmountToPayAttribute()
@@ -83,6 +86,11 @@ class Advertise extends Model
     public function article()
     {
         return $this->belongsTo(Article::class)->withoutGlobalScopes();
+    }
+
+    public function document()
+    {
+        return $this->morphOne(Document::class, 'documentable');
     }
 
 }

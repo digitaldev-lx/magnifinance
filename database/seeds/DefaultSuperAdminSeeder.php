@@ -34,8 +34,8 @@ class DefaultSuperAdminSeeder extends Seeder
 
         // seed tax setting
         Tax::create([
-            'name' => 'GST',
-            'percent' => 18,
+            'name' => 'IVA',
+            'percent' => 23,
             'status' => 'active',
         ]);
 

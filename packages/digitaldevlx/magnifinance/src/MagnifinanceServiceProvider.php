@@ -16,7 +16,7 @@ class MagnifinanceServiceProvider extends ServiceProvider
          */
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'magnifinance');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'magnifinance');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
          $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if ($this->app->runningInConsole()) {
@@ -24,6 +24,11 @@ class MagnifinanceServiceProvider extends ServiceProvider
                 __DIR__.'/../config/config.php' => config_path('magnifinance.php'),
             ], 'config');
 
+            if (! class_exists('CreateDocumentableTable')) {
+                $this->publishes([
+                    __DIR__ . '/../database/migrations/documentable_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_documentable_table.php'),
+                ], 'migrations');
+            }
             // Publishing the views.
             /*$this->publishes([
                 __DIR__.'/../resources/views' => resource_path('views/vendor/magnifinance'),

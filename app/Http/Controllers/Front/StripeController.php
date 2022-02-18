@@ -9,6 +9,7 @@ use App\User;
 use App\Booking;
 use App\Payment;
 use Carbon\Carbon;
+use DigitalDevLX\Magnifinance\facades\Magnifinance;
 use Stripe\Stripe;
 use App\Helper\Reply;
 use App\GlobalSetting;
@@ -184,6 +185,8 @@ class StripeController extends Controller
 
         if (isset($request->advertise_id)) {
             $advertise = Advertise::where(['id' => $request->advertise_id])->first();
+//            $document = Magnifinance::add
+//            $advertise->addDocument();
         }
         else {
             $invoice = Booking::where(['id' => $request->booking_id, 'user_id' => Auth::user()->id])->first();

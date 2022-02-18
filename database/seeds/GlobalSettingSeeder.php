@@ -17,7 +17,7 @@ class GlobalSettingSeeder extends Seeder
         $data = [
             'company_name' => 'SpotB Lda',
             'company_email' => 'geral@spot-b.com',
-            'company_phone' => '00351961546227',
+            'company_phone' => '961546227',
             'contact_email' => 'geral@spot-b.com',
             'logo' => 'storage/images/logo/16382612809deab0e8-cb03-43ec-a17d-5b055dd244f9.png',
             'address' => 'Rua Santo António de Lisboa, AGS2 CV ESQ 2700-744 Amadora',

@@ -564,6 +564,8 @@ class FrontController extends FrontBaseController
     public function teste()
     {
 
+        return $company = auth()->user()->load('country');
+
         /*$data = array(
             "UserName" => "Paulo Serrano",
             "UserEmail" => "pauloamserrano@gmail.com",
@@ -576,7 +578,7 @@ class FrontController extends FrontBaseController
             "CompanyCountry" => "Portugal"
         );*/
         $data = [];
-        $client = array(
+        /*$client = array(
             "Name" => "Paulo Serrano",
             "NIF" => "212655043",
             "Email" => "pauloamserrano@gmail.com",
@@ -586,19 +588,33 @@ class FrontController extends FrontBaseController
             "CountryCode" => "PT",
             "LegalName" => "Nome Legal",
             "PhoneNumber" => "966666666"
+        );*/
+
+        $client = array(
+            "Name" => "Ana Garcia",
+            "NIF" => "239637712",
+            "Email" => "pauloamserrano@gmail.com",
+            "Address" => "Rua dos Arneiros 21C",
+            "City" => "Lisboa",
+            "PostCode" => "1500-055",
+            "CountryCode" => "PT",
+            "LegalName" => "Centro Ana Garcia",
+            "PhoneNumber" => "966666666"
         );
 
         $list = [
-            "Code" => "04", // Service or Product ID, min lenght 2
-            "Description" => "Descrição",
-            "UnitPrice" => 34.5,
-            "Quantity" => 1,
-            "Unit" => "Service",
-            "Type" => "S", // S = Service P = Product
-            "TaxValue" => 23, // percentage
-            "ProductDiscount" => 0, // Percentage
-            "CostCenter" => ""
-        ];
+            [
+                "Code" => "010", // Service or Product ID, min lenght 2
+                "Description" => "Advertise from day one to day ten",
+                "UnitPrice" => 67.5,
+                "Quantity" => 1,
+                "Unit" => "Service",
+                "Type" => "S", // S = Service P = Product
+                "TaxValue" => 23, // percentage
+                "ProductDiscount" => 0, // Percentage
+                "CostCenter" => "Advertises"
+            ]
+            ];
 
         $document = [
             "Type" => "T", // T = Fatura/Recibo, I = Fatura, S = Fatura Simplificada, C - Nota de Credito, D = Nota de Debito
@@ -607,12 +623,13 @@ class FrontController extends FrontBaseController
             "Description" => "Descrição",
 //            "Serie" => "",
 //            "TaxExemptionReasonCode" => "",
-            "ExternalId" => 45, //payment Id
-            "Lines" => [$list]
+            "ExternalId" => 46, //transaction Id
+            "Lines" => $list
         ];
 
-        return Magnifinance::getDocument("143371309", "239637712");
-//        return Magnifinance::addDocument("239637712", $client, $document, "pauloamserrano@gmail.com");
+        return Magnifinance::getDocumentFromOwner("143374054");
+//        return Magnifinance::getDocument("143373975", "239637712");
+        return Magnifinance::emitDocumentFromOwner($client, $document, "pauloamserrano@gmail.com");
 
 
 //        "143371309"
@@ -2317,7 +2334,8 @@ class FrontController extends FrontBaseController
                     'name' => mb_convert_encoding($request->name, 'UTF-8', 'UTF-8'),
                     'email' => mb_convert_encoding($request->email, 'UTF-8', 'UTF-8'),
                     'password' => mb_convert_encoding($request->password, 'UTF-8', 'UTF-8'),
-                    'company_id' => mb_convert_encoding($company->id, 'UTF-8', 'UTF-8')
+                    'company_id' => mb_convert_encoding($company->id, 'UTF-8', 'UTF-8'),
+                    'country_id' => mb_convert_encoding($request->country_id, 'UTF-8', 'UTF-8')
                 ]);
                 $user->attachRole(Role::withoutGlobalScope(CompanyScope::class)->select('id', 'name')->where(['name' => 'administrator', 'company_id' => $company->id])->first()->id);
                 DB::commit();

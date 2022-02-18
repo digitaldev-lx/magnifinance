@@ -20,12 +20,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-center justify-content-md-end mb-3">
-                        {{--@if (in_array('Employee Leave',$user->modules) && $user->roles()->withoutGlobalScopes()->first()->hasPermission('read_employee_leave'))
-                        <a href="{{ route('admin.employee-leaves.index') }}" class="btn btn-rounded mb-1 mr-2" id="employee-leaves"><i class="fa fa-rocket"></i> @lang('app.employee') @lang('app.leave')</a>
-                        @endif
-                        @permission('read_employee_group')
-                        <a href="{{ route('admin.employee-group.index') }}" class="btn btn-rounded btn-info mb-1 mr-2"><i class="fa fa-list"></i> @lang('app.employeeGroup')</a>
-                        @endpermission--}}
+
                         @permission('create_advertise')
                         <a href="{{ route('admin.advertises.create') }}" class="btn btn-rounded btn-primary mb-1"><i class="fa fa-plus"></i> @lang('app.createNew')</a>
                         @endpermission

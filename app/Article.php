@@ -79,11 +79,11 @@ class Article extends Model
 
     public function getArticleImageUrlAttribute()
     {
-        if (is_null($this->image) || $this->image == '') {
-            return asset('img/no-image.jpg');
+        if(is_null($this->image)){
+            return "https://media.istockphoto.com/photos/multi-racial-ethnic-group-of-womans-with-diffrent-types-of-skin-and-picture-id1193184402?k=20&m=1193184402&s=612x612&w=0&h=cXQVcuS46oM0ya0OVH7hpjxPSwW_NdOKb5pM7zLJ2Sw=";
         }
-//
-        return asset($this->image);
+
+        return cdn_storage_url($this->image);
     }
 
     public function company()

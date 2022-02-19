@@ -122,7 +122,6 @@ class GlobalSetting extends Model
             }
         }
 
-
         return $number;
     }
 

@@ -2,18 +2,32 @@
 
 namespace DigitalDevLX\Magnifinance\facades;
 
+/**
+ * DigitalDevLx/Magniginance/facades
+ *
+ * @method static \DigitalDevLX\Magnifinance\Magnifinance addPartner()
+ */
+
+use App\Article;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Facade;
+use phpDocumentor\Reflection\Types\Static_;
+use phpDocumentor\Reflection\Types\String_;
 
 /**
  * @see \DigitalDevLX\Magnifinance\Skeleton\SkeletonClass
+ * @param array $partner
+ * @method static string addPartner(array $partner = [])
+ * @method static string getPartnerToken($nif)
+ * @method static string getDocumentFromPartner($id, $partnerNif)
+ * @method static string getDocumentFromOwner($document_id)
+ * @method static string emitDocumentFromPartner($partnerNif, array $client, array $document, string $sendToEmail)
+ * @method static string emitDocumentFromOwner(array $client, array $document, string $sendToEmail)
  */
+
 class Magnifinance extends Facade
 {
-    /**
-     * Get the registered name of the component.
-     *
-     * @return string
-     */
+
     protected static function getFacadeAccessor()
     {
         return 'magnifinance';

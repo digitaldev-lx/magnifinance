@@ -627,7 +627,7 @@ class FrontController extends FrontBaseController
             "Lines" => $list
         ];
 
-        return Magnifinance::getDocumentFromOwner("143374054");
+        return Magnifinance::emitDocumentFromPartner();
 //        return Magnifinance::getDocument("143373975", "239637712");
         return Magnifinance::emitDocumentFromOwner($client, $document, "pauloamserrano@gmail.com");
 
@@ -731,7 +731,6 @@ class FrontController extends FrontBaseController
 
     public function saveBooking(StoreFrontBooking $request)
     {
-
         /* if user is registered then login else do register */
         if ($this->user) {
             $user = $this->user;

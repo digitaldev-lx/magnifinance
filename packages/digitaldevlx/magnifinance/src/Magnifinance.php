@@ -25,15 +25,29 @@ class Magnifinance
         $this->partner = $partner;
     }
 
-    public function addPartner($partner = [])
+
+    /**
+     * Add a new partner.
+     *
+     * @param  array  $partner
+     * @return array
+     */
+    public function addPartner(array $partner)
     {
         $data = [];
         foreach ($partner as $key => $value){
             $data[$key] = $value;
         }
-        return $this->postRequest($data, "partner");
+        $response = $this->postRequest($data, "partner");
+        return json_decode($response);
     }
 
+    /**
+     * Get partner token.
+     *
+     * @param $nif
+     * @return string
+     */
     public function getPartnerToken($nif): string
     {
         $response = $this->getRequest('partner', 'accessTokens', 'partnerTaxId' , $nif, true);
@@ -43,6 +57,13 @@ class Magnifinance
         return $token['AccessToken'];
     }
 
+    /**
+     * Get document from partner.
+     *
+     * @param $id
+     * @param $partnerNif
+     * @return array
+     */
     public function getDocumentFromPartner($id, $partnerNif)
     {
         $partnerToken = $this->getPartnerToken($partnerNif);
@@ -50,13 +71,28 @@ class Magnifinance
         return json_decode($document);
     }
 
-    public function getDocumentFromOwner($id)
+    /**
+     * Get document from owner.
+     *
+     * @param $document_id
+     * @return array
+     */
+    public function getDocumentFromOwner($document_id)
     {
-        $document = $this->getRequest('document', null, 'documentId', $id, false);
+        $document = $this->getRequest('document', null, 'documentId', $document_id, false);
         return json_decode($document);
     }
 
-    public function emitDocumentFromPartner($partnerNif, $client, $document, $sendTo)
+    /**
+     * Emit a document from partner.
+     *
+     * @param $partnerNif
+     * @param array $client
+     * @param array $document
+     * @param string $sendToEmail
+     * @return array
+     */
+    public function emitDocumentFromPartner($partnerNif, array $client, array $document, string $sendToEmail)
     {
         $partnerToken = $this->getPartnerToken($partnerNif);
 
@@ -81,7 +117,15 @@ class Magnifinance
         return json_decode($response);
     }
 
-    public function emitDocumentFromOwner($client, $document, $sendTo)
+    /**
+     * Emit a document from owner.
+     *
+     * @param array $client
+     * @param array $document
+     * @param string $sendToEmail
+     * @return array
+     */
+    public function emitDocumentFromOwner(array $client, array $document, string $sendToEmail)
     {
 
         $data = [];
@@ -104,7 +148,15 @@ class Magnifinance
         return json_decode($response);
     }
 
-    private function postRequest($data, $endpoint = "", $partnerToken = null)
+    /**
+     * Post request.
+     *
+     * @param $data
+     * @param string $endpoint
+     * @param null $partnerToken
+     * @return array
+     */
+    private function postRequest($data, string $endpoint = "", $partnerToken = null)
     {
         $url = $this->base_url.$endpoint;
         $headers = [
@@ -114,7 +166,18 @@ class Magnifinance
         return Http::withHeaders($headers)->post($url, $data);
     }
 
-    private function getRequest($endpoint, $method, $param, $value, $withPassword = false, $partnerToken = null)
+    /**
+     * Get request.
+     *
+     * @param string $endpoint
+     * @param string $method
+     * @param string $param
+     * @param $value
+     * @param bool $withPassword
+     * @param $partnerToken
+     * @return array
+     */
+    private function getRequest(string $endpoint, string $method, string $param, $value, bool $withPassword = false, $partnerToken = null)
     {
         $url = !is_null($method)
             ? $this->base_url.$endpoint."/".$method."?".$param."=".$value

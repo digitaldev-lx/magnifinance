@@ -131,6 +131,8 @@ class Company extends Model
         'company_name',
         'company_email',
         'company_phone',
+        'vat_number',
+        'post_code',
         'address',
         'date_format',
         'time_format',

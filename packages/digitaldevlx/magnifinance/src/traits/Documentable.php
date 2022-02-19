@@ -2,7 +2,6 @@
 
 namespace DigitalDevLX\Magnifinance\traits;
 
-use Illuminate\Database\Eloquent\Model;
 use DigitalDevLX\Magnifinance\models\Document;
 
 trait Documentable

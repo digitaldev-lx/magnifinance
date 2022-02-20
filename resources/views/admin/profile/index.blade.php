@@ -29,6 +29,11 @@
                                     <input type="email" class="form-control" name="email" value="{{ $user->email }}">
                                 </div>
 
+                                <div class="form-group">
+                                    <label>@lang('app.vatNumber')</label>
+                                    <input type="text" class="form-control" name="vat_number" value="{{ $user->vat_number }}">
+                                </div>
+
                                 <!-- text input -->
                                 <div class="form-group">
                                     <label>@lang('app.password')</label>
@@ -57,9 +62,37 @@
                                         </div>
                                     </div>
                                 @endif
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>@lang('app.address')</label>
+                                            <input type="text" class="form-control" name="address" value="{{ ucwords($user->address) }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>@lang('app.businessPostCode')</label>
+                                            <input type="text" class="form-control" name="post_code" value="{{ ucwords($user->post_code) }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>@lang('app.placeholder.city')</label>
+                                            <input type="text" class="form-control" name="city" value="{{ ucwords($user->city) }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label>@lang('app.country')</label>
+                                        <select name="country_id" id="country_id" class="form-control select2">
+                                            @foreach ($countries as $country => $value)
+                                                <option {{$value['id'] == $user->country_id ? 'selected' : ''}} value="{{ $value['id'] }}">{{ $value['name'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">@lang('app.image')</label>
+                                    <label for="input-file-now">@lang('app.image')</label>
                                     <div class="card">
                                         <div class="card-body">
                                             <input type="file" id="input-file-now" name="image" accept=".png,.jpg,.jpeg" data-default-file="{{ $user->user_image_url  }}" class="dropify"
@@ -123,7 +156,7 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <button type="button" id="request-otp" class="btn btn-primary w-100">@lang('app.requestOTP')</button>
+                            <button type="button" id="request-otp" class="btn btn-primary w-100">{{__('app.verifyMobile')}}</button>
                         </div>
                     </div>
                 </div>

@@ -18,6 +18,7 @@
 
 <link rel="stylesheet" href="{{ asset('css/bootstrap-tagsinput.css') }}">
     <style>
+
         .dropify-wrapper, .dropify-preview, .dropify-render img {
             background-color: var(--sidebar-bg) !important;
         }
@@ -146,25 +147,72 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="exampleInputPassword1">@lang('app.logo')</label>
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <input type="file" id="input-file-now" name="logo"
-                                                                   accept=".png,.jpg,.jpeg" class="dropify"
-                                                                   data-default-file="{{ $settings->logo_url }}"
-                                                            />
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="vat_number"
+                                                                   class="control-label">@lang('app.vatNumber')</label>
+                                                            <input type="text" class="form-control  form-control-lg"
+                                                                   id="vat_number" name="vat_number" required
+                                                                   value="{{ $settings->vat_number }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPassword1">@lang('app.logo')</label>
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <input type="file" id="input-file-now" name="logo"
+                                                                           accept=".png,.jpg,.jpeg" class="dropify"
+                                                                           data-default-file="{{ $settings->logo_url }}"
+                                                                    />
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="exampleInputPassword1">@lang('app.address')</label>
                                                     <textarea class="form-control form-control-lg" name="address" id=""
-                                                              cols="30" rows="5">{!! $settings->address !!}</textarea>
+                                                              cols="30" rows="2">{!! $settings->address !!}</textarea>
                                                 </div>
+
                                                 <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="post_code"
+                                                                   class="control-label">{{__('app.businessPostCode')}}</label>
+                                                            <input type="text" class="form-control form-control-lg"
+                                                                   id="post_code" name="post_code" placeholder="{{__('app.placeholder.post_code')}}"
+                                                                   value="{{ $settings->post_code }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="city"
+                                                                   class="control-label">{{__('app.placeholder.city')}}</label>
+                                                            <input type="text" class="form-control form-control-lg"
+                                                                   id="city" name="city" placeholder="{{__('app.placeholder.city')}}"
+                                                                   value="{{ $settings->city }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label>@lang('app.country')</label>
+                                                        <select name="country_id" id="country_id" class="form-control select2">
+                                                            @foreach ($countries as $country => $value)
+                                                                <option {{$value['id'] == $settings->country_id ? 'selected' : ''}} value="{{ $value['id'] }}">{{ $value['name'] }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mt-1">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="date_format" class="control-label">
@@ -674,7 +722,6 @@
                     if (error) {
                         return;
                     }
-                    console.log(result.address);
                     document.getElementById('address').value = result.address.LongLabel
                     document.getElementById('latitude').value = result.latlng.lat
                     document.getElementById('longitude').value = result.latlng.lng

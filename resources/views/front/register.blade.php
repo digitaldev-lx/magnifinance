@@ -89,7 +89,17 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="name">@lang('app.businessEmail') <span class="required-span">*</span> </label>
+                            <label for="vat_number">{{__("app.companyVatNumber")}}<span class="required-span">*</span> </label>
+                            <input data-parsley-trigger="keyup" autocomplete="off" required type="text" name="vat_number" id="vat_number" class="form-control form-control-lg {{ $errors->has('vat_number') ? ' is-invalid' : '' }}" value="{{ old('vat_number') }}" required autofocus placeholder="{{__('app.placeholder.vat_number')}}" data-parsley-minlength="3">
+                            @if ($errors->has('vat_number'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('vat_number') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">@lang('app.businessEmail') <span class="required-span">*</span> </label>
                             <input data-parsley-trigger="keyup" autocomplete="off"  required type="email" name="email" id="email" class="form-control form-control-lg {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" required autofocus placeholder="@lang('app.placeholder.BusinessEmail')" id="username" aria-describedby="username">
                             @if ($errors->has('email'))
                                 <span class="invalid-feedback" role="alert">
@@ -99,7 +109,7 @@
                         </div>
 
                         <div class="input-group">
-                            <label id="password-label" for="name">@lang('app.password') <span class="required-span">*</span> </label>
+                            <label id="password-label" for="password">@lang('app.password') <span class="required-span">*</span> </label>
                             <input data-parsley-trigger="keyup" onKeyUp="checkPasswordStrength();" autocomplete="off"  required type="password" name="password" id="password" class="form-control border-right-lg-0 form-control-lg {{ $errors->has('password') ? ' is-invalid' : '' }}" value="{{ old('password') }}" required id="password">
                             <div class="input-group-append order-0 w-sm-100">
                                 <span class="input-group-text w-sm-100" id="password-strength-div">
@@ -118,7 +128,7 @@
                         </div>
 
                         <div class="form-group input-group mb-2 mt-2">
-                            <label for="name" class="btn-block">@lang('app.businessContact') <span class="required-span">*</span> </label>
+                            <label for="calling_code" class="btn-block">@lang('app.businessContact') <span class="required-span">*</span> </label>
                             <div class="input-group-prepend business-contact" id="prepend">
                                 <span class="input-group-text" id="basic-addon1">
                                 <select name="calling_code" id="calling_code" class="form-control myselect">
@@ -136,7 +146,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="name">@lang('app.businessWebsite') </label>
+                            <label for="website">@lang('app.businessWebsite') </label>
                             <input autocomplete="off"  type="url" name="website" id="website" class="form-control form-control-lg {{ $errors->has('website') ? ' is-invalid' : '' }}" value="{{ old('website') }}" placeholder="www.example.com" data-parsley-type="url">
                             @if ($errors->has('website'))
                                 <span class="invalid-feedback" role="alert">
@@ -156,11 +166,21 @@
                         </div>
 
                         <div class="form-group mt-4">
-                            <label for="name">@lang('app.address')<span class="required-span">*</span> </label>
-                            <textarea data-parsley-trigger="keyup" required class="form-control {{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" id="address" rows="5" placeholder="Eg. Near Statue of Liberty National Monument, New York City, United States." data-parsley-minlength="10"> {{ old('address') }} </textarea>
+                            <label for="address">@lang('app.address')<span class="required-span">*</span> </label>
+                            <textarea data-parsley-trigger="keyup" required class="form-control {{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" id="address" rows="3" placeholder="Eg. Near Statue of Liberty National Monument, New York City, United States." data-parsley-minlength="10"> {{ old('address') }} </textarea>
                             @if ($errors->has('address'))
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('address') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <label for="post_code">{{__('app.businessPostCode')}}<span class="required-span">*</span> </label>
+                            <input data-parsley-trigger="keyup" autocomplete="off"  required type="text" id="post_code" name="post_code" class="form-control form-control-lg {{ $errors->has('post_code') ? ' is-invalid' : '' }}"  required placeholder="{{__('app.placeholder.post_code')}}" data-parsley-minlength="3" value="{{ old('post_code') }}">
+                            @if ($errors->has('post_code'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('post_code') }}</strong>
                                 </span>
                             @endif
                         </div>

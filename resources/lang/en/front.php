@@ -41,6 +41,7 @@ return array (
     'firstName' => 'First Name',
     'lastName' => 'Last Name',
     'email' => 'Email',
+    'vat_number' => 'Vat Number',
     'phoneNumber' => 'Phone Number',
   ),
   'accountCreateNotice' => 'Note: Your account will be created automatically.',

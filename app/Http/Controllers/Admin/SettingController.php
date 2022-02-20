@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Country;
 use App\Services\ImagesManager;
 use App\Services\UrlManager;
 use App\Tax;
@@ -59,6 +60,7 @@ class SettingController extends AdminBaseController
         $this->timeFormats = Formats::timeFormats();
         $this->dateObject = Carbon::now($this->settings->timezone);
         $this->currencies = Currency::all();
+        $this->countries = Country::all();
         $this->enabledLanguages = Language::where('status', 'enabled')->orderBy('language_name')->get();
         $this->smtpSetting = SmtpSetting::first();
         $this->credentialSetting = PaymentGatewayCredentials::first();
@@ -113,6 +115,10 @@ class SettingController extends AdminBaseController
             $setting->company_email = $request->company_email;
             $setting->company_phone = $request->company_phone;
             $setting->address = $request->address;
+            $setting->post_code = $request->post_code;
+            $setting->city = $request->city;
+            $setting->country_id = $request->country_id;
+            $setting->vat_number = $request->vat_number;
             $setting->date_format = $request->date_format;
             $setting->time_format = $request->time_format;
             $setting->website = $request->website;

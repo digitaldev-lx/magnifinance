@@ -19,6 +19,10 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int|null $currency_id
  * @property int|null $package_id
  * @property string $company_name
+ * @property string $vat_number
+ * @property string $post_code
+ * @property string $city
+ * @property int|null $country_id
  * @property string|null $slug
  * @property string $company_email
  * @property string $company_phone

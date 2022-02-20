@@ -28,7 +28,11 @@ class UpdateSetting extends CoreRequest
             'company_name' => 'required',
             'company_email' => 'required|email',
             'company_phone' => 'required',
+            'vat_number' => 'required',
             'address' => 'required',
+            'post_code' => 'required',
+            'city' => 'required',
+            'country_id' => 'required',
             'website' => 'required|url',
             'date_format' => 'required',
             'time_format' => 'required'

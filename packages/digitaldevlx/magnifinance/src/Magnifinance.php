@@ -211,7 +211,6 @@ class Magnifinance
             "CompanyCountry" => $company->country
         ];
 
-        // todo: create migration to add vat_number and post_code to company
     }
 
     private function generateClient()
@@ -230,7 +229,5 @@ class Magnifinance
             "PhoneNumber" => $client->calling_code.$client->mobile
         ];
 
-        // todo: create migration to add address, city, post_code and vat_number to user
-        // todo: create migration to add vat_number to global settings
     }
 }

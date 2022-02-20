@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Country;
 use App\Helper\Files;
 use App\Helper\Reply;
 use App\Services\ImagesManager;
@@ -24,7 +25,8 @@ class ProfileController extends SuperAdminBaseController
     public function index()
     {
         $user = $this->user;
-        return view('superadmin.profile.index', compact('user'));
+        $countries = Country::all();
+        return view('superadmin.profile.index', compact(['user', 'countries']));
     }
 
     public function store(ProfileSetting $request)
@@ -32,6 +34,11 @@ class ProfileController extends SuperAdminBaseController
         $user = User::find($this->user->id);
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->address = $request->address;
+        $user->city = $request->city;
+        $user->post_code = $request->post_code;
+        $user->country_id = $request->country_id;
+        $user->vat_number = $request->vat_number;
 
         if($request->password != ''){
             $user->password = $request->password;

@@ -20,6 +20,10 @@ use Laravel\Cashier\Billable;
  * @property int|null $group_id
  * @property string $name
  * @property string $email
+ * @property string $address
+ * @property string $city
+ * @property string $post_code
+ * @property string $vat_number
  * @property string|null $calling_code
  * @property string|null $mobile
  * @property int $mobile_verified

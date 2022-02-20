@@ -373,15 +373,19 @@ return array(
     'categories' => 'Categorias',
     'contactUs' => 'Contacte-nos',
     'companyBusinessIndividualName' => 'Empresa / Negócio / Nome Individual',
-    'businessEmail' => 'Email de Negócio',
-    'businessContact' => 'Contato de negócio',
-    'businessWebsite' => 'Website de negócio',
+    'companyVatNumber' => 'NIF Empresa',
+    'vatNumber' => 'NIF',
+    'businessEmail' => 'Email',
+    'businessContact' => 'Contato',
+    'businessWebsite' => 'Website',
     'businessCityCountry' => 'Cidade/País',
+    'businessPostCode' => 'Codigo Postal',
     'createMyAccount' => 'Criar Conta',
     'placeholder' =>
         array(
             'CompanyBusinessIndividualName' => 'Ex. Centro Estética Amazing SA, Beauty E Mais, Sofia Martins',
             'BusinessEmail' => 'abc@example.com',
+            'vat_number' => '999999990',
             'Password' =>
                 array(
                     'Weak' => 'Fraco (deve ter pelo menos 6 caracteres)',
@@ -390,6 +394,7 @@ return array(
                 ),
             'ContactNumber' => 'Numero de Contacto',
             'city' => 'Cidade',
+            'post_code' => '0000-000',
 
         ),
     'yourName' => 'Nome',

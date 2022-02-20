@@ -41,6 +41,7 @@ return array (
     'firstName' => 'Primeiro Nome',
     'lastName' => 'Apelido',
     'email' => 'Email',
+    'vat_number' => 'NIF',
     'phoneNumber' => 'Numero de telefone',
   ),
   'accountCreateNotice' => 'Notea: Sua conta será criada automaticamente.',

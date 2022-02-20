@@ -757,6 +757,7 @@ class FrontController extends FrontBaseController
                 $user->name = $request->first_name . ' ' . $request->last_name;
                 $user->email = $request->email;
                 $user->mobile = $request->phone;
+                $user->vat_number = $request->vat_number;
                 $user->calling_code = $request->calling_code;
                 $user->password = \Hash::make($password);
                 $user->save();
@@ -2305,7 +2306,9 @@ class FrontController extends FrontBaseController
                     'company_name' => mb_convert_encoding($request->business_name, 'UTF-8', 'UTF-8'),
                     'company_email' => mb_convert_encoding($request->email, 'UTF-8', 'UTF-8'),
                     'company_phone' => mb_convert_encoding($request->contact, 'UTF-8', 'UTF-8'),
+                    'vat_number' => mb_convert_encoding($request->vat_number, 'UTF-8', 'UTF-8'),
                     'address' => mb_convert_encoding($request->address, 'UTF-8', 'UTF-8'),
+                    'post_code' => mb_convert_encoding($request->post_code, 'UTF-8', 'UTF-8'),
                     'city' => mb_convert_encoding($request->city, 'UTF-8', 'UTF-8'),
                     'country' => mb_convert_encoding(Str::title($request->country), 'UTF-8', 'UTF-8'),
                     'website' => mb_convert_encoding($request->website, 'UTF-8', 'UTF-8'),

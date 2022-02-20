@@ -376,15 +376,19 @@ return array (
   'categories' => 'Categories',
   'contactUs' => 'Contact Us',
   'companyBusinessIndividualName' => 'Company / Business / Individual Name',
+  'companyVatNumber' => 'Company Vat Number',
+  'vatNumber' => 'Vat Number',
   'businessEmail' => 'Business Email',
   'businessContact' => 'Business Contact',
   'businessWebsite' => 'Business Website',
   'businessCityCountry' => 'City/Country',
+  'businessPostCode' => 'Post Code',
   'createMyAccount' => 'Create My Account',
   'placeholder' =>
   array (
     'CompanyBusinessIndividualName' => 'Eg. Parlor INC, Beauty Parlor, John Doe',
     'BusinessEmail' => 'abc@example.com',
+    'vat_number' => '999999990',
     'Password' =>
     array (
       'Weak' => 'Weak  (should be atleast 6 characters)',
@@ -393,6 +397,7 @@ return array (
     ),
     'ContactNumber' => 'Contact Number',
     'city' => 'City',
+    'post_code' => '0000-000',
 
   ),
   'yourName' => 'Your Name',

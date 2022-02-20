@@ -113,7 +113,12 @@
                         <img src="{{ $user->user_image_url }}" class="img img-circle" height="28em" width="28em" alt="User Image"> <i class="fa fa-chevron-down"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a href="{{ route('superadmin.profile.index') }}" class="dropdown-item">
+
+                        @if ($user->hasRole('superadmin') || $user->hasRole('agent'))
+                            <a href="{{ route('superadmin.profile.index') }}" class="dropdown-item">
+                        @else
+                            <a href="{{ route('admin.profile.index') }}" class="dropdown-item">
+                        @endif
                             <i class="fa fa-user mr-2"></i> @lang('menu.profile')
                         </a>
                         <div class="dropdown-divider"></div>

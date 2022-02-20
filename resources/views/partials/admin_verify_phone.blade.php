@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <button type="button" id="request-otp" class="btn btn-primary w-100">@lang('app.requestOTP')</button>
+                        <button type="button" id="request-otp" class="btn btn-primary w-100">{{__('app.verifyMobile')}}</button>
                     </div>
                 </div>
             </div>

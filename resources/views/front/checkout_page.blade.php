@@ -112,6 +112,10 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <input type="text" class="step3_input mt-2 mb-2 form-control" name="vat_number" placeholder="@lang('front.registration.vat_number')*" autocomplete="off">
+                                    </div>
+
+                                    <div class="form-group">
                                         <input type="email" class="step3_input mt-2 mb-2 form-control" name="email" placeholder="@lang('front.registration.email')*" autocomplete="off">
                                     </div>
 

@@ -141,6 +141,7 @@ class Company extends Model
         'vat_number',
         'post_code',
         'address',
+        "country_id",
         'date_format',
         'time_format',
         'website',

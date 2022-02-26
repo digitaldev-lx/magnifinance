@@ -2303,9 +2303,9 @@ class FrontController extends FrontBaseController
 
                     if (!$validateRecaptcha) {
                         return $this->googleRecaptchaMessage();
+
                     }
                 }
-
 //                $country = Country::whereId($request->country_id)->firstOrFail();
 
                 $data = [
@@ -2326,28 +2326,29 @@ class FrontController extends FrontBaseController
                 ];
 
                 DB::beginTransaction();
-                $location = Location::updateOrCreate(
-                    [
-                        'name' => Str::title($request->city) . ', ' . Str::title($country->name),
-                    ],
-                    [
-                        'country_id' => $request->country_id
-                    ]
-                );
+                    $country = Country::find($request->country_id);
+                    $location = Location::updateOrCreate(
+                        [
+                            'name' => Str::title($request->city) . ', ' . Str::title($country->name),
+                        ],
+                        [
+                            'country_id' => $request->country_id
+                        ]
+                    );
 
-                $company = Company::create($data);
+                    $company = Company::create($data);
 
-                // create admin/employee
-                $user = User::create([
-                    'name' => mb_convert_encoding($request->name, 'UTF-8', 'UTF-8'),
-                    'email' => mb_convert_encoding($request->email, 'UTF-8', 'UTF-8'),
-                    'password' => mb_convert_encoding($request->password, 'UTF-8', 'UTF-8'),
-                    'company_id' => mb_convert_encoding($company->id, 'UTF-8', 'UTF-8'),
-                    'country_id' => mb_convert_encoding($request->country_id, 'UTF-8', 'UTF-8')
-                ]);
-                $user->attachRole(Role::withoutGlobalScope(CompanyScope::class)->select('id', 'name')->where(['name' => 'administrator', 'company_id' => $company->id])->first()->id);
+                    // create admin/employee
+                    $user = User::create([
+                        'name' => mb_convert_encoding($request->name, 'UTF-8', 'UTF-8'),
+                        'email' => mb_convert_encoding($request->email, 'UTF-8', 'UTF-8'),
+                        'password' => mb_convert_encoding($request->password, 'UTF-8', 'UTF-8'),
+                        'company_id' => mb_convert_encoding($company->id, 'UTF-8', 'UTF-8'),
+                        'country_id' => mb_convert_encoding($request->country_id, 'UTF-8', 'UTF-8')
+                    ]);
+                    $user->attachRole(Role::withoutGlobalScope(CompanyScope::class)->select('id', 'name')->where(['name' => 'administrator', 'company_id' => $company->id])->first()->id);
 
-                Magnifinance::addPartner($company);
+//                    Magnifinance::addPartner($company);
 
                 DB::commit();
             } catch (\Exception $e) {

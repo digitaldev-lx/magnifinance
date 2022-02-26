@@ -480,6 +480,7 @@ return array (
     'recurringPayments' => 'Recurring Payment',
     'payNow' => 'Pay Now',
     'payStripe' => 'Pay via Stripe',
+    'payWithCard' => 'Pagar com Cartão',
     'taxName' => 'Tax Name',
     'rate' => 'Rate',
     'payOffline' => 'Pay Offline',

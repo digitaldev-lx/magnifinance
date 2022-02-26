@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Country;
 use App\User;
 use Exception;
 use App\Package;
 use Carbon\Carbon;
 use App\Helper\Files;
 use App\Helper\Reply;
+use Illuminate\Support\Str;
+use Laravel\Cashier\Cashier;
 use Razorpay\Api\Api;
 use App\GlobalSetting;
 use App\PaypalInvoice;
@@ -53,9 +56,9 @@ class BillingController extends AdminBaseController
 
         $this->nextPaymentDate = '-';
         $this->previousPaymentDate = '-';
-        $this->stripeSettings = PaymentGatewayCredentials::withoutGlobalScopes(['company'])->first();
+        $this->stripeSettings = PaymentGatewayCredentials::withoutGlobalScopes()->first();
 //        $this->subscription = Subscription::where('company_id', company()->id)->first();
-        $this->razorPaySubscription = RazorpaySubscription::where('company_id', company()->id)->orderBy('id', 'Desc')->first();
+//        $this->razorPaySubscription = RazorpaySubscription::where('company_id', company()->id)->orderBy('id', 'Desc')->first();
         $this->nextPaymentDate = '-';
         $this->previousPaymentDate = '-';
         $this->subscription = Subscription::where('company_id', company()->id)->first();
@@ -66,28 +69,28 @@ class BillingController extends AdminBaseController
             $this->message = $request->get('message');
         }
 
-        $this->razorPaySubscription = RazorpaySubscription::where('company_id', company()->id)->orderBy('id', 'Desc')->first();
+//        $this->razorPaySubscription = RazorpaySubscription::where('company_id', company()->id)->orderBy('id', 'Desc')->first();
 
-        $stripe = DB::table('stripe_invoices')
+        $allInvoices = DB::table('stripe_invoices')
             ->join('packages', 'packages.id', 'stripe_invoices.package_id')
             ->selectRaw('stripe_invoices.id , "Stripe" as method, stripe_invoices.pay_date as paid_on, "" as end_on ,stripe_invoices.next_pay_date, stripe_invoices.created_at')
             ->whereNotNull('stripe_invoices.pay_date')
-            ->where('stripe_invoices.company_id', company()->id);
+            ->where('stripe_invoices.company_id', company()->id)->get();
 
-        $razorpay = DB::table('razorpay_invoices')
+        /*$razorpay = DB::table('razorpay_invoices')
             ->join('packages', 'packages.id', 'razorpay_invoices.package_id')
             ->selectRaw('razorpay_invoices.id , "Razorpay" as method, razorpay_invoices.pay_date as paid_on, "" as end_on ,razorpay_invoices.next_pay_date, razorpay_invoices.created_at')
             ->whereNotNull('razorpay_invoices.pay_date')
-            ->where('razorpay_invoices.company_id', company()->id);
+            ->where('razorpay_invoices.company_id', company()->id);*/
 
-        $allInvoices = DB::table('paypal_invoices')
+        /*$allInvoices = DB::table('paypal_invoices')
             ->join('packages', 'packages.id', 'paypal_invoices.package_id')
             ->selectRaw('paypal_invoices.id, "Paypal" as method, paypal_invoices.paid_on, paypal_invoices.end_on,paypal_invoices.next_pay_date,paypal_invoices.created_at')
             ->where('paypal_invoices.status', 'paid')
             ->where('paypal_invoices.company_id', company()->id)
             ->union($stripe)
             ->union($razorpay)
-            ->get();
+            ->get();*/
 
         $this->firstInvoice = $allInvoices->sortByDesc(function ($temp, $key) {
             return Carbon::parse($temp->created_at)->getTimestamp();
@@ -97,20 +100,20 @@ class BillingController extends AdminBaseController
         if ($this->firstInvoice) {
             if ($this->firstInvoice->next_pay_date)
             {
-                if ($this->firstInvoice->method == 'Paypal' && $this->firstInvoice !== null && is_null($this->firstInvoice->end_on))
+                /*if ($this->firstInvoice->method == 'Paypal' && $this->firstInvoice !== null && is_null($this->firstInvoice->end_on))
                 {
                     $this->nextPaymentDate = Carbon::parse($this->firstInvoice->next_pay_date)->toFormattedDateString();
-                }
+                }*/
 
                 if ($this->firstInvoice->method == 'Stripe' && $this->subscription !== null && is_null($this->subscription->ends_at))
                 {
                     $this->nextPaymentDate = Carbon::parse($this->firstInvoice->next_pay_date)->toFormattedDateString();
                 }
 
-                if ($this->firstInvoice->method == 'Razorpay' && $this->razorPaySubscription !== null && is_null($this->razorPaySubscription->ends_at))
+               /* if ($this->firstInvoice->method == 'Razorpay' && $this->razorPaySubscription !== null && is_null($this->razorPaySubscription->ends_at))
                 {
                     $this->nextPaymentDate = Carbon::parse($this->firstInvoice->next_pay_date)->toFormattedDateString();
-                }
+                }*/
 
             }
 
@@ -120,8 +123,9 @@ class BillingController extends AdminBaseController
 
         }
 
-        $this->paypalInvoice = PaypalInvoice::where('company_id', company()->id)->orderBy('created_at', 'desc')->first();
+//        $this->paypalInvoice = PaypalInvoice::where('company_id', company()->id)->orderBy('created_at', 'desc')->first();
 
+//        $this->package = Package::find(company()->package_id);
         return view('admin.billing.index', $this->data);
     }
 
@@ -133,11 +137,11 @@ class BillingController extends AdminBaseController
             ->whereNotNull('stripe_invoices.pay_date')
             ->where('stripe_invoices.company_id', company()->id);
 
-        $razorpay = DB::table('razorpay_invoices')
+        /*$razorpay = DB::table('razorpay_invoices')
             ->join('packages', 'packages.id', 'razorpay_invoices.package_id')
             ->selectRaw('razorpay_invoices.id ,razorpay_invoices.invoice_id , packages.name as name, "Razorpay" as method,razorpay_invoices.amount, razorpay_invoices.pay_date as paid_on ,razorpay_invoices.next_pay_date,razorpay_invoices.created_at')
             ->whereNotNull('razorpay_invoices.pay_date')
-            ->where('razorpay_invoices.company_id', company()->id);
+            ->where('razorpay_invoices.company_id', company()->id);*/
 
         $paypal = DB::table('paypal_invoices')
             ->join('packages', 'packages.id', 'paypal_invoices.package_id')
@@ -151,7 +155,7 @@ class BillingController extends AdminBaseController
             ->where('offline_invoices.company_id', company()->id)
             ->union($paypal)
             ->union($stripe)
-            ->union($razorpay)
+//            ->union($razorpay)
             ->get();
 
         $paypalData = $offline->sortByDesc(function ($temp, $key) {
@@ -218,28 +222,29 @@ class BillingController extends AdminBaseController
         $token = $request->payment_method;
         $email = $request->stripeEmail;
         $plan = Package::find($request->plan_id);
+        $company = $this->company = company();
 
-        $stripe = DB::table('stripe_invoices')
+        $allInvoices = DB::table('stripe_invoices')
             ->join('packages', 'packages.id', 'stripe_invoices.package_id')
             ->selectRaw('stripe_invoices.id , "Stripe" as method, stripe_invoices.pay_date as paid_on ,stripe_invoices.next_pay_date')
             ->whereNotNull('stripe_invoices.pay_date')
-            ->where('stripe_invoices.company_id', company()->id);
+            ->where('stripe_invoices.company_id', $company->id)->get();
 
-        $razorpay = DB::table('razorpay_invoices')
+        /*$razorpay = DB::table('razorpay_invoices')
             ->join('packages', 'packages.id', 'razorpay_invoices.package_id')
             ->selectRaw('razorpay_invoices.id ,"Razorpay" as method, razorpay_invoices.pay_date as paid_on ,razorpay_invoices.next_pay_date')
             ->whereNotNull('razorpay_invoices.pay_date')
-            ->where('razorpay_invoices.company_id', company()->id);
+            ->where('razorpay_invoices.company_id', company()->id);*/
 
-        $allInvoices = DB::table('paypal_invoices')
+        /*$allInvoices = DB::table('paypal_invoices')
             ->join('packages', 'packages.id', 'paypal_invoices.package_id')
             ->selectRaw('paypal_invoices.id, "Paypal" as method, paypal_invoices.paid_on,paypal_invoices.next_pay_date')
             ->where('paypal_invoices.status', 'paid')
             ->whereNull('paypal_invoices.end_on')
-            ->where('paypal_invoices.company_id', company()->id)
+            ->where('paypal_invoices.company_id', $company->id)
             ->union($stripe)
-            ->union($razorpay)
-            ->get();
+//            ->union($razorpay)
+            ->get();*/
 
         $firstInvoice = $allInvoices->sortByDesc(function ($temp, $key) {
             return Carbon::parse($temp->paid_on)->getTimestamp();
@@ -253,7 +258,7 @@ class BillingController extends AdminBaseController
 
         if ($subcriptionCancel)
         {
-            $company = $this->company = company();
+
             $subscription = $company->subscriptions;
 
             try {
@@ -261,14 +266,18 @@ class BillingController extends AdminBaseController
                 if ($subscription->count() > 0)
                 {
                     $company->subscription('main')->noProrate()->swap($plan->{'stripe_' . $request->type . '_plan_id'});
-                }
-                else {
+                }else {
+                    if(Str::contains($company->stripe_id, 'acct_')){
+                        $connect_id = $company->stripe_id;
+                        $company->stripe_id = null;
+                    }
 
                     $company->newSubscription('main', $plan->{'stripe_' . $request->type . '_plan_id'})->create($token, [
                         'email' => $email
                     ]);
-                }
 
+                    $company->stripe_id = $company->stripe_id ?? $connect_id;
+                }
                 $company = $this->company;
 
                 $company->package_id = $plan->id;
@@ -280,7 +289,7 @@ class BillingController extends AdminBaseController
                 $company->save();
                 DB::commit();
                 // Send notification to admin & superadmin
-                $generatedBy = User::withoutGlobalScopes(['company', 'active'])->whereNull('company_id')->first();
+                $generatedBy = User::withoutGlobalScopes()->whereNull('company_id')->first();
                 $allAdmins = User::allAdministrators()->where('company_id', $company->id)->get();
                 Notification::send($generatedBy, new CompanyUpdatedPlan($company, $plan->id));
                 Notification::send($allAdmins, new CompanyUpdatedPlan($company, $plan->id));
@@ -342,21 +351,20 @@ class BillingController extends AdminBaseController
 
         $this->free = false;
 
+        $this->package = Package::findOrFail($packageID);
+
         if((!round($this->package->monthly_price) > 0 && $this->package->default == 'no' ) || $this->package->is_free == 1  )
         {
             $this->free = true;
         }
-
-        $this->package = Package::findOrFail($packageID);
-
         $this->company = company();
         $this->type    = $request->type;
-        $this->stripeSettings = PaymentGatewayCredentials::withoutGlobalScopes(['company'])->first();
+        $this->stripeSettings = PaymentGatewayCredentials::withoutGlobalScopes()->first();
 
         $this->intent = $this->stripeSettings->stripe_client_id != null && $this->stripeSettings->stripe_secret != null && $this->stripeSettings->stripe_status == 'active' ? $this->company->createSetupIntent() : [];
 
         $this->logo = $this->company->logo_url;
-
+        $this->countries = Country::all();
         $this->methods = OfflinePaymentMethod::withoutGlobalScope(CompanyScope::class)->where('status', 'yes')->get();
 
         return View::make('admin.billing.payment-method-show', $this->data);
@@ -441,97 +449,97 @@ class BillingController extends AdminBaseController
         return Reply::redirect(route('admin.billing.index'));
     }
 
-    public function razorpayPayment(Request $request)
-    {
-        $credential = PaymentGatewayCredentials::withoutGlobalScopes(['company'])->first();
+//    public function razorpayPayment(Request $request)
+//    {
+//        $credential = PaymentGatewayCredentials::withoutGlobalScopes(['company'])->first();
+//
+//        $apiKey    = $credential->razorpay_key;
+//        $secretKey = $credential->razorpay_secret;
+//
+//        $paymentId = request('paymentId');
+//        $razorpaySignature = $request->razorpay_signature;
+//        $subscriptionId = $request->subscription_id;
+//        $this->company = company();
+//        $api = new Api($apiKey, $secretKey);
+//
+//        $plan = Package::with('currency')->find($request->plan_id);
+//        $type = $request->type;
+//
+//        $expectedSignature = hash_hmac('sha256', $paymentId . '|' . $subscriptionId, $secretKey);
+//
+//        if ($expectedSignature === $razorpaySignature) {
+//
+//            try {
+//                $api->payment->fetch($paymentId);
+//
+//                $payment = $api->payment->fetch($paymentId); // Returns a particular payment
+//
+//                if ($payment->status == 'authorized') {
+//                    $payment->capture(array('amount' => $payment->amount, 'currency' => $plan->currency->currency_code));
+//                }
+//
+//                $company = $this->company;
+//
+//                $company->package_id = $plan->id;
+//                $company->package_type = $type;
+//
+//                // Set company status active
+//                $company->status = 'active';
+//                $company->licence_expire_on = null;
+//
+//                $company->save();
+//
+//                $subscription = new RazorpaySubscription();
+//
+//                $subscription->subscription_id = $subscriptionId;
+//                $subscription->company_id      = company()->id;
+//                $subscription->razorpay_id     = $paymentId;
+//                $subscription->razorpay_plan   = $type;
+//                $subscription->quantity        = 1;
+//                $subscription->save();
+//
+//                // Send superadmin notification
+//                $generatedBy = User::withoutGlobalScopes(['company', 'active'])->whereNull('company_id')->first();
+//                $allAdmins = User::allAdministrators()->where('company_id', $company->id)->get();
+//                Notification::send($generatedBy, new CompanyUpdatedPlan($company, $plan->id));
+//                Notification::send($allAdmins, new CompanyUpdatedPlan($company, $plan->id));
+//
+//                return Reply::redirect(route('admin.billing.index'), 'Payment successfully done.');
+//            } catch (\Exception $e) {
+//                return back()->withError($e->getMessage())->withInput();
+//            }
+//        }
+//    }
 
-        $apiKey    = $credential->razorpay_key;
-        $secretKey = $credential->razorpay_secret;
+//    public function razorpaySubscription(Request $request)
+//    {
+//        $credential = PaymentGatewayCredentials::withoutGlobalScopes(['company'])->first();
+//
+//        $plan = Package::find($request->plan_id);
+//        $type = $request->type;
+//
+//        $planID = ($type == 'annual') ? $plan->razorpay_annual_plan_id : $plan->razorpay_monthly_plan_id;
+//
+//        $apiKey    = $credential->razorpay_key;
+//        $secretKey = $credential->razorpay_secret;
+//
+//        $api        = new Api($apiKey, $secretKey);
+//        $subscription  = $api->subscription->create(array('plan_id' => $planID, 'customer_notify' => 1, 'total_count' => 100));
+//
+//        return Reply::dataOnly(['subscriprion' => $subscription->id]);
+//    }
 
-        $paymentId = request('paymentId');
-        $razorpaySignature = $request->razorpay_signature;
-        $subscriptionId = $request->subscription_id;
-        $this->company = company();
-        $api = new Api($apiKey, $secretKey);
-
-        $plan = Package::with('currency')->find($request->plan_id);
-        $type = $request->type;
-
-        $expectedSignature = hash_hmac('sha256', $paymentId . '|' . $subscriptionId, $secretKey);
-
-        if ($expectedSignature === $razorpaySignature) {
-
-            try {
-                $api->payment->fetch($paymentId);
-
-                $payment = $api->payment->fetch($paymentId); // Returns a particular payment
-
-                if ($payment->status == 'authorized') {
-                    $payment->capture(array('amount' => $payment->amount, 'currency' => $plan->currency->currency_code));
-                }
-
-                $company = $this->company;
-
-                $company->package_id = $plan->id;
-                $company->package_type = $type;
-
-                // Set company status active
-                $company->status = 'active';
-                $company->licence_expire_on = null;
-
-                $company->save();
-
-                $subscription = new RazorpaySubscription();
-
-                $subscription->subscription_id = $subscriptionId;
-                $subscription->company_id      = company()->id;
-                $subscription->razorpay_id     = $paymentId;
-                $subscription->razorpay_plan   = $type;
-                $subscription->quantity        = 1;
-                $subscription->save();
-
-                // Send superadmin notification
-                $generatedBy = User::withoutGlobalScopes(['company', 'active'])->whereNull('company_id')->first();
-                $allAdmins = User::allAdministrators()->where('company_id', $company->id)->get();
-                Notification::send($generatedBy, new CompanyUpdatedPlan($company, $plan->id));
-                Notification::send($allAdmins, new CompanyUpdatedPlan($company, $plan->id));
-
-                return Reply::redirect(route('admin.billing.index'), 'Payment successfully done.');
-            } catch (\Exception $e) {
-                return back()->withError($e->getMessage())->withInput();
-            }
-        }
-    }
-
-    public function razorpaySubscription(Request $request)
-    {
-        $credential = PaymentGatewayCredentials::withoutGlobalScopes(['company'])->first();
-
-        $plan = Package::find($request->plan_id);
-        $type = $request->type;
-
-        $planID = ($type == 'annual') ? $plan->razorpay_annual_plan_id : $plan->razorpay_monthly_plan_id;
-
-        $apiKey    = $credential->razorpay_key;
-        $secretKey = $credential->razorpay_secret;
-
-        $api        = new Api($apiKey, $secretKey);
-        $subscription  = $api->subscription->create(array('plan_id' => $planID, 'customer_notify' => 1, 'total_count' => 100));
-
-        return Reply::dataOnly(['subscriprion' => $subscription->id]);
-    }
-
-    public function razorpayInvoiceDownload($id)
-    {
-        $this->invoice = RazorpayInvoice::with(['company', 'currency', 'package'])->findOrFail($id);
-        $this->company = company();
-        $this->global = $this->settings;
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('razorpay-invoice.invoice-1', $this->data);
-
-        $filename = $this->invoice->pay_date->format($this->global->date_format) . '-' . $this->invoice->next_pay_date->format($this->global->date_format);
-        return $pdf->download($filename . '.pdf');
-    }
+//    public function razorpayInvoiceDownload($id)
+//    {
+//        $this->invoice = RazorpayInvoice::with(['company', 'currency', 'package'])->findOrFail($id);
+//        $this->company = company();
+//        $this->global = $this->settings;
+//        $pdf = app('dompdf.wrapper');
+//        $pdf->loadView('razorpay-invoice.invoice-1', $this->data);
+//
+//        $filename = $this->invoice->pay_date->format($this->global->date_format) . '-' . $this->invoice->next_pay_date->format($this->global->date_format);
+//        return $pdf->download($filename . '.pdf');
+//    }
 
     public function cancelSubscription(Request $request)
     {
@@ -570,7 +578,7 @@ class BillingController extends AdminBaseController
                 }
             }
         }
-        elseif ($type == 'razorpay')
+        /*elseif ($type == 'razorpay')
         {
 
             $apiKey    = $credential->razorpay_key;
@@ -604,7 +612,7 @@ class BillingController extends AdminBaseController
             }
 
             return Reply::redirectWithError(route('admin.billing.index'), 'There is no data found for this subscription');
-        }
+        }*/
         else
         {
             $this->setStripConfigs();

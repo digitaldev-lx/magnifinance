@@ -138,14 +138,14 @@
                                         </div>
                                     </div>
 
-                                    @if ($googleCaptchaSettings->customer_page == 'active' && $googleCaptchaSettings->status == 'active')
+                                    {{--@if ($googleCaptchaSettings->customer_page == 'active' && $googleCaptchaSettings->status == 'active')
                                         <div class="form-group">
                                             @if ($googleCaptchaSettings->status == 'active')
                                                 <input type="hidden" name="recaptcha" class="form-control" id="recaptcha">
                                             @endif
-                                            <div id="captcha_container"></div>
+                                            <div id=":captcha_container_div"></div>
                                         </div>
-                                    @endif
+                                    @endif--}}
 
                                     <div class="d-flex">
                                         <textarea class="form-control" rows="4" name="additional_notes" placeholder="@lang('front.writeYourMessageHere')"></textarea>
@@ -244,15 +244,32 @@
 @endsection
 
 @push('footer-script')
-    @if ($googleCaptchaSettings->v2_status == 'active' && $googleCaptchaSettings->status == 'active')
+    {{--@if ($googleCaptchaSettings->v2_status == 'active' && $googleCaptchaSettings->status == 'active')
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
     async defer></script>
         <script>
             var gcv3;
             var onloadCallback = function() {
-                    // Renders the HTML element with id 'captcha_container' as a reCAPTCHA widget.
+                if ( $('#captcha_container_div').length ) {
+                    gcv3 = grecaptcha.render('captcha_container_div', {
+                        'sitekey' : '{{$googleCaptchaSettings->v2_site_key}}',
+                        'theme' : 'light',
+                        'callback' : function(response) {
+                            console.log(response);
+                            if(response) {
+
+                                document.getElementById('recaptcha').value = response;
+                            }
+                        },
+                    });
+                }
+            };
+
+
+            /*var onloadCallback = function() {
+                    // Renders the HTML element with id ':captcha_container_div' as a reCAPTCHA widget.
                     // The id of the reCAPTCHA widget is assigned to 'gcv3'.
-                    gcv3 = grecaptcha.render('captcha_container', {
+                    gcv3 = grecaptcha.render('captcha_container_div', {
                     'sitekey' : '{{$googleCaptchaSettings->v2_site_key}}',
                     'theme' : 'light',
                     'callback' : function(response) {
@@ -262,11 +279,11 @@
                         }
                     },
                 });
-            };
+            };*/
         </script>
-    @endif
+    @endif--}}
 
-    @if ($googleCaptchaSettings->v3_status == 'active' && $googleCaptchaSettings->status == 'active')
+    {{--@if ($googleCaptchaSettings->v3_status == 'active' && $googleCaptchaSettings->status == 'active')
         <script src="https://www.google.com/recaptcha/api.js?render={{ $googleCaptchaSettings->v3_site_key }}"></script>
         <script>
             grecaptcha.ready(function() {
@@ -277,7 +294,7 @@
                 });
             });
         </script>
-    @endif
+    @endif--}}
 
     <script>
         $('body').on('click', '.save-user', function () {

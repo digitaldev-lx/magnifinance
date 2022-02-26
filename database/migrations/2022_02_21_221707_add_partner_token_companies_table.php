@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddVatNumerPostCodeCompaniesTable extends Migration
+class AddPartnerTokenCompaniesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddVatNumerPostCodeCompaniesTable extends Migration
     public function up()
     {
         Schema::table('companies', function (Blueprint $table) {
-            $table->string('partner_token')->after('company_phone');
+            $table->string('partner_token')->default(null)->after('company_phone');
         });
     }
 
@@ -26,7 +26,7 @@ class AddVatNumerPostCodeCompaniesTable extends Migration
     public function down()
     {
         Schema::table('companies', function (Blueprint $table) {
-            $table->dropColumn(['vat_number', 'post_code']);
+            $table->dropColumn(['partner_token']);
         });
     }
 }

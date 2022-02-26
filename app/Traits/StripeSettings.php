@@ -16,7 +16,7 @@ trait StripeSettings
 
     public function setStripConfigs()
     {
-        $settings  = PaymentGatewayCredentials::withoutGlobalScopes(['company'])->first();
+        $settings  = PaymentGatewayCredentials::withoutGlobalScopes()->first();
         $key       = ($settings->stripe_client_id) ? $settings->stripe_client_id : env('STRIPE_KEY');
         $apiSecret = ($settings->stripe_secret) ? $settings->stripe_secret : env('STRIPE_SECRET');
         $webhookKey = ($settings->stripe_webhook_secret) ? $settings->stripe_webhook_secret : env('STRIPE_WEBHOOK_SECRET');

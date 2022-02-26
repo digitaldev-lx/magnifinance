@@ -241,10 +241,13 @@
                                 <tr>
                                     <td> </td>
                                     @foreach ($packages as $package)
-                                        @if (round($package->monthly_price) > 0 && ($offlineMethods > 0 || $paymentCredential->stripe_status=='active' || $paymentCredential->razorpay_status=='active'))
+                                        @if (round($package->monthly_price) > 0 && ($offlineMethods > 0 || $paymentCredential->stripe_status=='active'))
                                             <td>
-                                                @if ((!is_null($package->stripe_monthly_plan_id) || !is_null($package->razorpay_monthly_plan_id)))
-                                                    <button class="btn btn-success buy-plan" data-toggle="modal" data-target="#myModal" data-package-id="{{ $package->id }}" data-package-type="monthly" data-stripe-id="{{ $package->stripe_monthly_plan_id }}">@lang('app.buy') @lang('app.plan')</button>
+                                                @php
+                                                    $is_plan = Illuminate\Support\Str::contains(json_encode(company()->subscriptions), $package->stripe_monthly_plan_id)
+                                                @endphp
+                                                @if ((!is_null($package->stripe_monthly_plan_id)))
+                                                    <button class="btn {{$is_plan ? 'btn-danger' : 'btn-success buy-plan'}}" {{$is_plan ? '' : 'data-toggle="modal" data-target="#myModal"'}} data-package-id="{{ $package->id }}" data-package-type="monthly" data-stripe-id="{{ $package->stripe_monthly_plan_id }}">{{$is_plan ? __('app.currentPlan') : __('app.buy')}}</button>
                                                 @endif
                                             </td>
                                         @endif
@@ -348,8 +351,13 @@
                               @foreach ($packages as $package)
                                     @if (round($package->annual_price) > 0 && ($offlineMethods > 0 || $paymentCredential->stripe_status=='active' ||  $paymentCredential->razorpay_status=='active'))
                                     <td>
+                                        @php
+                                            $is_plan = Illuminate\Support\Str::contains(json_encode(company()->subscriptions), $package->stripe_annual_plan_id)
+                                        @endphp
                                         @if ((!is_null($package->stripe_annual_plan_id) || !is_null($package->razorpay_annual_plan_id)))
-                                            <button class="btn btn-success buy-plan"  data-package-id="{{ $package->id }}" data-package-type="annual">@lang('app.buy') @lang('app.plan')</button>
+{{--                                            <button class="btn btn-success buy-plan"  data-package-id="{{ $package->id }}" data-package-type="annual">@lang('app.buy') @lang('app.plan')</button>--}}
+                                            <button class="btn {{$is_plan ? 'btn-danger' : 'btn-success buy-plan'}}" {{$is_plan ? '' : 'data-toggle="modal" data-target="#myModal"'}} data-package-id="{{ $package->id }}" data-package-type="annual" data-stripe-id="{{ $package->stripe_monthly_plan_id }}">{{$is_plan ? __('app.currentPlan') : __('app.buy')}}</button>
+
                                         @endif
                                     </td>
                                     @endif
@@ -367,7 +375,7 @@
 @push('footer-js')
 
 <script src="https://js.stripe.com/v3/"></script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+{{--<script src="https://checkout.razorpay.com/v1/checkout.js"></script>--}}
 
 <script>
 
@@ -376,6 +384,7 @@
         var type = $(this).data('package-type');
         var url = "{{ route('admin.billing.select-package',':id') }}?type=" + type;
         url = url.replace(':id', id);
+        console.log(url);
         $(modal_lg + ' ' + modal_heading).html('...');
         $.ajaxModal(modal_lg, url);
     });

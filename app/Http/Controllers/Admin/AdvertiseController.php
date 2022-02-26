@@ -150,7 +150,7 @@ class AdvertiseController extends AdminBaseController
             $advertise = $advertise->load('category', 'article');
             $locale = App::getLocale();
             $view = view('admin.advertises.advertise_payment', compact('advertise', 'locale', 'credentials'))->render();
-        }catch (Exception $e){
+        }catch (\Exception $e){
             DB::rollBack();
             abort_and_log(403, $e->getMessage());
         }

@@ -482,6 +482,7 @@ return array (
   'new' => 'New',
   'tab' => 'Tab',
   'current' => 'Current',
+  'currentPlan' => 'Current Plan',
   'contentAlignment' => 'Content Alignment',
   'left' => 'Left',
   'right' => 'Right',

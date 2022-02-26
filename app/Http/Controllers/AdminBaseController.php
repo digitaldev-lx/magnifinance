@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Country;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
+use Laravel\Cashier\Subscription;
 use function PHPUnit\Framework\isNull;
 
 class AdminBaseController extends Controller
@@ -36,6 +37,7 @@ class AdminBaseController extends Controller
 
     public function __construct()
     {
+
         parent::__construct();
 
         $this->smsSettings = SmsSetting::first();
@@ -53,15 +55,11 @@ class AdminBaseController extends Controller
 
         $this->middleware(function ($request, $next)
         {
-            $this->themeSettings = Cache::remember('themeSettings', 60*60*24, function (){
-                return ThemeSetting::first();
-            });
+            $this->themeSettings = ThemeSetting::first();
             $this->productsCount = request()->hasCookie('products') ? count(json_decode(request()->cookie('products'), true)) : 0;
             $this->user = auth()->user();
 
-            /*$this->superadmin = Cache::remember('superadmin', 60*60*24, function (){
-                return GlobalSetting::first();
-            });*/
+//            $this->superadmin = GlobalSetting::first();
             $this->superadmin = GlobalSetting::first();
             if ($this->user) {
                 $this->todoItems = $this->user->todoItems()->groupBy('status', 'position')->get();
@@ -109,7 +107,6 @@ class AdminBaseController extends Controller
                  ];
             }
             view()->share('lat_long', $this->lat_long);
-
             view()->share('superadmin', $this->superadmin);
             view()->share('user', $this->user);
             view()->share('settings', $this->settings);
@@ -119,22 +116,11 @@ class AdminBaseController extends Controller
             view()->share('date_picker_format', Formats::dateFormats()[$this->settings->date_format]);
             view()->share('date_format', Formats::datePickerFormats()[$this->settings->date_format]);
             view()->share('time_picker_format', Formats::timeFormats()[$this->settings->time_format]);
-
-            $this->package = Cache::remember('package', 60*60*24, function (){
-                return Package::find($this->settings->package_id);
-            });
-            $this->total_employees = Cache::remember('total_employees', 60*60*24, function (){
-                return User::otherThanCustomers()->count();
-            });
-            $this->total_deals = Cache::remember('total_deals', 60*60*24, function (){
-                return Deal::count();
-            });
-            $this->total_business_services = Cache::remember('total_business_services', 60*60*24, function (){
-                return BusinessService::count();
-            });
-            $this->total_roles = Cache::remember('total_roles', 60*60*24, function (){
-                return Role::count();
-            });
+            $this->package = Package::find($this->settings->package_id);
+            $this->total_employees = User::otherThanCustomers()->count();
+            $this->total_deals = Deal::count();
+            $this->total_business_services = BusinessService::count();
+            $this->total_roles = Role::count();
 
             view()->share('package_setting', $this->package);
             view()->share('total_employees', $this->total_employees);

@@ -185,8 +185,6 @@ class StripeController extends Controller
 
         if (isset($request->advertise_id)) {
             $advertise = Advertise::where(['id' => $request->advertise_id])->first();
-//            $document = Magnifinance::add
-//            $advertise->addDocument();
         }
         else {
             $invoice = Booking::where(['id' => $request->booking_id, 'user_id' => Auth::user()->id])->first();
@@ -241,7 +239,6 @@ class StripeController extends Controller
             $superadmins = User::notCustomer()->withoutGlobalScopes()->whereNull('company_id')->get();
             Notification::send($admins, new AdvertiseCompanyInfo($advertise));
             Notification::send($superadmins, new AdvertisePurchased($advertise));
-
         }
 
         Session::put('success', __('messages.paymentSuccessAmount') . $formatted_amount);

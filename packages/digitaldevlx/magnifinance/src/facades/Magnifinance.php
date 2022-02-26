@@ -9,6 +9,7 @@ namespace DigitalDevLX\Magnifinance\facades;
  */
 
 use App\Article;
+use App\Company;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Facade;
 use phpDocumentor\Reflection\Types\Static_;
@@ -16,8 +17,8 @@ use phpDocumentor\Reflection\Types\String_;
 
 /**
  * @see \DigitalDevLX\Magnifinance\Skeleton\SkeletonClass
- * @param array $partner
- * @method static string addPartner(array $partner = [])
+ * @param Company $company
+ * @method static string addPartner(Company $company)
  * @method static string getPartnerToken($nif)
  * @method static string getDocumentFromPartner($id, $partnerNif)
  * @method static string getDocumentFromOwner($document_id)

@@ -38,10 +38,10 @@ class StoreFrontBooking extends CoreRequest
             ];
         }
 
-        if($google_captcha->status == 'active' && $google_captcha->customer_page == 'active')
+        /*if($google_captcha->status == 'active' && $google_captcha->customer_page == 'active')
         {
             $rules['recaptcha'] = 'required';
-        }
+        }*/
 
         return $rules;
     }

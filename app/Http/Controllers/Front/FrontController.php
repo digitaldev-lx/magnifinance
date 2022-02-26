@@ -563,8 +563,10 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-
-        return $company = auth()->user()->load('country');
+        return Str::contains(json_encode(company()->subscriptions), 'price_1KWdC3GzgobEAJp0CQ1BjeTk');
+        return ;
+      /*  return Magnifinance::addPartner();
+        return $company = auth()->user()->load('country');*/
 
         /*$data = array(
             "UserName" => "Paulo Serrano",
@@ -575,8 +577,9 @@ class FrontController extends FrontBaseController
             "CompanyAddress" => "Morada da empresa",
             "CompanyCity" => "Amadora",
             "CompanyPostCode" => "2700-744",
-            "CompanyCountry" => "Portugal"
+            "CompanyCountry" => "PT"
         );*/
+
         $data = [];
         /*$client = array(
             "Name" => "Paulo Serrano",
@@ -626,9 +629,12 @@ class FrontController extends FrontBaseController
             "ExternalId" => 46, //transaction Id
             "Lines" => $list
         ];
-
-        return Magnifinance::emitDocumentFromPartner();
-//        return Magnifinance::getDocument("143373975", "239637712");
+//todo: optimizar a criação de documento para os vários tipos de transação (anuncios, planos e compra de serviços)
+        $advertise = Advertise::where(['id' => 1])->first();
+       return $document = Magnifinance::emitDocumentFromOwner($advertise, $document,"pauloamserrano@gmail.com");
+//            $advertise->addDocument();
+//        return Magnifinance::getPartnerToken("239637712");
+        return Magnifinance::getDocumentFromPartner("143373975", "239637712");
         return Magnifinance::emitDocumentFromOwner($client, $document, "pauloamserrano@gmail.com");
 
 
@@ -739,7 +745,7 @@ class FrontController extends FrontBaseController
             $user = User::where($this->user, $request->{$this->user})->first();
 
             // Check google recaptcha if setting is enabled
-            if ($this->googleCaptchaSettings->status == 'active' && $this->googleCaptchaSettings->v2_status == 'active' && (is_null($user) || ($user && !$user->hasRole('admin')))) {
+            /*if ($this->googleCaptchaSettings->status == 'active' && $this->googleCaptchaSettings->v2_status == 'active' && (is_null($user) || ($user && !$user->hasRole('admin')))) {
                 // Checking is google recaptcha is valid
                 $gReCaptchaResponseInput = 'g-recaptcha-response';
                 $gReCaptchaResponse = $request->{$gReCaptchaResponseInput};
@@ -748,7 +754,7 @@ class FrontController extends FrontBaseController
                 if (!$validateRecaptcha) {
                     return $this->googleRecaptchaMessage();
                 }
-            }
+            }*/
 
             try {
                 DB::beginTransaction();
@@ -2300,7 +2306,7 @@ class FrontController extends FrontBaseController
                     }
                 }
 
-                $country = Country::whereId($request->country_id)->firstOrFail();
+//                $country = Country::whereId($request->country_id)->firstOrFail();
 
                 $data = [
                     'company_name' => mb_convert_encoding($request->business_name, 'UTF-8', 'UTF-8'),
@@ -2310,7 +2316,7 @@ class FrontController extends FrontBaseController
                     'address' => mb_convert_encoding($request->address, 'UTF-8', 'UTF-8'),
                     'post_code' => mb_convert_encoding($request->post_code, 'UTF-8', 'UTF-8'),
                     'city' => mb_convert_encoding($request->city, 'UTF-8', 'UTF-8'),
-                    'country' => mb_convert_encoding(Str::title($request->country), 'UTF-8', 'UTF-8'),
+                    'country_id' => mb_convert_encoding($request->country_id, 'UTF-8', 'UTF-8'),
                     'website' => mb_convert_encoding($request->website, 'UTF-8', 'UTF-8'),
                     'date_format' => 'Y-m-d',
                     'time_format' => 'h:i A',
@@ -2340,6 +2346,9 @@ class FrontController extends FrontBaseController
                     'country_id' => mb_convert_encoding($request->country_id, 'UTF-8', 'UTF-8')
                 ]);
                 $user->attachRole(Role::withoutGlobalScope(CompanyScope::class)->select('id', 'name')->where(['name' => 'administrator', 'company_id' => $company->id])->first()->id);
+
+                Magnifinance::addPartner($company);
+
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();

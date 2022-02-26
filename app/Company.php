@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int|null $package_id
  * @property string $company_name
  * @property string $vat_number
+ * @property string $partner_token
  * @property string $post_code
  * @property string $city
  * @property int|null $country_id
@@ -123,6 +124,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|Company whereWebsite($value)
  * @mixin \Eloquent
  */
+
 class Company extends Model
 {
     use Notifiable, Billable, SpatialTrait;
@@ -135,6 +137,7 @@ class Company extends Model
         'company_name',
         'company_email',
         'company_phone',
+        'partner_token',
         'vat_number',
         'post_code',
         'address',
@@ -343,4 +346,8 @@ class Company extends Model
         return $this->hasOne(GoogleAccount::class);
     }
 
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 }

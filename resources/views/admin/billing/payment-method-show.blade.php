@@ -107,24 +107,24 @@
                     <div class="col-12 col-sm-12 mt-40 text-center" id="onlineBox">
                         <div class="form-group payment-type align-items-center justify-content-center d-flex">
 
-                            @if($stripeSettings->paypal_client_id != null && $stripeSettings->paypal_secret != null && $stripeSettings->paypal_status == 'active')
+                            {{--@if($stripeSettings->paypal_client_id != null && $stripeSettings->paypal_secret != null && $stripeSettings->paypal_status == 'active')
                                 <button type="button" class="btn btn-warning waves-effect waves-light paypalPayment" data-toggle="tooltip" data-placement="top" title="Choose Plan">
                                     <i class="icon-anchor display-small"></i><span>
                                         <i class="fa fa-paypal"></i> @lang('modules.invoices.payPaypal')</span>
                                 </button>
-                            @endif
+                            @endif--}}
                             @if($stripeSettings->stripe_client_id != null && $stripeSettings->stripe_secret != null  && $stripeSettings->stripe_status == 'active')
                                 <button type="button" class="btn btn-primary waves-effect waves-light stripePay" data-toggle="tooltip" data-placement="top" title="Choose Plan">
                                     <i class="icon-anchor display-small"></i><span>
-                                    <i class="fa fa-cc-stripe"></i> @lang('modules.invoices.payStripe')</span>
+                                    <i class="fa fa-cc-stripe"></i> @lang('modules.invoices.payWithCard')</span>
                                 </button>
                             @endif
-                            @if($stripeSettings->razorpay_key != null && $stripeSettings->razorpay_secret != null  && $stripeSettings->razorpay_status == 'active')
+                            {{--@if($stripeSettings->razorpay_key != null && $stripeSettings->razorpay_secret != null  && $stripeSettings->razorpay_status == 'active')
                                 <button type="button" class="btn btn-info waves-effect waves-light m-l-10 razorpay-subscription" data-toggle="tooltip" data-placement="top" title="Choose Plan">
                                     <i class="icon-anchor display-small"></i><span>
                                         <i class="fa fa-credit-card-alt"></i> @lang('modules.invoices.payRazorpay') </span>
                                 </button>
-                            @endif
+                            @endif--}}
                         </div>
                     </div>
                     <div class="col-12 col-sm-12 mt-40 text-center">
@@ -178,7 +178,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>@lang('modules.payments.line') 1</label>
+                                    <label>@lang('modules.payments.address') 1</label>
                                     <input type="text" required name="line1" id="line1" class="form-control">
                                 </div>
                             </div>
@@ -196,12 +196,16 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>@lang('modules.payments.country')</label>
-                                    <input type="text" required name="country" id="country" class="form-control">
+                                    <label>@lang('app.country')</label>
+                                    <div class="input-group form-group">
+                                        <select name="country" id="country" class="form-control select2">
+                                            <option value="">@lang('app.select') @lang('app.location')</option>
+                                            @foreach($countries as $country)
+                                                <option value="{{$country->iso}}">{{$country->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12">
-                                <small>* @lang('modules.payments.addressCountryMustBeValid') <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_blank">2-alphabet ISO-3166 code</a></small>
                             </div>
                         </div>
                         <div class="flex flex-wrap mb-6">
@@ -214,7 +218,7 @@
                         <!-- Stripe Elements Placeholder -->
                         <div class="flex flex-wrap mt-6" id="stripe-pay-btn">
                             <button type="button" id="card-button"  data-secret="{{ $intent->client_secret }}"  class="btn btn-success inline-block align-middle text-center select-none border font-bold whitespace-no-wrap py-2 px-4 rounded text-base leading-normal no-underline text-gray-100 bg-blue-500 hover:bg-blue-700">
-                                <i class="fa fa-cc-stripe"></i> {{ __('Pay') }}
+                                <i class="fa fa-cc-stripe"></i> {{ __('app.pay') }}
                             </button>
                         </div>
                     </form>

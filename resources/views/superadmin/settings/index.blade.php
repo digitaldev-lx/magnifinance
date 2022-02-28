@@ -89,11 +89,7 @@
                 <a class="nav-link" href="#ticket-settings" data-toggle="tab">@lang('menu.ticketSettings')</a>
                 <a class="nav-link" href="#free-trial" data-toggle="tab">@lang('menu.freeTrialSettings')</a>
                 <a class="nav-link front-setting-page" href="#">@lang('menu.frontSettings')</a>
-                <a class="nav-link update-app" href="#">@lang('menu.updateApp')
-                    @if($newUpdate == 1)
-                        <span class="badge badge-success">{{ $lastVersion }}</span>
-                    @endif
-                </a>
+
             </div>
         </div>
         <div class="col-12 col-md-10">

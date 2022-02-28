@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Country;
 use App\Role;
 use App\Services\ImagesManager;
 use App\User;
@@ -73,8 +74,8 @@ class SettingController extends SuperAdminBaseController
         $this->modules = Module::whereIn('name', Permissions::getModules($this->user->role))->get();
         $this->moduleSettings = ModuleSetting::where('status', 'deactive')->get();
         $this->socialCredentials = SocialAuthSetting::first();
-
-        $client = new Client();
+        $this->countries = Country::all();
+        /*$client = new Client();
         $res = $client->request('GET', config('froiden_envato.updater_file_path'), ['verify' => false]);
         $this->lastVersion = $res->getBody();
         $this->lastVersion = json_decode($this->lastVersion, true);
@@ -94,7 +95,7 @@ class SettingController extends SuperAdminBaseController
 
         $this->appVersion = File::get('version.txt');
         $laravel = app();
-        $this->laravelVersion = $laravel::VERSION;
+        $this->laravelVersion = $laravel::VERSION;*/
 
         $this->package_modules = PackageModules::get();
         $this->package = Package::trialPackage()->first();
@@ -161,9 +162,13 @@ class SettingController extends SuperAdminBaseController
 
         $setting = GlobalSetting::first();
         $setting->company_name = $request->company_name;
+        $setting->vat_number = $request->vat_number;
         $setting->company_email = $request->company_email;
         $setting->company_phone = $request->company_phone;
         $setting->address = $request->address;
+        $setting->post_code = $request->post_code;
+        $setting->city = $request->city;
+        $setting->country_id = $request->country_id;
         $setting->date_format = $request->date_format;
         $setting->time_format = $request->time_format;
         $setting->website = $request->website;

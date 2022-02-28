@@ -106,17 +106,19 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="tax_name" class="control-label">@lang('app.company')
-                                                        @lang('app.name')</label>
+                                                    <label for="tax_name"
+                                                           class="control-label">@lang('app.company') @lang('app.name')</label>
+
                                                     <input type="text" class="form-control  form-control-lg"
                                                            id="company_name" name="company_name"
                                                            value="{{ $settings->company_name }}">
                                                 </div>
+
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="tax_name" class="control-label">@lang('app.company')
-                                                        @lang('app.email')</label>
+                                                    <label for="tax_name"
+                                                           class="control-label">@lang('app.company') @lang('app.email')</label>
                                                     <input type="text" class="form-control  form-control-lg"
                                                            id="company_email" name="company_email"
                                                            value="{{ $settings->company_email }}">
@@ -124,8 +126,8 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label for="tax_name" class="control-label">@lang('app.company')
-                                                        @lang('app.phone')</label>
+                                                    <label for="tax_name"
+                                                           class="control-label">@lang('app.company') @lang('app.phone')</label>
                                                     <input type="text" class="form-control  form-control-lg"
                                                            id="company_phone" name="company_phone"
                                                            value="{{ $settings->company_phone }}">
@@ -134,35 +136,83 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="input-file-now">@lang('app.logo')</label>
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <input type="file" id="input-file-now" name="image"
-                                                                   accept=".png,.jpg,.jpeg" class="dropify"
-                                                                   data-default-file="{{ $settings->logo_url }}"/>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="vat_number"
+                                                                   class="control-label">@lang('app.vatNumber')</label>
+                                                            <input type="text" class="form-control  form-control-lg"
+                                                                   id="vat_number" name="vat_number" required
+                                                                   value="{{ $settings->vat_number }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPassword1">@lang('app.logo')</label>
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <input type="file" id="input-file-now" name="logo"
+                                                                           accept=".png,.jpg,.jpeg" class="dropify"
+                                                                           data-default-file="{{ $settings->logo_url }}"
+                                                                    />
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="exampleInputPassword1">@lang('app.address')</label>
                                                     <textarea class="form-control form-control-lg" name="address" id=""
-                                                              cols="30" rows="5">{!! $settings->address !!}</textarea>
+                                                              cols="30" rows="2">{!! $settings->address !!}</textarea>
                                                 </div>
+
                                                 <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="post_code"
+                                                                   class="control-label">{{__('app.businessPostCode')}}</label>
+                                                            <input type="text" class="form-control form-control-lg"
+                                                                   id="post_code" name="post_code" placeholder="{{__('app.placeholder.post_code')}}"
+                                                                   value="{{ $settings->post_code }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="city"
+                                                                   class="control-label">{{__('app.placeholder.city')}}</label>
+                                                            <input type="text" class="form-control form-control-lg"
+                                                                   id="city" name="city" placeholder="{{__('app.placeholder.city')}}"
+                                                                   value="{{ $settings->city }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label>@lang('app.country')</label>
+                                                        <select name="country_id" id="country_id" class="form-control select2">
+                                                            @foreach ($countries as $country => $value)
+                                                                <option {{$value['id'] == $settings->country_id ? 'selected' : ''}} value="{{ $value['id'] }}">{{ $value['name'] }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mt-1">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="date_format" class="control-label">
                                                                 @lang('app.date_format')
                                                             </label>
+
                                                             <select name="date_format" id="date_format"
                                                                     class="form-control form-control-lg select2">
                                                                 @foreach($dateFormats as $key => $dateFormat)
-                                                                    <option value="{{ $key }}" @if($settings->date_format ==
-                                                $key) selected @endif>{{
-                                                $key.' ('.$dateObject->format($key).')' }}
+                                                                    <option value="{{ $key }}" @if($settings->date_format == $key) selected @endif>{{
+                                                                        $key.' ('.$dateObject->format($key).')' }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
@@ -173,29 +223,32 @@
                                                             <label for="time_format" class="control-label">
                                                                 @lang('app.time_format')
                                                             </label>
+
                                                             <select name="time_format" id="time_format"
                                                                     class="form-control form-control-lg select2">
                                                                 @foreach($timeFormats as $key => $timeFormat)
-                                                                    <option value="{{ $key }}" @if($settings->time_format ==
-                                                $key) selected @endif>{{
-                                                $key.' ('.$dateObject->format($key).')' }}
+                                                                    <option value="{{ $key }}" @if($settings->time_format == $key) selected @endif>{{
+                                                                        $key.' ('.$dateObject->format($key).')' }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label for="tax_name" class="control-label">@lang('app.company')
-                                                        @lang('app.website')</label>
+                                                    <label for="tax_name"
+                                                           class="control-label">@lang('app.company') @lang('app.website')</label>
                                                     <input type="text" class="form-control form-control-lg" id="website"
                                                            name="website" value="{{ $settings->website }}">
                                                 </div>
                                             </div>
+
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="tax_name"
@@ -203,11 +256,14 @@
                                                     <select name="timezone" id="timezone"
                                                             class="form-control form-control-lg select2">
                                                         @foreach($timezones as $tz)
-                                                            <option @if($settings->timezone == $tz) selected @endif>{{ $tz }}</option>
+                                                            <option @if($settings->timezone == $tz) selected @endif>{{
+                                                                $tz }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="tax_name"
@@ -218,12 +274,12 @@
                                                             <option
                                                                 @if($currency->id == $settings->currency_id) selected
                                                                 @endif
-                                                                value="{{ $currency->id }}">{{ $currency->currency_symbol.' ('.$currency->currency_code.')' }}
-                                                            </option>
+                                                                value="{{ $currency->id }}">{{ $currency->currency_symbol.' ('.$currency->currency_code.')' }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="tax_name"
@@ -231,8 +287,8 @@
                                                     <select name="locale" id="locale"
                                                             class="form-control form-control-lg">
                                                         @forelse($enabledLanguages as $language)
-                                                            <option value="{{ $language->language_code }}" @if($settings->locale
-                                            == $language->language_code) selected @endif >
+                                                            <option value="{{ $language->language_code }}"
+                                                                    @if($settings->locale == $language->language_code) selected @endif >
                                                                 {{ $language->language_name }}
                                                             </option>
                                                         @empty
@@ -244,6 +300,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
@@ -252,6 +309,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </form>
                                 </div>
                                 {{-- GENERAL TAB --}}

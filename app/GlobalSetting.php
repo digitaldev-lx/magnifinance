@@ -16,6 +16,10 @@ use Illuminate\Notifications\Notifiable;
  * @property string $contact_email
  * @property string|null $logo
  * @property string $address
+ * @property string $vat_number
+ * @property string $post_code
+ * @property string $city
+ * @property int $country_id
  * @property string $date_format
  * @property string $time_format
  * @property string $website

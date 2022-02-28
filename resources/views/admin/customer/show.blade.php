@@ -306,7 +306,7 @@
                 let current_url = "?current_url="+'customerPage';
                 let url = "{{ route('admin.bookings.edit', ':id') }}"+current_url;
                 url = url.replace(':id', bookingId);
-                
+
                 $.easyAjax({
                     type: 'GET',
                     url: url,

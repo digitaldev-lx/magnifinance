@@ -53,7 +53,7 @@ class CompanyUpdatedPlan extends BaseNotification
         return (new MailMessage)
             ->subject(__('email.planUpdate.subject') . ' ' . config('app.name') . '!')
             ->greeting(__('email.hello') . ' ' . ucwords($notifiable->name) . '!')
-            ->line(__($this->company->company_name . ' ' . 'email.planUpdate.text') . ' ' . $this->package->name)
+            ->line(__($this->company->company_name . ' ' . __('email.planUpdate.text')) . ' ' . $this->package->name)
             ->action(__('email.loginDashboard'), (url('/login')))
             ->line(__('email.thankyouNote'));
     }

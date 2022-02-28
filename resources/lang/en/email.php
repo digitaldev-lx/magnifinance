@@ -63,7 +63,7 @@ return array(
     'planUpdate' =>
         array(
             'subject' => 'Solicitação de mudança de plano',
-            'text' => ':company solicita mudança de plano.',
+            'text' => ':company alterou o seu plano para ',
             'packageName' => 'Plano',
         ),
     'offlinePackageChangeRequest' => 'Novo pedido de plano offline',

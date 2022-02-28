@@ -5,11 +5,17 @@ namespace App\Http\Controllers\Front;
 use App\Advertise;
 use App\Notifications\AdvertiseCompanyInfo;
 use App\Notifications\AdvertisePurchased;
+use App\Notifications\CompanyUpdatedPlan;
+use App\Package;
+use App\Services\StripeCustomerManager;
 use App\User;
 use App\Booking;
 use App\Payment;
 use Carbon\Carbon;
 use DigitalDevLX\Magnifinance\facades\Magnifinance;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Stripe;
 use App\Helper\Reply;
 use App\GlobalSetting;
@@ -87,26 +93,26 @@ class StripeController extends Controller
     /**
      * Store a details of payment with paypal.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function paymentWithStripe(Request $request)
     {
-        $tax_amount = Tax::active()->first();
+//        $tax_amount = Tax::active()->first();
         $paymentCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
 
-        if(isset($request->booking_id)){
+        if (isset($request->booking_id)) {
             $booking = Booking::with('items')->whereId($request->booking_id)->first();
             $stripeAccountDetails = GatewayAccountDetail::activeConnectedOfGateway('stripe')->first();
 
             $line_items = [];
             foreach ($booking->items as $key => $value) {
 
-                if($value->businessService->tax_on_price_status == 'inactive'){
+                if ($value->businessService->tax_on_price_status == 'inactive') {
                     $price = ($value->business_service_id == null) ?
                         $value->unit_price * 100 :
                         ($value->unit_price * $value->businessService->taxServices[0]->tax->percent) + $value->unit_price * 100;
-                }else{
+                } else {
                     $price = $value->unit_price * 100;
                 }
 
@@ -135,11 +141,10 @@ class StripeController extends Controller
                             'destination' => $destination,
                         ],
                     ],
-                    'success_url' => route('front.afterStripePayment',  ['return_url' => $request->return_url, 'booking_id' => $booking->id]),
+                    'success_url' => route('front.afterStripePayment', ['return_url' => $request->return_url, 'booking_id' => $booking->id]),
                     'cancel_url' => route('front.payment-gateway'),
                 ];
-            }
-            elseif ($destination == null && $destination == '') {
+            } elseif ($destination == null && $destination == '') {
                 $data = [
                     'payment_method_types' => ['card'],
                     'line_items' => [$line_items],
@@ -148,11 +153,11 @@ class StripeController extends Controller
                 ];
             }
 
-        }elseif (isset($request->advertise_id)){
+        } elseif (isset($request->advertise_id)) {
             $advertise = Advertise::find($request->advertise_id);
 
             $line_items[] = [
-                'name' => __('app.advertise') . ' ' . __('app.from') . ' ' . $advertise->from . ' ' . __('app.to'). ' ' .$advertise->to,
+                'name' => __('app.advertise') . ' ' . __('app.from') . ' ' . $advertise->from . ' ' . __('app.to') . ' ' . $advertise->to,
                 'amount' => round(currencyConvertedPrice(company()->id, $advertise->amount * 100), 2),
                 'currency' => $this->settings->currency->currency_code,
                 'quantity' => 1,
@@ -164,6 +169,26 @@ class StripeController extends Controller
                 'success_url' => route('front.afterStripePayment', ['return_url' => $request->return_url, 'advertise_id' => $advertise->id]),
                 'cancel_url' => route('front.payment-gateway'),
             ];
+
+        } elseif (isset($request->plan_id)) {
+
+            $plan = Package::find($request->plan_id);
+            $customer_id = (new StripeCustomerManager())->handleCustomerId();
+
+            $data = [
+                'customer' => $customer_id,
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price' => $plan->{'stripe_' . $request->type . '_plan_id'},
+//                    'amount' => $plan->{$request->type . '_price'},
+//                    'currency' => $this->settings->currency->currency_code,
+                    'quantity' => 1,
+                ]],
+                'mode' => 'subscription',
+                'success_url' => route('front.afterStripePayment', ['return_url' => $request->return_url, 'plan_id' => $plan->id, 'type'=> $request->type]),
+                'cancel_url' => route('front.payment-gateway'),
+            ];
+
         }
 
         $session = \Stripe\Checkout\Session::create($data);
@@ -175,18 +200,23 @@ class StripeController extends Controller
 
     public function afterStripePayment(Request $request, $return_url, $bookingId = null)
     {
+
         $session_data = session('stripe_session');
         $session = \Stripe\Checkout\Session::retrieve($session_data->id);
 
-        $payment_method = \Stripe\PaymentIntent::retrieve(
-            $session->payment_intent,
-            []
-        );
+        if (!isset($request->plan_id)) {
+            $payment_method = \Stripe\PaymentIntent::retrieve(
+                $session->payment_intent,
+                []
+            );
+        }
+
 
         if (isset($request->advertise_id)) {
             $advertise = Advertise::where(['id' => $request->advertise_id])->first();
-        }
-        else {
+        } elseif (isset($request->plan_id)) {
+            $package = Package::where(['id' => $request->plan_id])->first();
+        } else {
             $invoice = Booking::where(['id' => $request->booking_id, 'user_id' => Auth::user()->id])->first();
         }
 
@@ -194,7 +224,7 @@ class StripeController extends Controller
 
         $currency = GlobalSetting::first()->currency;
 
-        if(isset($request->booking_id)){
+        if (isset($request->booking_id)) {
             $payment = new Payment();
             $payment->booking_id = $invoice->id;
             $payment->company_id = $invoice->company_id;
@@ -205,7 +235,8 @@ class StripeController extends Controller
             $payment->transaction_id = $payment_method->id;
             $payment->transfer_status = 'not_transferred';
 
-            if ($payment_method->transfer_data && !is_null($payment_method->transfer_data->destination)) { /** @phpstan-ignore-line */
+            if ($payment_method->transfer_data && !is_null($payment_method->transfer_data->destination)) {
+                /** @phpstan-ignore-line */
                 $payment->transfer_status = 'transferred';
             }
 
@@ -226,7 +257,72 @@ class StripeController extends Controller
 
             $user = User::findOrFail($invoice->user_id);
             $user->notify(new BookingConfirmation($invoice));
-        }else{
+
+
+        } elseif (isset($request->plan_id)) {
+
+//            $token = $payment_method;
+            $token = $request->payment_method;
+
+            $plan = Package::find($request->plan_id);
+            $company = $this->company = company();
+            $email = $this->company->company_email;
+
+            $allInvoices = DB::table('stripe_invoices')
+                ->join('packages', 'packages.id', 'stripe_invoices.package_id')
+                ->selectRaw('stripe_invoices.id , "Stripe" as method, stripe_invoices.pay_date as paid_on ,stripe_invoices.next_pay_date')
+                ->whereNotNull('stripe_invoices.pay_date')
+                ->where('stripe_invoices.company_id', $company->id)->get();
+
+            $firstInvoice = $allInvoices->sortByDesc(function ($temp, $key) {
+                return Carbon::parse($temp->paid_on)->getTimestamp();
+            })->first();
+
+            $subscription = $company->subscriptions;
+
+            try {
+                DB::beginTransaction();
+                $stripe = new StripeCustomerManager();
+                $email = $stripe->getStripeCustomer()->email;
+                if ($subscription->count() > 0) {
+                    $company->subscription('main')->noProrate()->swap($plan->{'stripe_' . $request->type . '_plan_id'});
+                } else {
+
+                    $company->newSubscription('main', $plan->{'stripe_' . $request->type . '_plan_id'})->create($token, [
+                        'email' => $email
+                    ]);
+
+//                    $company->stripe_id = $company->stripe_id ?? $connect_id;
+                }
+                $company = $this->company;
+
+                $company->package_id = $plan->id;
+                $company->package_type = $request->type;
+
+                // Set company status active
+                $company->status = 'active';
+                $company->licence_expire_on = null;
+                $company->save();
+                DB::commit();
+                // Send notification to admin & superadmin
+                $generatedBy = User::withoutGlobalScopes()->whereNull('company_id')->first();
+                $allAdmins = User::allAdministrators()->where('company_id', $company->id)->get();
+                Notification::send($generatedBy, new CompanyUpdatedPlan($company, $plan->id));
+                Notification::send($allAdmins, new CompanyUpdatedPlan($company, $plan->id));
+
+                Session::put('success', 'Plan has been subscribed.');
+                return Redirect::route('admin.billing.index');
+            } catch (IncompletePayment $exception) {
+                DB::rollBack();
+                return redirect()->route(
+                    'cashier.payment',
+                    [$exception->payment->id, 'redirect' => route('admin.billing.index')]/** @phpstan-ignore-line */
+                );
+            }
+
+            return Reply::redirect(route('admin.billing.index'), 'Plan has been subscribed');
+
+        } else {
             $advertise->transaction_id = $payment_method->id;
 
             $advertise->paid_on = Carbon::now();
@@ -247,16 +343,20 @@ class StripeController extends Controller
 
             return redirect()->route('admin.bookings.index');
 
-        }elseif ($return_url == 'calendarPage') {
+        } elseif ($return_url == 'calendarPage') {
 
             return redirect()->route('admin.calendar');
 
-        }elseif ($return_url == 'advertises') {
+        } elseif ($return_url == 'advertises') {
 
             return redirect()->route('admin.advertises.show', $advertise->id);
         }
+        elseif ($return_url == 'packages') {
 
-        if(isset($request->booking_id)){
+            return redirect()->route('admin.billing.index');
+        }
+
+        if (isset($request->booking_id)) {
             return $this->redirectToPayment($request->booking_id, null, 'Payment success');
 
         }
@@ -264,7 +364,7 @@ class StripeController extends Controller
 
     }
 
-    public function redirectToPayment($bookingId = null, $advertiseId = null,  $message)
+    public function redirectToPayment($bookingId = null, $advertiseId = null, $message)
     {
         if ($bookingId == null) {
             return redirect()->route('front.payment.success')->with(['message' => $message]);

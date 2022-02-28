@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Advertise;
 use App\Article;
 use App\Country;
+use App\Services\StripeCustomerManager;
 use App\Tax;
 use App\Deal;
 use App\Page;
@@ -62,6 +63,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Stripe\Stripe;
 
 class FrontController extends FrontBaseController
 {
@@ -563,6 +565,14 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
+
+        $paymentCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
+        Stripe::setApiKey($paymentCredentials->stripe_secret);
+        $stripe = new StripeCustomerManager();
+        return $stripe->getStripeCustomer();
+        //"acct_1KShBM2f0yGDuHKo"
+        return $customer_id = company()->createOrGetStripeCustomer();
+        return $company ? true : false;
         return Str::contains(json_encode(company()->subscriptions), 'price_1KWdC3GzgobEAJp0CQ1BjeTk');
         return ;
       /*  return Magnifinance::addPartner();

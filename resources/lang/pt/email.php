@@ -63,7 +63,7 @@ return array(
     'planUpdate' =>
         array(
             'subject' => 'Package change request',
-            'text' => ':company is requested for package change.',
+            'text' => ':company was change for package ',
             'packageName' => 'Package Name',
         ),
     'offlinePackageChangeRequest' => 'New offline package request',

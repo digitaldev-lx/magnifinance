@@ -247,7 +247,7 @@
                                                     $is_plan = Illuminate\Support\Str::contains(json_encode(company()->subscriptions), $package->stripe_monthly_plan_id)
                                                 @endphp
                                                 @if ((!is_null($package->stripe_monthly_plan_id)))
-                                                    <button class="btn {{$is_plan ? 'btn-danger' : 'btn-success buy-plan'}}" {{$is_plan ? '' : 'data-toggle="modal" data-target="#myModal"'}} data-package-id="{{ $package->id }}" data-package-type="monthly" data-stripe-id="{{ $package->stripe_monthly_plan_id }}">{{$is_plan ? __('app.currentPlan') : __('app.buy')}}</button>
+                                                    <button class="btn {{$is_plan ? 'btn-danger' : 'btn-success buy-plan'}}" data-package-id="{{ $package->id }}" data-package-type="monthly" data-stripe-id="{{ $package->stripe_monthly_plan_id }}">{{$is_plan ? __('app.currentPlan') : __('app.buy')}}</button>
                                                 @endif
                                             </td>
                                         @endif
@@ -354,9 +354,9 @@
                                         @php
                                             $is_plan = Illuminate\Support\Str::contains(json_encode(company()->subscriptions), $package->stripe_annual_plan_id)
                                         @endphp
-                                        @if ((!is_null($package->stripe_annual_plan_id) || !is_null($package->razorpay_annual_plan_id)))
+                                        @if ((!is_null($package->stripe_annual_plan_id)))
 {{--                                            <button class="btn btn-success buy-plan"  data-package-id="{{ $package->id }}" data-package-type="annual">@lang('app.buy') @lang('app.plan')</button>--}}
-                                            <button class="btn {{$is_plan ? 'btn-danger' : 'btn-success buy-plan'}}" {{$is_plan ? '' : 'data-toggle="modal" data-target="#myModal"'}} data-package-id="{{ $package->id }}" data-package-type="annual" data-stripe-id="{{ $package->stripe_monthly_plan_id }}">{{$is_plan ? __('app.currentPlan') : __('app.buy')}}</button>
+                                            <button class="btn {{$is_plan ? 'btn-danger' : 'btn-success buy-plan'}}" data-package-id="{{ $package->id }}" data-package-type="annual" data-stripe-id="{{ $package->stripe_monthly_plan_id }}">{{$is_plan ? __('app.currentPlan') : __('app.buy')}}</button>
 
                                         @endif
                                     </td>
@@ -374,20 +374,62 @@
 
 @push('footer-js')
 
-<script src="https://js.stripe.com/v3/"></script>
-{{--<script src="https://checkout.razorpay.com/v1/checkout.js"></script>--}}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+
+        var stripe = Stripe('{{ $paymentCredential->stripe_client_id }}');
+        var checkoutButton = document.getElementsByClassName('buy-plan');
+
+        $(document).on('click', '.buy-plan', function (){
+            let package_id = $(this).data('package-id')
+            let type = $(this).data('package-type')
+            $.easyAjax({
+                url: '{{route('front.stripe')}}',
+                container: '#invoice_container',
+                type: "POST",
+                redirect: true,
+                async: false,
+                data: {"_token" : "{{ csrf_token() }}", 'type': type, 'plan_id' : package_id, 'return_url' : 'packages'},
+                beforeSend: function ( xhr ) {
+                    jQuery("#page-loader").removeClass("d-none");
+                    $("#page-loader").show();
+                    $(".loader").show();
+                },
+                success: function(response){
+                    console.log(response)
+                    jQuery("#page-loader").addClass("d-none");
+
+                    stripe.redirectToCheckout({
+                        sessionId: response.id,
+                    }).then(function (result) {
+                        console.log(result);
+                        if (result.error) {
+                            $.easyAjax({
+                                url: '{{route('front.redirectToErrorPage')}}',
+                            });
+                        }
+                    });
+                },
+                error: function(response){
+                    console.log(response)
+
+                },
+                complete : $(".loader").hide()
+            });
+        });
+
+    </script>
 
 <script>
 
-    $('body').on('click', '.buy-plan', function () {
+    /*$('body').on('click', '.buy-plan', function () {
         var id = $(this).data('package-id');
         var type = $(this).data('package-type');
-        var url = "{{ route('admin.billing.select-package',':id') }}?type=" + type;
+        var url = "{{-- route('admin.billing.select-package',':id') --}}?type=" + type;
         url = url.replace(':id', id);
-        console.log(url);
         $(modal_lg + ' ' + modal_heading).html('...');
         $.ajaxModal(modal_lg, url);
-    });
+    });*/
 
    $(document).ready(function() {
       $('#country-name').select2({

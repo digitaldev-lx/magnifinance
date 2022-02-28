@@ -211,7 +211,6 @@ class BillingController extends AdminBaseController
         $packages = Package::active()->get();
         $allPackageModules = PackageModules::all();
         $offlineMethods = OfflinePaymentMethod::where('status', 'yes')->count();
-
         return view('admin.billing.change_plan', compact('packages', 'allPackageModules', 'offlineMethods'));
     }
 
@@ -267,16 +266,16 @@ class BillingController extends AdminBaseController
                 {
                     $company->subscription('main')->noProrate()->swap($plan->{'stripe_' . $request->type . '_plan_id'});
                 }else {
-                    if(Str::contains($company->stripe_id, 'acct_')){
+                    /*if(Str::contains($company->stripe_id, 'acct_')){
                         $connect_id = $company->stripe_id;
                         $company->stripe_id = null;
-                    }
+                    }*/
 
                     $company->newSubscription('main', $plan->{'stripe_' . $request->type . '_plan_id'})->create($token, [
                         'email' => $email
                     ]);
 
-                    $company->stripe_id = $company->stripe_id ?? $connect_id;
+//                    $company->stripe_id = $company->stripe_id ?? $connect_id;
                 }
                 $company = $this->company;
 

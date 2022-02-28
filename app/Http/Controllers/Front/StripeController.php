@@ -211,7 +211,6 @@ class StripeController extends Controller
             );
         }
 
-
         if (isset($request->advertise_id)) {
             $advertise = Advertise::where(['id' => $request->advertise_id])->first();
         } elseif (isset($request->plan_id)) {
@@ -292,7 +291,6 @@ class StripeController extends Controller
                         'email' => $email
                     ]);
 
-//                    $company->stripe_id = $company->stripe_id ?? $connect_id;
                 }
                 $company = $this->company;
 

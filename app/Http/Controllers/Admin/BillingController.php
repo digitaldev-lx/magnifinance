@@ -77,25 +77,9 @@ class BillingController extends AdminBaseController
             ->whereNotNull('stripe_invoices.pay_date')
             ->where('stripe_invoices.company_id', company()->id)->get();
 
-        /*$razorpay = DB::table('razorpay_invoices')
-            ->join('packages', 'packages.id', 'razorpay_invoices.package_id')
-            ->selectRaw('razorpay_invoices.id , "Razorpay" as method, razorpay_invoices.pay_date as paid_on, "" as end_on ,razorpay_invoices.next_pay_date, razorpay_invoices.created_at')
-            ->whereNotNull('razorpay_invoices.pay_date')
-            ->where('razorpay_invoices.company_id', company()->id);*/
-
-        /*$allInvoices = DB::table('paypal_invoices')
-            ->join('packages', 'packages.id', 'paypal_invoices.package_id')
-            ->selectRaw('paypal_invoices.id, "Paypal" as method, paypal_invoices.paid_on, paypal_invoices.end_on,paypal_invoices.next_pay_date,paypal_invoices.created_at')
-            ->where('paypal_invoices.status', 'paid')
-            ->where('paypal_invoices.company_id', company()->id)
-            ->union($stripe)
-            ->union($razorpay)
-            ->get();*/
-
         $this->firstInvoice = $allInvoices->sortByDesc(function ($temp, $key) {
             return Carbon::parse($temp->created_at)->getTimestamp();
         })->first();
-
 
         if ($this->firstInvoice) {
             if ($this->firstInvoice->next_pay_date)
@@ -143,17 +127,17 @@ class BillingController extends AdminBaseController
             ->whereNotNull('razorpay_invoices.pay_date')
             ->where('razorpay_invoices.company_id', company()->id);*/
 
-        $paypal = DB::table('paypal_invoices')
+        /*$paypal = DB::table('paypal_invoices')
             ->join('packages', 'packages.id', 'paypal_invoices.package_id')
             ->selectRaw('paypal_invoices.id,"" as invoice_id, packages.name as name, "Paypal" as method ,paypal_invoices.total as amount, paypal_invoices.paid_on,paypal_invoices.next_pay_date, paypal_invoices.created_at')
             ->where('paypal_invoices.status', 'paid')
-            ->where('paypal_invoices.company_id', company()->id);
+            ->where('paypal_invoices.company_id', company()->id);*/
 
         $offline = DB::table('offline_invoices')
             ->join('packages', 'packages.id', 'offline_invoices.package_id')
             ->selectRaw('offline_invoices.id,"" as invoice_id, packages.name as name, "Offline" as method ,offline_invoices.amount as amount, offline_invoices.pay_date as paid_on,offline_invoices.next_pay_date, offline_invoices.created_at')
             ->where('offline_invoices.company_id', company()->id)
-            ->union($paypal)
+//            ->union($paypal)
             ->union($stripe)
 //            ->union($razorpay)
             ->get();

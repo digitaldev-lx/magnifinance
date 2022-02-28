@@ -39,7 +39,7 @@ class StoreAdvertise extends FormRequest
                 'after:from'
             ],
             'amount' => 'required',
-            'avg_amount' => 'required|gt:2',
+            'avg_amount' => 'required',
         ];
     }
 

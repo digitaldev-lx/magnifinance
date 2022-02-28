@@ -56,7 +56,7 @@ class StripeWebhookController extends Controller
                 $invoiceRealId = $payload['data']['object']['id'];
                 \Log::debug([$customerId,config('cashier.webhook.secret'), $payload]);
 
-                $company = Company::where('stripe_id', $customerId)->first();
+                $company = Company::where('stripe_id', $customerId)->orWhere('customer_id', $customerId)->first();
 
                 $package = \App\Package::where(function ($query) use($planId) {
                     $query->where('stripe_annual_plan_id', '=', $planId)
@@ -105,7 +105,7 @@ class StripeWebhookController extends Controller
             elseif ($payload['type'] == 'invoice.payment_failed') {
                 $customerId = $payload['data']['object']['customer'];
 
-                $company = Company::where('stripe_id', $customerId)->first();
+                $company = Company::where('stripe_id', $customerId)->orWhere('customer_id', $customerId)->first();
                 $subscription = Subscription::where('company_id', $company->id)->first();
 
                 if($subscription){
@@ -133,7 +133,7 @@ class StripeWebhookController extends Controller
 
                 $customerId = $payload['data']['object']['customer'];
 
-                $company = Company::where('stripe_id', $customerId)->first();
+                $company = Company::where('stripe_id', $customerId)->orWhere('customer_id', $customerId)->first();
 
                 if($company){
                     $subscription = Subscription::where('company_id', $company->id)->first();
@@ -155,7 +155,7 @@ class StripeWebhookController extends Controller
             {
                 $customerId = $payload['data']['object']['customer'];
 
-                $company = Company::where('stripe_id', $customerId)->first();
+                $company = Company::where('stripe_id', $customerId)->orWhere('customer_id', $customerId)->first();
                 $subscription = Subscription::where('company_id', $company->id)->first();
 
                 if($subscription){

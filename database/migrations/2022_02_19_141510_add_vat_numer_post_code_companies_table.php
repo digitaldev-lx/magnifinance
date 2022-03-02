@@ -14,7 +14,8 @@ class AddVatNumerPostCodeCompaniesTable extends Migration
     public function up()
     {
         Schema::table('companies', function (Blueprint $table) {
-            $table->string('partner_token')->after('company_phone');
+            $table->string('vat_number')->after('company_phone');
+            $table->string('post_code')->after('company_phone');
         });
     }
 

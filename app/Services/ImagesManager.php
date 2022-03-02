@@ -50,7 +50,9 @@ class ImagesManager
 
     public function deleteImage($filePath): bool
     {
-        return Storage::disk('digitalocean')->delete($filePath);
+        if(Storage::disk('digitalocean')->exists($filePath)){
+            return Storage::disk('digitalocean')->delete($filePath);
+        }
     }
 
     public function imageUrl($filePath): string

@@ -53,6 +53,7 @@ class ImagesManager
         if(Storage::disk('digitalocean')->exists($filePath)){
             return Storage::disk('digitalocean')->delete($filePath);
         }
+        return true;
     }
 
     public function imageUrl($filePath): string

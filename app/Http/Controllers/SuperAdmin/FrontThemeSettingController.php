@@ -59,7 +59,7 @@ class FrontThemeSettingController extends SuperAdminBaseController
         }
 
         if ($request->hasFile('favicon')) {
-            $this->image->deleteImage($theme->logo);
+            $this->image->deleteImage($theme->favicon);
             $theme->favicon = $this->image->storeImage($request, 'favicon', 'favicon');
         }
 

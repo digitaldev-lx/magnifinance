@@ -217,6 +217,7 @@ class PackageController extends SuperAdminBaseController
         $data['mark_recommended']  = is_null($request->mark_as_recommended) ? 'false' : $request->mark_as_recommended;
         $data['status']  = is_null($request->status) ? 'inactive' : $request->status;
         $data['package_modules']  = json_encode($request->package_modules);
+        $data['description']  = $request->description;
         return $data;
     }
 

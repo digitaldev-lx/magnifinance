@@ -79,6 +79,7 @@ class Package extends Model
         'max_deals',
         'max_roles',
         'monthly_price',
+        'description',
         'annual_price',
         'stripe_monthly_plan_id',
         'stripe_annual_plan_id',

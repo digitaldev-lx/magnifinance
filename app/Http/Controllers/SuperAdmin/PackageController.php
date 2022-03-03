@@ -187,7 +187,6 @@ class PackageController extends SuperAdminBaseController
     public function update(StorePackage $request, Package $package)
     {
         abort_403(!$this->user->is_superadmin_employee || !$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('update_package'));
-
         $data = $this->modifyRequest($request);
         $package->update($data);
 

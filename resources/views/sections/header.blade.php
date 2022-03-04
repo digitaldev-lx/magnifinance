@@ -472,7 +472,7 @@
                                     });
 
                                     let viewAllCategories = response.total_categories_count > 8 ? `<div class="row justify-content-center mt-3">
-                                    <a href="{{ route('front.services', 'all') }}" class="view_all hvr-radial-out">View All</a>
+                                    <a href="{{ route('front.services', 'all') }}" class="view_all hvr-radial-out">{{__('app.viewAll')}}</a>
                                     </div>` : '';
 
                                     categories = categories+`</div>`+viewAllCategories+`</div>`;

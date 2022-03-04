@@ -150,6 +150,8 @@
 
         @include('sections.footer')
 
+        @include('cookieConsent::index')
+
         @include('front.coupon-model')
 
         <!-- Location Modal Start -->

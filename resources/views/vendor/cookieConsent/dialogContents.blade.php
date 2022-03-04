@@ -35,8 +35,8 @@
 
     <div class="content">
         <p class="cookie-consent__message">
-        {!! trans('cookieConsent::texts.message') !!}
-    </p>
+            {!! trans('cookieConsent::texts.message') !!}
+        </p>
 
         <button class="js-cookie-consent js-cookie-consent-agree btn btn-primary-outline mt-2">
             {{ trans('cookieConsent::texts.agree') }}

@@ -61,8 +61,12 @@ use App\Http\Requests\ApplyCoupon\ApplyRequest;
 use App\Notifications\SuperadminNotificationAboutNewAddedCompany;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Spatie\Crawler\Crawler;
+use Spatie\Sitemap\SitemapGenerator;
 use Stripe\Stripe;
 
 class FrontController extends FrontBaseController
@@ -565,6 +569,39 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
+        $path = "sitemap/sitemap.xml";
+        $sitemap = Sitemap::create(env('APP_URL'))
+            ->add(Url::create('/terms-and-conditions')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
+            ->add(Url::create('/privacy-policy')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
+            ->add(Url::create('/contact-us')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
+            ->add(Url::create('/about-us')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
+            ->add(Url::create('/how-it-works')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY));
+
+        Company::all()->each(function (Company $company) use ($sitemap) {
+            $sitemap->add(Url::create("/vendor/$company->slug")
+                ->setLastModificationDate($company->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
+        });
+
+        Article::whereStatus('approved')->each(function (Article $article) use ($sitemap) {
+            $sitemap->add(Url::create("/blog/$article->slug")
+                ->setLastModificationDate($article->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
+        });
+
+        BusinessService::whereStatus('active')->each(function (BusinessService $service) use ($sitemap) {
+            $sitemap->add(Url::create("/service/$service->company_id/$service->slug")
+                ->setLastModificationDate($service->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
+        });
+
+        $sitemapFile = $sitemap->writeToDisk('digitalocean', $path);
+
+        if($sitemapFile) {
+            return response()->json(["success" => true]);
+        }else{
+            return response()->json(["success" => false]);
+        }
 
         $paymentCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
         Stripe::setApiKey($paymentCredentials->stripe_secret);

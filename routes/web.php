@@ -119,7 +119,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('save-contact-settings', 'SettingController@editContactDetails')->name('save-contact-settings');
             Route::post('save-map-configuration', 'SettingController@editMapKey')->name('save-map-configuration');
             Route::post('save-google-calendar-config', 'SettingController@saveGoogleCalendarConfig')->name('saveGoogleCalendarConfig');
-//            Route::get('update', 'UpdateApplicationController@index')->name('update.index');
+            Route::get('sitemap-download', 'SettingController@sitemapDownload')->name('sitemapDownload');
+            Route::post('sitemap-generate', 'SettingController@sitemapGenerate')->name('sitemapGenerate');
 
             Route::post('reports/earningChart', ['uses' => 'ReportController@earningReportChart'])->name('reports.earningReportChart');
             Route::post('reports/salesChart', ['uses' => 'ReportController@salesReportChart'])->name('reports.salesReportChart');

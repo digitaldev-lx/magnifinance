@@ -38,7 +38,8 @@
         "shetabit/visitor": "^3.1",
         "spatie/laravel-cookie-consent": "^2.12",
         "stripe/stripe-php": "^7.68",
-        "yajra/laravel-datatables-oracle": "^9.0"
+        "yajra/laravel-datatables-oracle": "^9.0",
+        "spatie/laravel-sitemap": "^5.9.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

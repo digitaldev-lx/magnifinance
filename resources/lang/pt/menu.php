@@ -53,6 +53,7 @@ return array(
     'professionals' => 'Profissionais',
     'footerSettings' => 'Definições de rodapé',
     'seoSettings' => 'Definições SEO',
+    'sitemapSettings' => 'Sitemap para Google',
     'calendar' => 'Calendario',
     'invoices' => 'Faturas',
     'freeTrialSettings' => 'Definições Free Trial',

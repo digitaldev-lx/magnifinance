@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Article;
+use App\BusinessService;
+use App\Company;
 use App\Country;
 use App\Role;
 use App\Services\ImagesManager;
@@ -39,6 +42,8 @@ use App\Http\Requests\Setting\UpdateSetting;
 use App\Http\Controllers\SuperAdminBaseController;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
 
 class SettingController extends SuperAdminBaseController
 {
@@ -75,27 +80,6 @@ class SettingController extends SuperAdminBaseController
         $this->moduleSettings = ModuleSetting::where('status', 'deactive')->get();
         $this->socialCredentials = SocialAuthSetting::first();
         $this->countries = Country::all();
-        /*$client = new Client();
-        $res = $client->request('GET', config('froiden_envato.updater_file_path'), ['verify' => false]);
-        $this->lastVersion = $res->getBody();
-        $this->lastVersion = json_decode($this->lastVersion, true);
-        $currentVersion = File::get('version.txt');
-
-        $description = $this->lastVersion['description'];
-
-        $this->newUpdate = 0;
-
-        if (version_compare($this->lastVersion['version'], $currentVersion) > 0)
-        {
-            $this->newUpdate = 1;
-        }
-
-        $this->updateInfo = $description;
-        $this->lastVersion = $this->lastVersion['version'];
-
-        $this->appVersion = File::get('version.txt');
-        $laravel = app();
-        $this->laravelVersion = $laravel::VERSION;*/
 
         $this->package_modules = PackageModules::get();
         $this->package = Package::trialPackage()->first();
@@ -111,6 +95,7 @@ class SettingController extends SuperAdminBaseController
         }
 
         $this->selected_package_modules = $selected_package_modules;
+
         return view('superadmin.settings.index', $this->data);
     }
 
@@ -131,6 +116,49 @@ class SettingController extends SuperAdminBaseController
         $setting->save();
 
         return Reply::success(__('messages.updatedSuccessfully'));
+    }
+
+    public function sitemapDownload()
+    {
+        $path = "sitemap/sitemap.xml";
+        return Storage::disk('digitalocean')->download($path, 'sitemap.xml', ['Content-Type' => 'application/xml']);
+    }
+
+    public function sitemapGenerate()
+    {
+        $path = "sitemap/sitemap.xml";
+        $sitemap = Sitemap::create(env('APP_URL'))
+            ->add(Url::create('/terms-and-conditions')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
+            ->add(Url::create('/privacy-policy')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
+            ->add(Url::create('/contact-us')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
+            ->add(Url::create('/about-us')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
+            ->add(Url::create('/how-it-works')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY));
+
+        Company::all()->each(function (Company $company) use ($sitemap) {
+            $sitemap->add(Url::create("/vendor/$company->slug")
+                ->setLastModificationDate($company->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
+        });
+
+        Article::whereStatus('approved')->each(function (Article $article) use ($sitemap) {
+            $sitemap->add(Url::create("/blog/$article->slug")
+                ->setLastModificationDate($article->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
+        });
+
+        BusinessService::whereStatus('active')->each(function (BusinessService $service) use ($sitemap) {
+            $sitemap->add(Url::create("/service/$service->company_id/$service->slug")
+                ->setLastModificationDate($service->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
+        });
+
+        $sitemapFile = $sitemap->writeToDisk('digitalocean', $path);
+
+        if($sitemapFile) {
+            return response()->json(["status" => true]);
+        }else{
+            return response()->json(["status" => false]);
+        }
     }
 
     public function editTerms()

@@ -18,12 +18,12 @@ use App\PaymentGatewayCredentials;
 class CompanyObserver
 {
 
-    public function saving(Company $company)
+    /*public function saving(Company $company)
     {
         if ($company->isDirty('logo')) {
             Files::deleteFile($company->getOriginal('logo'), 'company-logo');
         }
-    }
+    }*/
 
     public function creating(Company $company)
     {
@@ -35,6 +35,8 @@ class CompanyObserver
         }
 
         $company->slug = $company->company_name;
+
+
 
         if (is_null($company->package_id)) {
             $package = Package::active()->trialPackage()->first();

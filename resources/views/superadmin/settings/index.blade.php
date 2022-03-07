@@ -76,6 +76,7 @@
                 <a class="nav-link" href="#theme" data-toggle="tab">@lang('menu.themeSettings')</a>
                 <a class="nav-link" href="#tax" data-toggle="tab">@lang('app.tax') @lang('menu.settings')</a>
                 <a class="nav-link" href="#seo-settings" data-toggle="tab">@lang('menu.seoSettings')</a>
+                <a class="nav-link" href="#sitemap-google" data-toggle="tab">@lang('menu.sitemapSettings')</a>
                 <a class="nav-link" href="#contact-settings" data-toggle="tab">@lang('menu.contactSettings')</a>
                 <a class="nav-link" href="#map-configuration"
                    data-toggle="tab">@lang('menu.mapConfiguration') @lang('menu.settings')</a>
@@ -948,6 +949,25 @@
                                     </form>
                                 </div>
                                 {{-- SEO TAB --}}
+
+                                {{-- SITEMAP TAB --}}
+                                <div class="tab-pane" id="sitemap-google">
+                                    <h4>@lang('menu.sitemapSettings')</h4>
+                                    <hr>
+                                    <div class="form-group">
+                                        <button id="generate-sitemap-google" type="button"
+                                                class="btn btn-success"><i
+                                                class="fa fa-sitemap"></i> @lang('app.sitemapGenerate')
+                                        </button>
+                                    </div>
+                                    <br>
+                                    <p>{{__('app.sitemaplastModified')}} {{  \Carbon\Carbon::parse(\Storage::disk('digitalocean')->lastModified('sitemap/sitemap.xml'))->diffForHumans()  }}</p>
+                                    <a href="{{route('superadmin.sitemapDownload')}}" class="btn btn-link">{{__('app.sitemapDownload')}}</a>
+
+                                </div>
+                                {{-- SITEMAP TAB --}}
+
+
                                 {{-- CONTACT TAB --}}
                                 <div class="tab-pane" id="contact-settings">
                                     <h4>@lang('menu.contactSettings')</h4>
@@ -1286,6 +1306,21 @@
                 data: $('#updateCurrency').serialize(),
                 success: function (response) {
                     if (response.status == 'success') {
+                        window.location.reload();
+                    }
+                }
+            })
+        });
+
+        $('body').on('click', '#generate-sitemap-google', function () {
+            $.easyAjax({
+                url: '{{ route('superadmin.sitemapGenerate')}}',
+                container: '#generate-sitemap-google',
+                type: "POST",
+                data: {_token: "{{csrf_token()}}"},
+                success: function (response) {
+                    console.log(response)
+                    if (response.status) {
                         window.location.reload();
                     }
                 }

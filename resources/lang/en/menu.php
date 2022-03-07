@@ -52,6 +52,7 @@ return array (
     'professionals' => 'Professionals',
     'footerSettings' => 'Footer Settings',
     'seoSettings' => 'SEO Settings',
+    'sitemapSettings' => 'Sitemap for Google',
     'calendar' => 'Calendar',
     'invoices' => 'Invoices',
     'freeTrialSettings' => 'Free Trial Settings',

@@ -569,49 +569,72 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-        $path = "sitemap/sitemap.xml";
-        $sitemap = Sitemap::create(env('APP_URL'))
-            ->add(Url::create('/terms-and-conditions')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
-            ->add(Url::create('/privacy-policy')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
-            ->add(Url::create('/contact-us')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
-            ->add(Url::create('/about-us')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY))
-            ->add(Url::create('/how-it-works')->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY));
+        $service = BusinessService::with('taxServices')->firstOrFail();
+        return $service->net_price + $service->net_price * ($service->taxServices[0]->tax->percent / 100);
+        $bookingDate = Carbon::createFromFormat('Y-m-d', "2022-03-09");
+        dd($bookingDate->format("Y-m-d") === Carbon::today()->format("Y-m-d"));
+        $company = company();
+dd($this->user->userBookingCount(Carbon::createFromFormat('Y-m-d', $bookingDate)));
+        if (!is_null($this->user) && $company->booking_per_day != (0 || '') && $company->booking_per_day <= $this->user->userBookingCount(Carbon::createFromFormat('Y-m-d', $request->bookingDate))) {
+            $msg = __('messages.reachMaxBooking') . Carbon::createFromFormat('Y-m-d', $request->bookingDate)->format('Y-m-d');
+            return Reply::dataOnly(['status' => 'fail', 'msg' => $msg]);
+        }
+        return
+        $bookingDate = Carbon::createFromFormat('Y-m-d', $request->bookingDate);
+        $day = $bookingDate->format('l');
+        $bookingTime = BookingTime::withoutGlobalScope(CompanyScope::class)->where('company_id', $company->id)->where('day', strtolower($day))->first();
+        // Check if multiple booking allowed
 
-        Company::all()->each(function (Company $company) use ($sitemap) {
-            $sitemap->add(Url::create("/vendor/$company->slug")
-                ->setLastModificationDate($company->updated_at)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
-        });
+        $bookings = Booking::withoutGlobalScope(CompanyScope::class)
+            ->where('company_id', $company->id)
+            ->whereDate('date_time', '=', $bookingDate->format('Y-m-d'));
 
-        Article::whereStatus('approved')->each(function (Article $article) use ($sitemap) {
-            $sitemap->add(Url::create("/blog/$article->slug")
-                ->setLastModificationDate($article->updated_at)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY));
-        });
+        $officeLeaves = OfficeLeave::where('start_date', '<=', $bookingDate)
+            ->where('end_date', '>=', $bookingDate)
+            ->get();
 
-        BusinessService::whereStatus('active')->each(function (BusinessService $service) use ($sitemap) {
-            $sitemap->add(Url::create("/service/$service->company_id/$service->slug")
-                ->setLastModificationDate($service->updated_at)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
-        });
+        if ($officeLeaves->count() > 0) {
+            $msg = __('messages.ShopClosed');
+            return Reply::dataOnly(['status' => 'shopclosed', 'msg' => $msg]);
 
-        $sitemapFile = $sitemap->writeToDisk('digitalocean', $path);
-
-        if($sitemapFile) {
-            return response()->json(["success" => true]);
-        }else{
-            return response()->json(["success" => false]);
         }
 
-        $paymentCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
-        Stripe::setApiKey($paymentCredentials->stripe_secret);
-        $stripe = new StripeCustomerManager();
-        return $stripe->getStripeCustomer();
-        //"acct_1KShBM2f0yGDuHKo"
-        return $customer_id = company()->createOrGetStripeCustomer();
-        return $company ? true : false;
-        return Str::contains(json_encode(company()->subscriptions), 'price_1KWdC3GzgobEAJp0CQ1BjeTk');
-        return ;
+        if ($bookingTime->per_day_max_booking != (0 || '') && $bookingTime->per_day_max_booking <= $bookings->count()) {
+            $msg = __('messages.reachMaxBookingPerDay') . Carbon::createFromFormat('Y-m-d', $request->bookingDate)->format('Y-m-d');
+            return Reply::dataOnly(['status' => 'fail', 'msg' => $msg]);
+        }
+
+        if ($bookingTime->multiple_booking == 'no') {
+            $bookings = $bookings->get();
+        } else {
+            $bookings = $bookings->whereRaw('DAYOFWEEK(date_time) = ' . ($bookingDate->dayOfWeek + 1))->get();
+        }
+
+        $variables = compact('bookingTime', 'bookings', 'company');
+
+        if ($bookingTime->status == 'enabled') {
+            if ($bookingDate->day === Carbon::today()->day) {
+                $startTime = Carbon::createFromFormat($this->settings->time_format, $bookingTime->utc_start_time);
+
+                while ($startTime->lessThan(Carbon::now())) {
+                    $startTime = $startTime->addMinutes($bookingTime->slot_duration);
+                }
+            } else {
+//                $startTime = Carbon::createFromFormat($this->settings->time_format, $bookingTime->utc_start_time);
+                $startTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_start_time);
+            }
+
+            $endTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_end_time);
+            $startTime->setTimezone($company->timezone);
+            $endTime->setTimezone($company->timezone);
+
+            $startTime->setDate($bookingDate->year, $bookingDate->month, $bookingDate->day);
+            $endTime->setDate($bookingDate->year, $bookingDate->month, $bookingDate->day);
+
+            $variables = compact('startTime', 'endTime', 'bookingTime', 'bookings', 'company');
+        }
+        $view = view('admin.booking.booking_slots', $variables)->render();
+        return Reply::dataOnly(['status' => 'success', 'view' => $view]);
       /*  return Magnifinance::addPartner();
         return $company = auth()->user()->load('country');*/
 
@@ -784,162 +807,228 @@ class FrontController extends FrontBaseController
 
     public function saveBooking(StoreFrontBooking $request)
     {
-        /* if user is registered then login else do register */
-        if ($this->user) {
-            $user = $this->user;
-        } else {
-            // User type from email/username
-            $user = User::where($this->user, $request->{$this->user})->first();
+        if(isset($request->from_pos) && $request->from_pos == "true"){
+            $user = User::withoutGlobalScopes()->whereId($request->user_id)->firstOrFail();
+            $originalAmount = $taxAmount = $amountToPay = $discountAmount = $couponDiscountAmount = 0;
+            $source = "pos";
+            $bookingItems = array();
 
-            // Check google recaptcha if setting is enabled
-            /*if ($this->googleCaptchaSettings->status == 'active' && $this->googleCaptchaSettings->v2_status == 'active' && (is_null($user) || ($user && !$user->hasRole('admin')))) {
-                // Checking is google recaptcha is valid
-                $gReCaptchaResponseInput = 'g-recaptcha-response';
-                $gReCaptchaResponse = $request->{$gReCaptchaResponseInput};
-                $validateRecaptcha = $this->validateGoogleReCaptcha($gReCaptchaResponse);
-
-                if (!$validateRecaptcha) {
-                    return $this->googleRecaptchaMessage();
-                }
-            }*/
-
-            try {
-                DB::beginTransaction();
-                $password = Str::random(8);
-                $user = User::firstOrNew(['email' => $request->email]);
-                $user->name = $request->first_name . ' ' . $request->last_name;
-                $user->email = $request->email;
-                $user->mobile = $request->phone;
-                $user->vat_number = $request->vat_number;
-                $user->calling_code = $request->calling_code;
-                $user->password = \Hash::make($password);
-                $user->save();
-
-                $user->attachRole(Role::where('name', 'customer')->first()->id);
-
-                Auth::loginUsingId($user->id);
-                $this->user = $user;
-                DB::commit();
-            } catch (\Exception $e) {
-                DB::rollBack();
-                abort_and_log(403, $e->getMessage());
-            }
-
-
-            if ($this->smsSettings->nexmo_status == 'active' && !$user->mobile_verified) {
-                // verify user mobile number
-                return response(Reply::redirect(route('front.checkoutPage'), __('messages.front.success.userCreated')));
-            }
-
-            $user->notify(new NewUser($password));
-        }
-
-        $products = (array)json_decode(request()->cookie('products', true));
-        $keys = array_keys($products);
-        $type = $products[$keys[0]]->type == 'deal' ? 'deal' : 'booking';
-
-        // get products and bookingDetails
-        $products = json_decode($request->cookie('products'), true);
-
-        // Get Applied Coupon Details
-        $couponData = request()->hasCookie('couponData') ? json_decode(request()->cookie('couponData'), true) : [];
-
-        /* booking details having bookingDate, bookingTime, selected_user, emp_name */
-        $bookingDetails = json_decode($request->cookie('bookingDetails'), true);
-
-        if (is_null($products) && ($type != 'deal' || is_null($bookingDetails))) {
-            return response(Reply::redirect(route('front.index')));
-        }
-
-        if ($type == 'booking') {
-            // get bookings and bookingTime as per bookingDetails date
-            $bookingDate = Carbon::createFromFormat('Y-m-d', $bookingDetails['bookingDate']);
-            $day = $bookingDate->format('l');
-            $bookingTime = BookingTime::where('day', strtolower($day))->first();
-
-            $bookings = Booking::select('id', 'date_time')->where(DB::raw('DATE(date_time)'), $bookingDate->format('Y-m-d'))->whereRaw('DAYOFWEEK(date_time) = ' . ($bookingDate->dayOfWeek + 1))->get();
-
-            if ($bookingTime->max_booking != 0 && $bookings->count() > $bookingTime->max_booking) {
-                return response(Reply::redirect(route('front.bookingPage')))->withCookie(Cookie::forget('bookingDetails'));
-            }
-        }
-
-        $originalAmount = $taxAmount = $amountToPay = $discountAmount = $couponDiscountAmount = 0;
-
-        $bookingItems = array();
-
-        $companyId = 0;
-
-        $tax = 0;
-        $taxName = [];
-        $taxPercent = 0;
-        $Amt = 0;
-
-        foreach ($products as $key => $product) {
-
-            if ($type !== 'deal') {
-                $taxes = ItemTax::with('tax')->where('service_id', $product['id'])->get();
-            } else {
-                $taxes = ItemTax::with('tax')->where('deal_id', $product['id'])->get();
-            }
+            $companyId = 0;
 
             $tax = 0;
+            $taxName = [];
+            $taxPercent = 0;
+            $Amt = 0;
 
-            foreach ($taxes as $key => $value) {
-                $tax += $value->tax->percent;
-                $taxName[] = $value->tax->name;
-                $taxPercent += $value->tax->percent;
-            }
+            for ($i = 0; $i < count($request->cart_prices); $i++) {
+                $service = BusinessService::findOrFail($request->cart_services[$i]);
+                $location = $service->location->id;
+                $taxes = ItemTax::with('tax')->where('service_id', $service->id)->get();
 
-            $companyId = $product['companyId'];
+                $tax = 0;
 
-            if ($product['tax_on_price_status'] == 'active') {
-                $net_price = round($product['price'] / (1 + $tax / 100) * $product['quantity'], 2);
-                $amount = convertedOriginalPrice($companyId, ($product['quantity'] * $product['price']));
+                foreach ($taxes as $key => $value) {
+                    $tax += $value->tax->percent;
+                    $taxName[] = $value->tax->name;
+                    $taxPercent += $value->tax->percent;
+                }
 
-                $Amt += ($product['price'] * $product['quantity']);
+                $companyId = auth()->user()->company_id;
+
+                if ($service->tax_on_price_status == 'active') {
+                    $unit_price = $service->net_price;
+                    $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->net_price));
+
+                    $Amt += ($service->net_price * $request->cart_quantity[$i]);
 //                $Amt += $net_price;
 //                $taxAmount += ($product['price'] * $product['quantity']) - $net_price;
-                $taxAmount += 0;
-            } else {
+                    $taxAmount += ($service->price - $service->net_price) * $request->cart_quantity[$i];
+                } else {
+                    $unit_price = $service->price;
+                    $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->price));
+                    $parcel = $service->price * $request->cart_quantity[$i];
+                    $Amt += $parcel;
+                    $taxAmount += ($parcel * $tax) / 100;
+                }
 
-                $amount = convertedOriginalPrice($companyId, ($product['quantity'] * $product['price']));
-                $parcel = $product['price'] * $product['quantity'];
-                $Amt += $parcel;
-                $taxAmount += ($parcel * $tax) / 100;
+                $originalAmount += $amount;
+
+                $deal_id = null;
+                $business_service_id = $service->id;
+
+                $bookingItems[] = [
+                    'business_service_id' => $business_service_id,
+                    'quantity' => $request->cart_quantity[$i],
+                    'unit_price' => convertedOriginalPrice($companyId, $unit_price),
+                    'amount' => $amount,
+                    'deal_id' => $deal_id,
+                ];
+
             }
 
-            $originalAmount += $amount;
+            $amountToPay = ($originalAmount + $taxAmount);
 
-            $deal_id = ($product['type'] == 'deal') ? $product['id'] : null;
-            $business_service_id = ($product['type'] == 'service') ? $product['id'] : null;
+            /*if ($couponData) {
+                if ($amountToPay <= $couponData['applyAmount']) {
+                    $amountToPay = 0;
+                } else {
+                    $amountToPay -= $couponData['applyAmount'];
+                }
 
-            $bookingItems[] = [
-                'business_service_id' => $business_service_id,
-                'quantity' => $product['quantity'],
-                'unit_price' => convertedOriginalPrice($companyId, $product['price']),
-                'amount' => $amount,
-                'deal_id' => $deal_id,
-            ];
+                $couponDiscountAmount = $couponData['applyAmount'];
+            }*/
 
-        }
+            $amountToPay = round($amountToPay, 2);
+            $dateTime = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y-m-d') . ' ' . Carbon::createFromFormat('H:i:s', $request->booking_time)->format('H:i:s');
 
-        $amountToPay = ($originalAmount + $taxAmount);
+            $currencyId = Company::withoutGlobalScope(CompanyScope::class)->find($companyId)->currency_id;
 
-        if ($couponData) {
-            if ($amountToPay <= $couponData['applyAmount']) {
-                $amountToPay = 0;
+        }else{
+            if ($this->user) {
+                $user = $this->user;
             } else {
-                $amountToPay -= $couponData['applyAmount'];
+                // User type from email/username
+                $user = User::where($this->user, $request->{$this->user})->first();
+                $location = $request->location;
+
+                try {
+                    DB::beginTransaction();
+                    $password = Str::random(8);
+                    $user = User::firstOrNew(['email' => $request->email]);
+                    $user->name = $request->first_name . ' ' . $request->last_name;
+                    $user->email = $request->email;
+                    $user->mobile = $request->phone;
+                    $user->vat_number = $request->vat_number ?? '999999990';
+                    $user->calling_code = $request->calling_code;
+                    $user->password = \Hash::make($password);
+                    $user->save();
+
+                    $user->attachRole(Role::where('name', 'customer')->first()->id);
+
+                    Auth::loginUsingId($user->id);
+                    $this->user = $user;
+                    DB::commit();
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    abort_and_log(403, $e->getMessage());
+                }
+
+
+                if ($this->smsSettings->nexmo_status == 'active' && !$user->mobile_verified) {
+                    // verify user mobile number
+                    return response(Reply::redirect(route('front.checkoutPage'), __('messages.front.success.userCreated')));
+                }
+
+                $user->notify(new NewUser($password));
+            }
+            $source = "online";
+            $products = (array)json_decode(request()->cookie('products', true));
+            $keys = array_keys($products);
+            $type = $products[$keys[0]]->type == 'deal' ? 'deal' : 'booking';
+
+            // get products and bookingDetails
+            $products = json_decode($request->cookie('products'), true);
+
+            // Get Applied Coupon Details
+            $couponData = request()->hasCookie('couponData') ? json_decode(request()->cookie('couponData'), true) : [];
+
+            /* booking details having bookingDate, bookingTime, selected_user, emp_name */
+            $bookingDetails = json_decode($request->cookie('bookingDetails'), true);
+
+            if (is_null($products) && ($type != 'deal' || is_null($bookingDetails))) {
+                return response(Reply::redirect(route('front.index')));
             }
 
-            $couponDiscountAmount = $couponData['applyAmount'];
+            if ($type == 'booking') {
+                // get bookings and bookingTime as per bookingDetails date
+                $bookingDate = Carbon::createFromFormat('Y-m-d', $bookingDetails['bookingDate']);
+                $day = $bookingDate->format('l');
+                $bookingTime = BookingTime::where('day', strtolower($day))->first();
+
+                $bookings = Booking::select('id', 'date_time')->where(DB::raw('DATE(date_time)'), $bookingDate->format('Y-m-d'))->whereRaw('DAYOFWEEK(date_time) = ' . ($bookingDate->dayOfWeek + 1))->get();
+
+                if ($bookingTime->max_booking != 0 && $bookings->count() > $bookingTime->max_booking) {
+                    return response(Reply::redirect(route('front.bookingPage')))->withCookie(Cookie::forget('bookingDetails'));
+                }
+            }
+
+            $originalAmount = $taxAmount = $amountToPay = $discountAmount = $couponDiscountAmount = 0;
+
+            $bookingItems = array();
+
+            $companyId = 0;
+
+            $tax = 0;
+            $taxName = [];
+            $taxPercent = 0;
+            $Amt = 0;
+
+            foreach ($products as $key => $product) {
+
+                if ($type !== 'deal') {
+                    $taxes = ItemTax::with('tax')->where('service_id', $product['id'])->get();
+                } else {
+                    $taxes = ItemTax::with('tax')->where('deal_id', $product['id'])->get();
+                }
+
+                $tax = 0;
+
+                foreach ($taxes as $key => $value) {
+                    $tax += $value->tax->percent;
+                    $taxName[] = $value->tax->name;
+                    $taxPercent += $value->tax->percent;
+                }
+
+                $companyId = $product['companyId'];
+
+                if ($product['tax_on_price_status'] == 'active') {
+                    $net_price = round($product['price'] / (1 + $tax / 100) * $product['quantity'], 2);
+                    $amount = convertedOriginalPrice($companyId, ($product['quantity'] * $product['price']));
+
+                    $Amt += ($product['price'] * $product['quantity']);
+//                $Amt += $net_price;
+//                $taxAmount += ($product['price'] * $product['quantity']) - $net_price;
+                    $taxAmount += 0;
+                } else {
+
+                    $amount = convertedOriginalPrice($companyId, ($product['quantity'] * $product['price']));
+                    $parcel = $product['price'] * $product['quantity'];
+                    $Amt += $parcel;
+                    $taxAmount += ($parcel * $tax) / 100;
+                }
+
+                $originalAmount += $amount;
+
+                $deal_id = ($product['type'] == 'deal') ? $product['id'] : null;
+                $business_service_id = ($product['type'] == 'service') ? $product['id'] : null;
+
+                $bookingItems[] = [
+                    'business_service_id' => $business_service_id,
+                    'quantity' => $product['quantity'],
+                    'unit_price' => convertedOriginalPrice($companyId, $product['price']),
+                    'amount' => $amount,
+                    'deal_id' => $deal_id,
+                ];
+
+            }
+
+            $amountToPay = ($originalAmount + $taxAmount);
+
+            if ($couponData) {
+                if ($amountToPay <= $couponData['applyAmount']) {
+                    $amountToPay = 0;
+                } else {
+                    $amountToPay -= $couponData['applyAmount'];
+                }
+
+                $couponDiscountAmount = $couponData['applyAmount'];
+            }
+
+            $amountToPay = round($amountToPay, 2);
+
+            $dateTime = $type !== 'deal' ? Carbon::createFromFormat('Y-m-d', $bookingDetails['bookingDate'])->format('Y-m-d') . ' ' . Carbon::createFromFormat('H:i:s', $bookingDetails['bookingTime'])->format('H:i:s') : '';
+            $currencyId = Company::withoutGlobalScope(CompanyScope::class)->find($companyId)->currency_id;
         }
-
-        $amountToPay = round($amountToPay, 2);
-
-        $dateTime = $type !== 'deal' ? Carbon::createFromFormat('Y-m-d', $bookingDetails['bookingDate'])->format('Y-m-d') . ' ' . Carbon::createFromFormat('H:i:s', $bookingDetails['bookingTime'])->format('H:i:s') : '';
-        $currencyId = Company::withoutGlobalScope(CompanyScope::class)->find($companyId)->currency_id;
 
         try {
             DB::beginTransaction();
@@ -956,8 +1045,8 @@ class FrontController extends FrontBaseController
             $booking->discount_percent = '0';
             $booking->payment_status = 'pending';
             $booking->additional_notes = $request->additional_notes;
-            $booking->location_id = $request->location;
-            $booking->source = 'online';
+            $booking->location_id = $location;
+            $booking->source = $source;
 
             if (!is_null($tax)) {
                 $booking->tax_name = json_encode($taxName);
@@ -965,13 +1054,16 @@ class FrontController extends FrontBaseController
                 $booking->tax_amount = $taxAmount;
             }
 
-            if (count($couponData) > 0 && !is_null($couponData)) {
-                $booking->coupon_id = $couponData[0]['id'];
-                $booking->coupon_discount = $couponDiscountAmount;
-                $coupon = Coupon::findOrFail($couponData[0]['id']);
-                $coupon->used_time = ($coupon->used_time + 1);
-                $coupon->save();
+            if(isset($couponData)){
+                if (count($couponData) > 0 && !is_null($couponData)) {
+                    $booking->coupon_id = $couponData[0]['id'];
+                    $booking->coupon_discount = $couponDiscountAmount;
+                    $coupon = Coupon::findOrFail($couponData[0]['id']);
+                    $coupon->used_time = ($coupon->used_time + 1);
+                    $coupon->save();
+                }
             }
+
 
             foreach ($bookingItems as $key => $bookingItem) {
                 if ($bookingItem['deal_id']) {
@@ -990,32 +1082,29 @@ class FrontController extends FrontBaseController
             abort_and_log(403, $e->getMessage());
         }
 
-        // create and save order for razorpay
-        /*$data = [
-            'amount' => $booking->converted_amount_to_pay * 100,
-            'currency' => $this->settings->currency->currency_code,
-        ];
-
-        $credentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
-
-        if ($credentials->razorpay_status === 'active') {
-            $booking->order_id = Razorpay::createOrder($data)->id;
-        }
-
-        $booking->save();*/
-
-        if ($type !== 'deal') {
-            /* Assign Suggested User To Booking */
-            if (!empty(json_decode($request->cookie('bookingDetails'))->selected_user)) {
-                $booking->users()->attach(json_decode($request->cookie('bookingDetails'))->selected_user);
-                setcookie('selected_user', '', time() - 3600);
+        if(isset($type)){
+            if ($type !== 'deal') {
+                /* Assign Suggested User To Booking */
+                if (!empty(json_decode($request->cookie('bookingDetails'))->selected_user)) {
+                    $booking->users()->attach(json_decode($request->cookie('bookingDetails'))->selected_user);
+                    setcookie('selected_user', '', time() - 3600);
+                } else {
+                    if ($this->suggestEmployee($booking->date_time)) {
+                        $booking->users()->attach($this->suggestEmployee($booking->date_time));
+                        setcookie('user_id', '', time() - 3600);
+                    }
+                }
+            }
+        }else{
+            if (isset($request->employee) && count($request->employee) > 0) {
+                $booking->users()->attach($request->employee);
             } else {
                 if ($this->suggestEmployee($booking->date_time)) {
                     $booking->users()->attach($this->suggestEmployee($booking->date_time));
-                    setcookie('user_id', '', time() - 3600);
                 }
             }
         }
+
 
         foreach ($bookingItems as $key => $bookingItem) {
             $bookingItems[$key]['booking_id'] = $booking->id;
@@ -1031,6 +1120,9 @@ class FrontController extends FrontBaseController
             abort_and_log(403, $e->getMessage());
         }
 
+        if(isset($request->from_pos) && $request->from_pos == "true"){
+            return Reply::dataOnly(['success' => true, 'msg' => __('front.bookingSuccessful')]);
+        }
 
         return response(Reply::redirect(route('front.payment-gateway'), __('messages.front.success.bookingCreated')))
             ->withCookie(Cookie::forget('bookingDetails'))

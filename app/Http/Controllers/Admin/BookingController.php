@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\BookingTime;
+use App\Category;
+use App\Country;
+use App\OfficeLeave;
 use App\Tax;
 use App\User;
 use App\Coupon;
@@ -19,6 +23,8 @@ use App\BusinessService;
 use App\Scopes\CompanyScope;
 use Illuminate\Http\Request;
 use App\PaymentGatewayCredentials;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\BookingCancel;
 use Illuminate\Support\Facades\Auth;
@@ -153,6 +159,104 @@ class BookingController extends AdminBaseController
         }
 
         return view('admin.booking.calendar_index', compact('bookings'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        abort_if(!$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('create_booking'), 403);
+
+        $services = BusinessService::active()->get();
+        $categories = Category::active()
+            ->with(['services' => function ($query) {
+                $query->active();
+            }])->withoutGlobalScope(CompanyScope::class)->has('services', '>', 0)->get();
+        $locations = Location::withoutGlobalScope(CompanyScope::class)->get();
+        $tax = Tax::active()->first();
+        $taxes = Tax::active()->get();
+        $employees = User::OtherThanCustomers()->get();
+
+        $bookingDetails = [];
+
+        if (request()->hasCookie('bookingDetails')) {
+            $bookingDetails = json_decode(request()->cookie('bookingDetails'), true);
+        }
+
+        if (request()->ajax()) {
+            return Reply::dataOnly(['status' => 'success', 'productsCount' => $this->productsCount]);
+        }
+
+        $locale = App::getLocale();
+
+        return view('admin.booking.create', compact('services', 'categories', 'locations', 'taxes', 'tax', 'employees', 'bookingDetails', 'locale'));
+    }
+
+    public function bookingSlots(Request $request)
+    {
+        $user = User::withoutGlobalScopes()->where('id',$request->user_id)->firstOrFail();
+        $company = company();
+
+        if (!is_null($this->user) && $company->booking_per_day != (0 || '') && $company->booking_per_day <= $user->userBookingCount(Carbon::createFromFormat('Y-m-d', $request->bookingDate))) {
+            $msg = __('messages.reachMaxBooking') . Carbon::createFromFormat('Y-m-d', $request->bookingDate)->format('Y-m-d');
+            return Reply::dataOnly(['status' => 'fail', 'msg' => $msg]);
+        }
+
+        $bookingDate = Carbon::createFromFormat('Y-m-d', $request->bookingDate);
+        $day = $bookingDate->format('l');
+        $bookingTime = BookingTime::where('day', strtolower($day))->first();
+        // Check if multiple booking allowed
+
+        $bookings = Booking::whereDate('date_time', '=', $bookingDate->format('Y-m-d'));
+
+        $officeLeaves = OfficeLeave::where('start_date', '<=', $bookingDate)
+            ->where('end_date', '>=', $bookingDate)
+            ->get();
+
+        if ($officeLeaves->count() > 0) {
+            $msg = __('messages.ShopClosed');
+            return Reply::dataOnly(['status' => 'shopclosed', 'msg' => $msg]);
+
+        }
+
+        if ($bookingTime->per_day_max_booking != (0 || '') && $bookingTime->per_day_max_booking <= $bookings->count()) {
+            $msg = __('messages.reachMaxBookingPerDay') . Carbon::createFromFormat('Y-m-d', $request->bookingDate)->format('Y-m-d');
+            return Reply::dataOnly(['status' => 'fail', 'msg' => $msg]);
+        }
+
+        if ($bookingTime->multiple_booking == 'no') {
+            $bookings = $bookings->get();
+        } else {
+            $bookings = $bookings->whereRaw('DAYOFWEEK(date_time) = ' . ($bookingDate->dayOfWeek + 1))->get();
+        }
+
+        $variables = compact('bookingTime', 'bookings', 'company');
+        if ($bookingTime->status == 'enabled') {
+            if ($bookingDate->format("Y-m-d") === Carbon::today()->format("Y-m-d")) {
+                $startTime = Carbon::createFromFormat($this->settings->time_format, $bookingTime->utc_start_time);
+
+                while ($startTime->lessThan(Carbon::now())) {
+                    $startTime = $startTime->addMinutes($bookingTime->slot_duration);
+                }
+            } else {
+//                $startTime = Carbon::createFromFormat($this->settings->time_format, $bookingTime->utc_start_time);
+                $startTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_start_time);
+            }
+
+            $endTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_end_time);
+            $startTime->setTimezone($company->timezone);
+            $endTime->setTimezone($company->timezone);
+
+            $startTime->setDate($bookingDate->year, $bookingDate->month, $bookingDate->day);
+            $endTime->setDate($bookingDate->year, $bookingDate->month, $bookingDate->day);
+
+            $variables = compact('startTime', 'endTime', 'bookingTime', 'bookings', 'company');
+        }
+        $view = view('admin.booking.booking_slots', $variables)->render();
+        return Reply::dataOnly(['status' => 'success', 'view' => $view]);
     }
 
     /**

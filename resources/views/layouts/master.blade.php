@@ -75,8 +75,8 @@
                     $searchRoute = $user->is_superadmin ? route('superadmin.search.store') : route('admin.search.store');
                 @endphp
 
-                <form id="search" class="form-inline h-100 mx-3" action="{{ $searchRoute }}" method="POST">
-                    @csrf
+<!--                <form id="search" class="form-inline h-100 mx-3" action="{{ $searchRoute }}" method="POST">
+{{--                    @csrf--}}
                     <div class="input-group input-group-custom">
                         <input name="search_key" id="search_key" class="form-control form-control-navbar" type="search" placeholder="@lang('front.searchBy')" aria-label="Search" autocomplete="off" required title="@lang('front.searchBy')" />
                         <div class="input-group-append">
@@ -85,7 +85,7 @@
                             </button>
                         </div>
                     </div>
-                </form>
+                </form>-->
 
             @endif
 

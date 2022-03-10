@@ -141,13 +141,9 @@ class AdminBaseController extends Controller
     {
 
         $codes = [];
-        $location = Cache::remember('location', 60*60*24, function (){
-            return Location::where('country_id', '!=', null)->pluck('country_id');
-        });
+        $location = Location::where('country_id', '!=', null)->pluck('country_id');
 
-        $countries = Cache::remember('countries', 60*60*24, function () use ($location){
-            return count($location) > 0 ? Country::whereIn('id', $location)->get() : Country::get();
-        });
+        $countries = Country::all();
 
         foreach($countries as $country) {
             $codes = Arr::add($codes, $country->iso, array('name' => $country->name, 'dial_code' => '+'.$country->phonecode, 'code' => $country->iso));

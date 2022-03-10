@@ -21,6 +21,7 @@ use Shetabit\Visitor\Traits\Visitable;
  * @property string $slug
  * @property string $description
  * @property float $price
+ * @property float $price_with_taxes
  * @property float $time
  * @property string $time_type
  * @property float $discount
@@ -93,7 +94,8 @@ class BusinessService extends Model
         'converted_discounted_price',
         'formated_price',
         'formated_discounted_price',
-        'discounted_price'
+        'discounted_price',
+        'price_with_taxes'
     ];
 
     public function getServiceImageUrlAttribute()
@@ -124,16 +126,18 @@ class BusinessService extends Model
     {
         if($this->discount > 0){
             if($this->discount_type == 'fixed'){
-                return ($this->price - $this->discount);
+                return $this->tax_on_price_status !== "active" ? ($this->price - $this->discount) : ($this->net_price - $this->discount);
             }
             elseif($this->discount_type == 'percent'){
-                $discount = (($this->discount / 100) * $this->price);
-                return round(($this->price - $discount), 2);
+                $discount = $this->tax_on_price_status !== "active" ? (($this->discount / 100) * $this->price) : (($this->discount / 100) * $this->net_price);
+                return $this->tax_on_price_status !== "active" ? round(($this->price - $discount), 2) : round(($this->net_price - $discount), 2);
             }
         }
 
-        return $this->price;
+        return $this->tax_on_price_status !== "active" ? $this->price : $this->net_price;
     }
+
+
 
     public function scopeActive($query)
     {
@@ -215,6 +219,25 @@ class BusinessService extends Model
         }
 
         return $taxPercent;
+    }
+
+    public function getPriceWithTaxesAttribute()
+    {
+        if (!$this->taxServices) {
+            return 0;
+        }
+
+        $taxPercent = 0;
+
+        foreach ($this->taxServices as $key => $tax) {
+            $taxPercent += $tax->tax->percent;
+        }
+
+        if($this->tax_on_price_status == "active"){
+            return $this->net_price + $this->net_price * ($taxPercent / 100);
+        }else{
+            return $this->price + $this->price * ($taxPercent / 100);
+        }
     }
 
 }

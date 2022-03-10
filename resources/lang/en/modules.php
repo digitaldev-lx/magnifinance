@@ -24,6 +24,7 @@ return array (
   'booking' =>
   array (
     'sendReminder' => 'Send Reminder',
+    'askForPayment' => 'Ask For Payment',
     'feedback' => 'Feedback',
     'giveFeedback' => 'Give your valuable feedback',
     'viewFeedback' => 'View your feedback',
@@ -41,6 +42,7 @@ return array (
     'cashToReturn' => 'Cash to return',
     'cashRemaining' => 'Cash remaining',
     'emptyCart' => 'Empty Cart',
+    'confirmBooking' => 'Confirm Booking',
     'paymentMethod' => 'Payment Method',
     'paymentStatus' => 'Payment Status',
     'billedTo' => 'Billed To',

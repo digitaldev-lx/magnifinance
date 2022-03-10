@@ -11,6 +11,7 @@ use App\Notifications\NewUser;
 use App\User;
 use App\Http\Requests\Customer\UpdateCustomer;
 use App\Role;
+use Illuminate\Support\Str;
 
 class CustomerController extends AdminBaseController
 {
@@ -53,13 +54,15 @@ class CustomerController extends AdminBaseController
      */
     public function store(StoreCustomer $request)
     {
+        $password = Str::random(8);
         $data = [
             'company_id' => null,
             'name' => $request->name,
             'email' => $request->email,
+            'vat_number' => $request->vat_number,
             'calling_code' => $request->calling_code,
             'mobile' => $request->mobile,
-            'password' => '123456',
+            'password' => \Hash::make($password),
         ];
 
         $user = User::create($data);
@@ -67,7 +70,7 @@ class CustomerController extends AdminBaseController
         // add customer role
         $user->attachRole(Role::where('name', 'customer')->withoutGlobalScopes()->first()->id);
 
-        $user->notify(new NewUser('123456'));
+        $user->notify(new NewUser($password));
 
         return Reply::successWithData(__('messages.createdSuccessfully'), ['user' => ['id' => $user->id, 'text' => $user->name]]);
     }
@@ -99,6 +102,10 @@ class CustomerController extends AdminBaseController
         return view('admin.customer.show', compact('customer', 'completedBookings', 'approvedBookings', 'pendingBookings', 'inProgressBookings', 'canceledBookings', 'earning'));
     }
 
+    public function getCustomer(User $id)
+    {
+        return $id;
+    }
     /**
      * Show the form for editing the specified resource.
      *

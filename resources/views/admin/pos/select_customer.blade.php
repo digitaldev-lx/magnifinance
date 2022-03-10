@@ -34,6 +34,10 @@
                         <label>@lang('app.email')</label>
                         <input type="text" class="form-control form-control-lg" name="email" >
                     </div>
+                    <div class="form-group">
+                        <label>@lang('app.vatNumber')</label>
+                        <input type="text" class="form-control form-control-lg" name="vat_number" >
+                    </div>
                 </div>
             </div>
         </div>

@@ -112,7 +112,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="step3_input mt-2 mb-2 form-control" name="vat_number" placeholder="@lang('front.registration.vat_number')*" autocomplete="off">
+                                        <input type="text" class="step3_input mt-2 mb-2 form-control" name="vat_number" placeholder="@lang('front.registration.vat_number')" autocomplete="off">
                                     </div>
 
                                     <div class="form-group">
@@ -134,7 +134,7 @@
                                               </span>
                                             </div>
                                              <input type="text" class="form-control " name="phone"
-                                             placeholder="@lang('front.registration.phoneNumber')*"aria-label="Username" aria-describedby="basic-addon1">
+                                             placeholder="@lang('front.registration.phoneNumber')"aria-label="Username" aria-describedby="basic-addon1">
                                         </div>
                                     </div>
 
@@ -329,10 +329,15 @@
                 disableButton: true,
                 buttonSelector: ".save-booking",
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
                 },
                 error: function (error){
-                    console.log(error);
+                    if( error.status === 422 ) {
+                        var data = error.responseJSON.errors
+                    }
+                    $.each( data, function( key, value ) {
+                        $.showToastr(value[0], 'error');
+                    });
                 }
             })
         })

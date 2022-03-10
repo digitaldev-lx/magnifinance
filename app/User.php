@@ -281,9 +281,10 @@ class User extends Authenticatable
 
     public function scopeAllCustomers()
     {
-        return $this->whereHas('roles', function ($query) {
+        return $this->whereRelation('roles', 'name', 'customer')->withoutGlobalScopes();
+        /*return $this->whereHas('roles', function ($query) {
             $query->where('name', 'customer')->withoutGlobalScopes();
-        });
+        });*/
     }
 
     public function scopeNotCustomer()

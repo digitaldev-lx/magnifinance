@@ -219,6 +219,9 @@ Route::group(['middleware' => 'auth'], function () {
                     'articles'     => 'ArticleController',
                 ]
             );
+
+            Route::get('customer/{id}', 'CustomerController@getCustomer')->name('customer.find');
+
             Route::post('updateWorking/{id}', 'EmployeeScheduleSettingController@updateWorking')->name('updateWorking');
             Route::post('selectLocation', 'DealController@selectLocation')->name('deals.selectLocation');
             Route::post('selectServices', 'DealController@selectServices')->name('deals.selectServices');
@@ -325,6 +328,8 @@ Route::group(['middleware' => 'auth'], function () {
                 'bookings' => 'BookingController',
                 'profile' => 'ProfileController'
             ]);
+
+            Route::post('/booking-slots', ['uses' => 'BookingController@bookingSlots'])->name('pos.bookingSlots');
         }
     );
 

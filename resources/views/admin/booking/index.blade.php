@@ -114,7 +114,15 @@
                                     </div>
                                 </div>
                             @endif
-
+                                <div class="col-md-6">
+                                    @permission('create_booking')
+                                        {{--                                    @if ($total_business_services < $package->max_services && $package->max_services > 0)--}}
+                                        <div class="d-flex justify-content-center justify-content-md-end mb-3">
+                                            <a href="{{ route('admin.bookings.create') }}" class="btn btn-rounded btn-primary mb-1"><i class="fa fa-plus"></i> @lang('app.createNew')</a>
+                                        </div>
+                                        {{--                                    @endif--}}
+                                    @endpermission
+                                </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 alert alert-primary"><i class="fa fa-info-circle"></i> @lang('modules.booking.selectNote')</div>

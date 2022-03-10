@@ -198,7 +198,7 @@
                                 </select>
                                 </span>
                             </div>
-                             </div>
+                         </div>
 
                         @if ($googleCaptchaSettings->vendor_page == 'active' && $googleCaptchaSettings->status == 'active')
                             <div class="form-group">

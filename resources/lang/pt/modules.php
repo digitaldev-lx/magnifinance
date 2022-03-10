@@ -24,6 +24,7 @@ return array (
   'booking' =>
   array (
     'sendReminder' => 'Enviar Lembrete',
+    'askForPayment' => 'Pedir Pagamento',
     'feedback' => 'Feedback',
     'giveFeedback' => 'Dê o seu valioso feedback',
     'viewFeedback' => 'Ver o seu feedback',
@@ -34,13 +35,14 @@ return array (
     'selectNote' => 'Clique na Marcação para selecionar.',
     'selectCustomer' => 'Selecionar Cliente',
     'customerDetails' => 'Detalhes do Cliente',
-    'searchNote' => 'Search a customer by name, email or mobile',
+    'searchNote' => 'Pesquisa de clientes por nome, email ou telefone',
     'payViaCash' => 'Pagar a dinheiro',
     'payViaCard' => 'Pagar com cartão',
     'cashGivenByCustomer' => 'Dinheiro pago pelo cliente',
     'cashToReturn' => 'Troco',
     'cashRemaining' => 'Dinheiro restante',
     'emptyCart' => 'Carrinho Vazio',
+    'confirmBooking' => 'Confirmar Marcação',
     'paymentMethod' => 'Metodo de Pagamento',
     'paymentStatus' => 'Status de Pagamento',
     'billedTo' => 'Faturado a',

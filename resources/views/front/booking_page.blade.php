@@ -3,6 +3,9 @@
 @push('styles')
     <link href=" {{ asset('front/css/bootstrap-datepicker.css') }} " rel="stylesheet">
     <link href=" {{ asset('front/css/booking-step-1.css') }} " rel="stylesheet">
+    <link href=" {{ asset('front/css/responsive.css') }} " rel="stylesheet">
+    <link href=" {{ asset('assets/css/style.css') }} " rel="stylesheet">
+
     <style>
         #msg_div {
             color: crimson;

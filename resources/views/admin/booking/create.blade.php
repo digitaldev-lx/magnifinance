@@ -1275,64 +1275,54 @@
             $.ajaxModal(modal_lg, url);*/
         });
 
-        $('#payment-modal').on('shown.bs.modal', function () {
-            $('#cash-given').val(globalCartTotal);
-            $('#cash-return').html(currency_format(0));
-            $('#cash-remaining').html(currency_format(0));
-            $('#cash-given').select();
-        });
+        $('body').on('click', '#do-payment', function() {
+            let cartItems = $("input[name='cart_prices[]']").length;
+            let userId = $("#user_id").val();
 
-        $('#cash-given').focus(function () {
-            $(this).select();
-        })
+            if(userId === null){
+                swal('@lang("modules.booking.selectCustomer")');
 
-        $("body").on("click", "input[name='payment_gateway']", function() {
-            let paymentMode = $(this).val();
-
-            if(paymentMode === 'cash') {
-                $('#cash-mode').show();
-            } else {
-                $('#cash-mode').hide();
-            }
-        });
-
-        $('body').on('keyup', '#cash-given', function() {
-            let cashGiven = $(this).val();
-            if(cashGiven === ''){
-                cashGiven = 0;
-            }
-
-            let total = $('#cart-total-input').val();
-            let cashReturn = (parseFloat(total) - parseFloat(cashGiven)).toFixed(2);
-            let cashRemaining = (parseFloat(total) - parseFloat(cashGiven)).toFixed(2);
-
-            if(cashRemaining < 0){
-                cashRemaining = parseFloat(0).toFixed(2);
-            }
-
-            if(cashReturn < 0){
-                cashReturn = Math.abs(cashReturn);
+                $('#user-error').html('@lang("modules.booking.selectCustomer")');
+                return false;
             }
             else{
-                cashReturn = parseFloat(0).toFixed(2);
+                $('#user-error').html('');
             }
 
-            $('#cash-return').html(currency_format(cashReturn));
-            $('#cash-remaining').html(currency_format(cashRemaining));
+            if(cartItems === 0){
+                swal('@lang("modules.booking.addItemsToCart")');
+                $('#cart-item-error').html('@lang("modules.booking.addItemsToCart")');
+                return false;
+            }
+            else{
+                $('#cart-item-error').html('');
+            }
+
+            var amount = $('#total-cart').html();
+
+            var url = "{{ route('admin.bookings.ask-payment-modal',':amount') }}";
+            url = url.replace(':amount', amount);
+            $(modal_lg + ' ' + modal_heading).html('...');
+            $.ajaxModal(modal_lg, url);
         });
+
+        $('body').on('keyup', '#prepayment_discount_percent', function() {
+            console.log($(this).val());
+            //todo: pegar no valor de amount, retirar o €, converter para float, fazer calculo e mostrar de novo
+        })
 
         $('body').on('click', '#submit-cart', function() {
             let location = $('#location-filter').val();
-
-            let url = "{{route('admin.pos.store')}}";
+            console.log($('#pos-form').serializeArray());
+            /*let url = "{{route('admin.pos.store')}}";
             let bookingTime = $('#posTime').val();
             $.easyAjax({
                 url: url,
                 container: '#pos-form',
                 type: "POST",
-                data: $('#pos-form').serialize()+'&payment_gateway='+$('input[name="payment_gateway"]:checked').val()+'&pos_date='+pos_date+'&pos_time='+bookingTime+'&location='+location,
+                data: $('#pos-form').serialize()+'&payment_gateway='+$('"#payment_gateway"').val()+'&prepayment_discount_percent='+$("#prepayment_discount_percent").val()+'&location='+location,
                 redirect: true
-            })
+            })*/
         });
 
         function checkValue(discount) {

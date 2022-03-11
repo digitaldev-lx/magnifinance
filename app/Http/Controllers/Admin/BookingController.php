@@ -195,6 +195,12 @@ class BookingController extends AdminBaseController
         return view('admin.booking.create', compact('services', 'categories', 'locations', 'taxes', 'tax', 'employees', 'bookingDetails', 'locale'));
     }
 
+    public function askPaymentModal($amount)
+    {
+        $this->amount = $amount;
+        return view('admin.booking.checkout_modal', $this->data);
+    }
+
     public function bookingSlots(Request $request)
     {
         $user = User::withoutGlobalScopes()->where('id',$request->user_id)->firstOrFail();

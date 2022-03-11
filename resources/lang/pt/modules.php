@@ -39,6 +39,7 @@ return array (
     'payViaCash' => 'Pagar a dinheiro',
     'payViaCard' => 'Pagar com cartão',
     'cashGivenByCustomer' => 'Dinheiro pago pelo cliente',
+    'prePaymentDiscountPercent' => 'Desconto em percentagem por Pre-Pagamento',
     'cashToReturn' => 'Troco',
     'cashRemaining' => 'Dinheiro restante',
     'emptyCart' => 'Carrinho Vazio',

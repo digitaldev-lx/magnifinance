@@ -323,6 +323,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('bookings/print/{id}', ['uses' => 'BookingController@print'])->name('bookings.print');
             Route::put('bookings/update-booking-date/{id}', ['uses' => 'BookingController@updateBookingDate'])->name('bookings.update_booking_date');
             Route::get('bookings/feedBack/{id}', ['uses' => 'BookingController@feedBack'])->name('bookings.feedBack');
+            Route::get('bookings/ask-payment-modal/{amount}', ['uses' => 'BookingController@askPaymentModal'])->name('bookings.ask-payment-modal');
 
             Route::resources([
                 'bookings' => 'BookingController',

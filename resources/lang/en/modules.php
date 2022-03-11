@@ -39,6 +39,7 @@ return array (
     'payViaCash' => 'Pay by cash',
     'payViaCard' => 'Pay by card',
     'cashGivenByCustomer' => 'Cash given by customer',
+    'prePaymentDiscountPercent' => 'Pre Payment Discount Percent',
     'cashToReturn' => 'Cash to return',
     'cashRemaining' => 'Cash remaining',
     'emptyCart' => 'Empty Cart',

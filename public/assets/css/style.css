@@ -1229,7 +1229,7 @@ input:focus {
 .datepicker table tr td.active.active,
 .datepicker table tr td.active.active:focus,
 .datepicker table tr td.active.highlighted.active:focus {
-    background: rgba(255, 255, 255, 1);
+    /*background: rgba(255, 255, 255, 1);*/
     box-shadow: 0 0 20px 0px var(--dark-primary-color);
     color: var(--primary-color);
     font-size: 20px;
@@ -1318,7 +1318,7 @@ input:focus {
 .slots-wrapper {
     border-radius: 0 0 5px 5px;
     position: relative;
-    background-color: var(--dark-primary-color);
+    /*background-color: var(--dark-primary-color);*/
     z-index: 0;
     margin-left: 30px;
     display: none;

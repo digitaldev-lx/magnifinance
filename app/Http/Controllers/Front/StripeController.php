@@ -353,6 +353,10 @@ class StripeController extends Controller
 
             return redirect()->route('admin.billing.index');
         }
+        elseif ($return_url == 'POSPayment') {
+
+            return redirect()->route('admin.dashboard');
+        }
 
         if (isset($request->booking_id)) {
             return $this->redirectToPayment($request->booking_id, null, 'Payment success');

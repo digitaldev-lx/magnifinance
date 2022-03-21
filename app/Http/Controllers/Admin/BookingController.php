@@ -5,7 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\BookingTime;
 use App\Category;
 use App\Country;
+use App\Deal;
+use App\EmployeeSchedule;
+use App\GatewayAccountDetail;
+use App\Http\Requests\StoreFrontBooking;
+use App\Leave;
+use App\Notifications\AdvertiseCompanyInfo;
+use App\Notifications\AdvertisePurchased;
+use App\Notifications\SendPaymentLinkNotification;
 use App\OfficeLeave;
+use App\Role;
 use App\Tax;
 use App\User;
 use App\Coupon;
@@ -25,6 +34,7 @@ use Illuminate\Http\Request;
 use App\PaymentGatewayCredentials;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\BookingCancel;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +43,7 @@ use App\Http\Requests\Booking\UpdateBooking;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\BookingStatusMultiUpdate;
+use Stripe\Stripe;
 
 class BookingController extends AdminBaseController
 {
@@ -193,6 +204,213 @@ class BookingController extends AdminBaseController
         $locale = App::getLocale();
 
         return view('admin.booking.create', compact('services', 'categories', 'locations', 'taxes', 'tax', 'employees', 'bookingDetails', 'locale'));
+    }
+
+    public function posPrePayment(StoreFrontBooking $request)
+    {
+        $user = User::withoutGlobalScopes()->whereId($request->user_id)->firstOrFail();
+        $originalAmount = $taxAmount = $amountToPay = $discountAmount = $couponDiscountAmount = 0;
+        $source = "pos";
+        $bookingItems = array();
+
+        $companyId = 0;
+
+        $tax = 0;
+        $taxName = [];
+        $taxPercent = 0;
+        $Amt = 0;
+        for ($i = 0; $i < count($request->cart_prices); $i++) {
+            $service = BusinessService::findOrFail($request->cart_services[$i]);
+            $location = $service->location->id;
+            $taxes = ItemTax::with('tax')->where('service_id', $service->id)->get();
+
+            $tax = 0;
+
+            foreach ($taxes as $key => $value) {
+                $tax += $value->tax->percent;
+                $taxName[] = $value->tax->name;
+                $taxPercent += $value->tax->percent;
+            }
+
+            $companyId = auth()->user()->company_id;
+
+            if ($service->tax_on_price_status == 'active') {
+                $unit_price = $service->net_price;
+                $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->net_price));
+
+                $Amt += ($service->net_price * $request->cart_quantity[$i]);
+//                $Amt += $net_price;
+//                $taxAmount += ($product['price'] * $product['quantity']) - $net_price;
+                $taxAmount += ($service->price - $service->net_price) * $request->cart_quantity[$i];
+            } else {
+                $unit_price = $service->price;
+                $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->price));
+                $parcel = $service->price * $request->cart_quantity[$i];
+                $Amt += $parcel;
+                $taxAmount += ($parcel * $tax) / 100;
+            }
+
+            $originalAmount += $amount;
+
+            $deal_id = null;
+            $business_service_id = $service->id;
+
+            $bookingItems[] = [
+                'business_service_id' => $business_service_id,
+                'quantity' => $request->cart_quantity[$i],
+                'unit_price' => convertedOriginalPrice($companyId, $unit_price),
+                'amount' => $amount,
+                'deal_id' => $deal_id,
+            ];
+
+        }
+
+        $amountToPay = ($originalAmount + $taxAmount);
+
+        $amountToPay = round($amountToPay, 2);
+        $dateTime = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y-m-d') . ' ' . Carbon::createFromFormat('H:i:s', $request->booking_time)->format('H:i:s');
+
+        $currencyId = Company::withoutGlobalScope(CompanyScope::class)->find($companyId)->currency_id;
+
+
+        try {
+            DB::beginTransaction();
+
+            $booking = new Booking();
+            $booking->company_id = $companyId;
+            $booking->user_id = $user->id;
+            $booking->currency_id = $currencyId;
+            $booking->date_time = $dateTime;
+            $booking->status = 'pending';
+            $booking->payment_gateway = 'card';
+            $booking->original_amount = $originalAmount;
+            $booking->discount = $discountAmount;
+            $booking->prepayment_discount_percent = $request->prepayment_discount_percent ?? 0;
+            $booking->discount_percent = '0';
+            $booking->payment_status = 'pending';
+            $booking->additional_notes = $request->additional_notes;
+            $booking->location_id = $location;
+            $booking->source = $source;
+
+            if (!is_null($tax)) {
+                $booking->tax_name = json_encode($taxName);
+                $booking->tax_percent = $taxPercent;
+                $booking->tax_amount = $taxAmount;
+            }
+
+            if(isset($couponData)){
+                if (count($couponData) > 0 && !is_null($couponData)) {
+                    $booking->coupon_id = $couponData[0]['id'];
+                    $booking->coupon_discount = $couponDiscountAmount;
+                    $coupon = Coupon::findOrFail($couponData[0]['id']);
+                    $coupon->used_time = ($coupon->used_time + 1);
+                    $coupon->save();
+                }
+            }
+
+
+            foreach ($bookingItems as $key => $bookingItem) {
+                if ($bookingItem['deal_id']) {
+                    $deal = Deal::findOrFail($bookingItem['deal_id']);
+                    $deal->used_time = ((int)$deal->used_time + 1);
+                    $deal->update();
+                }
+            }
+
+            $booking->amount_to_pay = $amountToPay;
+            $booking->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            abort_and_log(403, $e->getMessage());
+        }
+
+        if (isset($request->employee) && count($request->employee) > 0) {
+            $booking->users()->attach($request->employee);
+        } else {
+            if ($this->suggestEmployee($booking->date_time, $request->cart_services)) {
+                $booking->users()->attach($this->suggestEmployee($booking->date_time, $request->cart_services));
+            }
+        }
+
+
+        foreach ($bookingItems as $key => $bookingItem) {
+            $bookingItems[$key]['booking_id'] = $booking->id;
+            $bookingItems[$key]['company_id'] = $companyId;
+        }
+
+        try {
+            DB::beginTransaction();
+            DB::table('booking_items')->insert($bookingItems);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            abort_and_log(403, $e->getMessage());
+        }
+
+        $booking = $booking->load("items");
+        $stripeAccountDetails = GatewayAccountDetail::activeConnectedOfGateway('stripe')->first();
+        $paymentCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
+
+        /** setup Stripe credentials **/
+        Stripe::setApiKey($paymentCredentials->stripe_secret);
+
+        $line_items = [];
+        foreach ($booking->items as $key => $value) {
+
+            if ($value->businessService->tax_on_price_status == 'inactive') {
+                $price = ($value->business_service_id == null) ?
+                    $value->unit_price * 100 :
+                    ($value->unit_price * $value->businessService->taxServices[0]->tax->percent) + $value->unit_price * 100;
+            } else {
+                $price = $value->unit_price * 100;
+            }
+
+            $name = ($value->business_service_id == null) ? $value->product->name ?? 'deal' : $value->businessService->name;
+
+            if($request->prepayment_discount_percent !== 0 || !is_null($request->prepayment_discount_percent)){
+                $price = $price - $price * ($request->prepayment_discount_percent / 100);
+            }
+
+            $line_items[] = [
+                'name' => $name,
+                'amount' => round(currencyConvertedPrice($value->company_id, $price), 2),
+                'currency' => $this->settings->currency->currency_code,
+                'quantity' => $value->quantity,
+            ];
+        }
+        $amount = $booking->converted_amount_to_pay * 100;
+        $destination = $stripeAccountDetails ? $stripeAccountDetails->account_id : '';
+
+        $applicationFee = round((($amount / 100) * $paymentCredentials->stripe_commission_percentage), 0);
+        $data = [];
+
+        if ($destination != null && $destination != '') {
+            $data = [
+                'metadata' => ["total_amount" => $request->totalAmount],
+                'payment_method_types' => ['card'],
+                'line_items' => [$line_items],
+                'payment_intent_data' => [
+                    'application_fee_amount' => $applicationFee,
+                    'transfer_data' => [
+                        'destination' => $destination,
+                    ],
+                ],
+                'success_url' => route('front.afterStripePayment', ['return_url' => "POSPayment", 'booking_id' => $booking->id]),
+                'cancel_url' => route('front.payment-gateway'),
+            ];
+        }
+
+
+        $session = \Stripe\Checkout\Session::create($data);
+
+        $user->notify(new SendPaymentLinkNotification($session));
+
+        return Reply::success(__('app.paymentRequestSent'));
+        /*$superadmins = User::notCustomer()->withoutGlobalScopes()->whereNull('company_id')->get();
+        Notification::send($superadmins, new AdvertisePurchased($advertise));*/
+
     }
 
     public function askPaymentModal($amount)
@@ -912,6 +1130,121 @@ class BookingController extends AdminBaseController
 
         return Reply::dataOnly(['status' => 'success']);
 
+    }
+
+
+    public function suggestEmployee($date, $service_ids)
+    {
+        /* check for all employee of that service, of that particular location  */
+        $dateTime = $date;
+
+//        [$service_ids, $service_names] = Arr::divide(json_decode(request()->cookie('products'), true));
+
+        $user_lists = BusinessService::with('users')->whereIn('id', $service_ids)->get();
+
+        $all_users_of_particular_services = array();
+
+        foreach ($user_lists as $user_list) {
+            foreach ($user_list->users as $user) {
+                $all_users_of_particular_services[] = $user->id;
+            }
+        }
+
+        /* if no empolyee for that particular service is found then allow booking with null employee assignment  */
+        if (empty($all_users_of_particular_services)) {
+            return '';
+        }
+
+        /* Employee schedule: */
+        $day = $dateTime->format('l');
+        $time = $dateTime->format('H:i:s');
+        $date = $dateTime->format('Y-m-d');
+
+        /* Check for employees working on that day: */
+        $employeeWorking = EmployeeSchedule::with('employee')->where('days', $day)
+            ->whereTime('start_time', '<=', $time)->whereTime('end_time', '>=', $time)
+            ->where('is_working', 'yes')->whereIn('employee_id', $all_users_of_particular_services)->get();
+
+        $working_employee = array();
+
+        foreach ($employeeWorking as $employeeWorkings) {
+            $working_employee[] = $employeeWorkings->employee->id;
+        }
+
+        $assigned_user_list_array = array();
+        $assigned_users_list = Booking::with('users')
+            ->where('date_time', $dateTime)
+            ->get();
+
+        foreach ($assigned_users_list as $key => $value) {
+            foreach ($value->users as $key1 => $value1) {
+                $assigned_user_list_array[] = $value1->id;
+            }
+        }
+
+        $free_employee_list = array_diff($working_employee, array_intersect($working_employee, $assigned_user_list_array));
+
+        /* Leave: */
+
+        /* check for half day*/
+        $halfday_leave = Leave::with('employee')->whereDate('start_date', '<=', $date)
+            ->whereDate('end_date', '>=', $date)->whereTime('start_time', '<=', $time)
+            ->whereTime('end_time', '>=', $time)->where('leave_type', 'Half day')->where('status', 'approved')->get();
+
+        $users_on_halfday_leave = array();
+
+        foreach ($halfday_leave as $halfday_leaves) {
+            $users_on_halfday_leave[] = $halfday_leaves->employee->id;
+        }
+
+        /* check for full day*/
+        $fullday_leave = Leave::with('employee')->whereDate('start_date', '<=', $date)
+            ->whereDate('end_date', '>=', $date)->where('leave_type', 'Full day')->where('status', 'approved')->get();
+
+        $users_on_fullday_leave = array();
+
+        foreach ($fullday_leave as $fullday_leaves) {
+            $users_on_fullday_leave[] = $fullday_leaves->employee->id;
+        }
+
+        $employees_not_on_halfday_leave = array_diff($free_employee_list, array_intersect($free_employee_list, $users_on_halfday_leave));
+
+        $employees_not_on_fullday_leave = array_diff($free_employee_list, array_intersect($free_employee_list, $users_on_fullday_leave));
+
+        $companyId = Role::select('company_id')->where('id', auth()->user()->role->id)->first()->company_id;
+        $company = Company::where('id', $companyId)->first();
+
+        /* if any employee is on leave on that day */
+        if ($this->getCartCompanyDetail()->employee_selection == 'enabled') {
+
+            return User::allEmployees()->select('id', 'name')->whereIn('id', $employees_not_on_fullday_leave)->whereIn('id', $employees_not_on_halfday_leave)->get();
+
+        }
+
+        /* if no employee found then return allow booking with no employee assignment   */
+        if (empty($free_employee_list)) {
+            if ($this->getCartCompanyDetail()->multi_task_user == 'enabled') {
+                /* give single users */
+                return User::select('id', 'name')->whereIn('id', $all_users_of_particular_services)->first()->id;
+            }
+        }
+
+        /* select of all remaining employees */
+        $users = User::select('id', 'name')->whereIn('id', $free_employee_list);
+
+        if ($this->settings->disable_slot == 'enabled') {
+
+            foreach ($users->get() as $key => $employee_list) {
+                // call function which will see employee schedules
+                $user_schedule = $this->checkUserSchedule($employee_list->id, $date);
+
+                if ($user_schedule == true) {
+                    return $employee_list->id;
+                }
+            }
+        }
+
+        return $users->first()->id;
     }
 
 } /* end of class */

@@ -41,7 +41,7 @@ class CreateBookingsTable extends Migration
             $table->float('tax_percent', 8, 2);
             $table->float('tax_amount', 8, 2);
             $table->float('amount_to_pay');
-            $table->enum('payment_status', ['pending', 'completed'])->default('completed');
+            $table->enum('payment_status', ['pending', 'completed', 'parcial'])->default('completed');
             $table->string('source')->default('pos');
             $table->text('additional_notes')->nullable();
 

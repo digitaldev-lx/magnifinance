@@ -35,5 +35,5 @@
     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i>
         @lang('app.cancel')</button>
     <button type="button" id="submit-cart" class="btn btn-success"><i class="fa fa-check"></i>
-        @lang('app.submit')</button>
+        @lang('app.sendPaymentRequest')</button>
 </div>

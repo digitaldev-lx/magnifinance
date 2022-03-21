@@ -24,42 +24,41 @@
             </div>
         @else
             <div class="col-12 align-items-center available_time">
-                <ul class="time-slots">
-                    @php
-                        $slot_count = 1;
-                        $check_remaining_booking_slots = 0;
-                    @endphp
-                    @for ($d = $startTime; $d < $endTime; $d->addMinutes($bookingTime->slot_duration))
-                        @php $slotAvailable = 1; @endphp
-                        @if ($bookingTime->multiple_booking === 'no' && $bookings->count() > 0)
-                            @foreach ($bookings as $booking)
-                                @if ($booking->date_time->format($settings->time_format) == $d->format($settings->time_format))
-                                    @php $slotAvailable = 0; @endphp
-                                @endif
-                            @endforeach
-                        @endif
 
-                        @if ($slotAvailable == 1)
-                            @php $check_remaining_booking_slots++; @endphp
+                @php
+                    $slot_count = 1;
+                    $check_remaining_booking_slots = 0;
+                @endphp
+                @for ($d = $startTime; $d < $endTime; $d->addMinutes($bookingTime->slot_duration))
+                    @php $slotAvailable = 1; @endphp
+                    @if ($bookingTime->multiple_booking === 'no' && $bookings->count() > 0)
+                        @foreach ($bookings as $booking)
+                            @if ($booking->date_time->format($settings->time_format) == $d->format($settings->time_format))
+                                @php $slotAvailable = 0; @endphp
+                            @endif
+                        @endforeach
+                    @endif
 
-                            <li>
-                                <div class="custom-control custom-radio check-user-availability"
-                                    data-date="{{ $d }}"
-                                    data-radio-id="{{ $slot_count }}"
-{{--                                    data-time="{{ $d->format($settings->time_format) }}">--}}
-                                    data-time="{{ $d->format($company->time_format) }}">
-                                    <input type="radio" id="radio{{ $slot_count }}" name="booking_time"
-                                        class="custom-control-input" value="{{ $d->format('H:i:s') }}">
-                                    <label class="custom-control-label"
-{{--                                        for="radio{{ $slot_count }}">{{ $d->format($settings->time_format) }}</label>--}}
-                                        for="radio{{ $slot_count }}">{{ $d->format($company->time_format) }}</label>
-                                </div>
-                            </li>
+                    @if ($slotAvailable == 1)
+                        @php $check_remaining_booking_slots++; @endphp
 
-                        @endif
-                        @php $slot_count++; @endphp
-                    @endfor
-                </ul>
+                        <div class="custom-control custom-radio custom-control-inline check-user-availability"
+                             data-date="{{ $d }}"
+                             data-radio-id="{{ $slot_count }}"
+                             {{--                                    data-time="{{ $d->format($settings->time_format) }}">--}}
+                             data-time="{{ $d->format($company->time_format) }}">
+
+
+                            <input type="radio" id="radio{{ $slot_count }}" name="booking_time"
+                                   class="custom-control-input mr-3" value="{{ $d->format('H:i:s') }}">
+                            <label class="custom-control-label ml-4"
+                                   {{--                                        for="radio{{ $slot_count }}">{{ $d->format($settings->time_format) }}</label>--}}
+                                   for="radio{{ $slot_count }}">{{ $d->format($company->time_format) }}</label>
+                        </div>
+
+                    @endif
+                    @php $slot_count++; @endphp
+                @endfor
 
 
                 <div class="col-12 align-items-center msg-container">

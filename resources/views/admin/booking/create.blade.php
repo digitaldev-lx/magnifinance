@@ -363,7 +363,7 @@
             $('.slots-wrapper').html(html);
 
             $('html, body').animate({
-                scrollTop: $(".slots-wrapper").offset().top
+                scrollTop: $("#datepicker").offset().top
             }, 1000);
             getBookingSlots({ bookingDate:  pos_date, user_id: $("#user_id").val(), _token: "{{ csrf_token() }}"})
         });
@@ -1299,7 +1299,7 @@
             }
 
             var amount = $('#total-cart').html();
-
+            totalAmount = parseFloat($('#total-cart').html())
             var url = "{{ route('admin.bookings.ask-payment-modal',':amount') }}";
             url = url.replace(':amount', amount);
             $(modal_lg + ' ' + modal_heading).html('...');
@@ -1307,22 +1307,53 @@
         });
 
         $('body').on('keyup', '#prepayment_discount_percent', function() {
-            console.log($(this).val());
-            //todo: pegar no valor de amount, retirar o €, converter para float, fazer calculo e mostrar de novo
+            if($(this).val() == 0 || $(this).val() == ''){
+                $("#payment-modal-total").html($('#total-cart').html())
+            }
+
+            let amount = $('#total-cart').html()
+            amount = amount.replace('{{$settings->currency->currency_symbol}}', '')
+            amount = parseFloat(amount)
+            totalAmount = amount - amount * ($(this).val() / 100)
+            $("#payment-modal-total").html("{{$settings->currency->currency_symbol}}"+totalAmount.toFixed(2))
         })
 
         $('body').on('click', '#submit-cart', function() {
             let location = $('#location-filter').val();
-            console.log($('#pos-form').serializeArray());
-            /*let url = "{{route('admin.pos.store')}}";
-            let bookingTime = $('#posTime').val();
+            let url = "{{route('admin.booking.prepayment')}}";
+            if(Number.isNaN(totalAmount)){
+                let amount = $('#total-cart').html()
+                amount = amount.replace('{{$settings->currency->currency_symbol}}', '')
+                totalAmount = parseFloat(amount)
+            }
+            let dataArray = $('#pos-form').serializeArray();
+
+            dataArray.push({name: "prepayment_discount_percent", value: $("#prepayment_discount_percent").val()});
+            dataArray.push({name: "location", value: location});
+            dataArray.push({name: "totalAmount", value: totalAmount.toFixed(2)});
+
             $.easyAjax({
                 url: url,
                 container: '#pos-form',
                 type: "POST",
-                data: $('#pos-form').serialize()+'&payment_gateway='+$('"#payment_gateway"').val()+'&prepayment_discount_percent='+$("#prepayment_discount_percent").val()+'&location='+location,
-                redirect: true
-            })*/
+                data: dataArray,
+                redirect: true,
+                success: function (response){
+                    console.log(response);
+                    if(response.status == "success"){
+                        $.showToastr(response.message, 'success');
+                    }
+                },
+                error: function (error){
+                    console.log(error);
+                    if (error.status === 422) {
+                        var data = error.responseJSON.errors
+                    }
+                    $.each(data, function (key, value) {
+                        $.showToastr(value[0], 'error');
+                    });
+                }
+            })
         });
 
         function checkValue(discount) {

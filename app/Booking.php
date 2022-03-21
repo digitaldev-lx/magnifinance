@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property float|null $product_amount
  * @property float $discount
  * @property float $discount_percent
+ * @property float $prepayment_discount_percent
  * @property float|null $coupon_discount
  * @property string $tax_name
  * @property float $tax_percent

@@ -12,6 +12,8 @@ return array(
     'password' => 'Password',
     'appointo' => ':name',
     'loginAccount' => 'Login to your account',
+    'thankForYourContactAndInterest' => "Thank you for contacting us and for your interest in our services.",
+    'confirmAppointmentPaymentButton' => "To confirm your appointment, please click on the next button and make the payment.",
     'getStartedToday' => 'Get started today',
     'congratulationNote' => 'Congratulations on starting your business with :name',
     'congratulationNote1' => 'You have joined the #1 platform for monitoring your appointment online and that means the opportunities ahead of you are virtually limitless. We can not wait to see what you offer',

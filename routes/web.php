@@ -324,6 +324,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::put('bookings/update-booking-date/{id}', ['uses' => 'BookingController@updateBookingDate'])->name('bookings.update_booking_date');
             Route::get('bookings/feedBack/{id}', ['uses' => 'BookingController@feedBack'])->name('bookings.feedBack');
             Route::get('bookings/ask-payment-modal/{amount}', ['uses' => 'BookingController@askPaymentModal'])->name('bookings.ask-payment-modal');
+            Route::post('/booking-prepayment', ['uses' => 'BookingController@posPrePayment'])->name('booking.prepayment');
 
             Route::resources([
                 'bookings' => 'BookingController',
@@ -385,6 +386,7 @@ Route::group(['namespace' => 'Front', 'as' => 'front.'], function () {
     Route::post('/update-cart', ['uses' => 'FrontController@updateCart'])->name('updateCart');
 
     Route::post('/save-booking', ['uses' => 'FrontController@saveBooking'])->name('saveBooking');
+
     Route::group(['middleware' => 'mobileVerifyRedirect'], function () {
         Route::get('payment-gateway', array('as' => 'payment-gateway', 'uses' => 'FrontController@paymentGateway'));
         Route::get('offline-payment/{bookingId?}/{return_url?}', array('as' => 'offline-payment', 'uses' => 'FrontController@offlinePayment'));

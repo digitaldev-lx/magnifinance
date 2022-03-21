@@ -569,6 +569,7 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
+        return company()->currency;
         $service = BusinessService::with('taxServices')->firstOrFail();
         return $service->net_price + $service->net_price * ($service->taxServices[0]->tax->percent / 100);
         $bookingDate = Carbon::createFromFormat('Y-m-d', "2022-03-09");
@@ -807,6 +808,7 @@ dd($this->user->userBookingCount(Carbon::createFromFormat('Y-m-d', $bookingDate)
 
     public function saveBooking(StoreFrontBooking $request)
     {
+        $location = $request->location;
         if(isset($request->from_pos) && $request->from_pos == "true"){
             $user = User::withoutGlobalScopes()->whereId($request->user_id)->firstOrFail();
             $originalAmount = $taxAmount = $amountToPay = $discountAmount = $couponDiscountAmount = 0;
@@ -889,7 +891,6 @@ dd($this->user->userBookingCount(Carbon::createFromFormat('Y-m-d', $bookingDate)
             } else {
                 // User type from email/username
                 $user = User::where($this->user, $request->{$this->user})->first();
-                $location = $request->location;
 
                 try {
                     DB::beginTransaction();

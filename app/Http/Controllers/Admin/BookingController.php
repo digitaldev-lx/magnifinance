@@ -397,8 +397,8 @@ class BookingController extends AdminBaseController
                         'destination' => $destination,
                     ],
                 ],
-                'success_url' => route('front.afterStripePayment', ['return_url' => "POSPayment", 'booking_id' => $booking->id]),
-                'cancel_url' => route('front.payment-gateway'),
+                'success_url' => route('front.afterStripePayment', ['return_url' => 'POSPayment', 'booking_id' => $booking->id]),
+                'cancel_url' => route('admin.dashboard')
             ];
         }
 

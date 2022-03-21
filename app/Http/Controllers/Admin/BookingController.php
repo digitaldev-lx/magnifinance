@@ -403,7 +403,7 @@ class BookingController extends AdminBaseController
         }
 
 
-        $session = \Stripe\Checkout\Session::create($data);
+        return $session = \Stripe\Checkout\Session::create($data);
 
         $user->notify(new SendPaymentLinkNotification($session));
 

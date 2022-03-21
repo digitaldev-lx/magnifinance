@@ -413,6 +413,7 @@ return array(
     'package' => 'Plano',
     'licence' => 'Licença',
     'expires' => 'expira',
+    'attention' => 'Atenção',
     'on' => 'Em',
     'method' => 'Método',
     'starting' => 'A partir',

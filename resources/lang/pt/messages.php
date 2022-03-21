@@ -147,6 +147,8 @@ return array (
   'maxEmpLimit' => 'Max employee limit has been reached.  Upgrade your plan',
   'maxRoleLimit' => 'Max role limit has been reached. Upgrade your plan.',
   'accessDenied' => 'Do not have access. Upgrade your plan.',
+  'configMissed' => 'Não tem acesso. Necessária configuração.',
+  'configNow' => 'Configurar Agora.',
   'forbidden' => 'Forbidden',
   'accountConnectedSuccessfully' => 'Account connected successfully.',
   'accountNotConnected' => 'Account not connected, try again.',

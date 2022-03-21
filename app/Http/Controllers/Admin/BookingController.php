@@ -190,6 +190,7 @@ class BookingController extends AdminBaseController
         $tax = Tax::active()->first();
         $taxes = Tax::active()->get();
         $employees = User::OtherThanCustomers()->get();
+        $stripeAccountDetails = GatewayAccountDetail::activeConnectedOfGateway('stripe')->first();
 
         $bookingDetails = [];
 
@@ -203,7 +204,7 @@ class BookingController extends AdminBaseController
 
         $locale = App::getLocale();
 
-        return view('admin.booking.create', compact('services', 'categories', 'locations', 'taxes', 'tax', 'employees', 'bookingDetails', 'locale'));
+        return view('admin.booking.create', compact('services', 'categories', 'locations', 'taxes', 'tax', 'employees', 'bookingDetails', 'locale', 'stripeAccountDetails'));
     }
 
     public function posPrePayment(StoreFrontBooking $request)
@@ -384,23 +385,20 @@ class BookingController extends AdminBaseController
         $destination = $stripeAccountDetails ? $stripeAccountDetails->account_id : '';
 
         $applicationFee = round((($amount / 100) * $paymentCredentials->stripe_commission_percentage), 0);
-        $data = [];
 
-        if ($destination != null && $destination != '') {
-            $data = [
-                'metadata' => ["total_amount" => $request->totalAmount],
-                'payment_method_types' => ['card'],
-                'line_items' => [$line_items],
-                'payment_intent_data' => [
-                    'application_fee_amount' => $applicationFee,
-                    'transfer_data' => [
-                        'destination' => $destination,
-                    ],
+        $data = [
+            'metadata' => ["total_amount" => $request->totalAmount],
+            'payment_method_types' => ['card'],
+            'line_items' => [$line_items],
+            'payment_intent_data' => [
+                'application_fee_amount' => $applicationFee,
+                'transfer_data' => [
+                    'destination' => $destination,
                 ],
-                'success_url' => route('front.afterStripePayment', ['return_url' => 'POSPayment', 'booking_id' => $booking->id]),
-                'cancel_url' => route('admin.dashboard')
-            ];
-        }
+            ],
+            'success_url' => route('front.afterStripePayment', ['return_url' => 'POSPayment', 'booking_id' => $booking->id]),
+            'cancel_url' => route('admin.dashboard')
+        ];
 
 
         return $session = \Stripe\Checkout\Session::create($data);
@@ -459,6 +457,7 @@ class BookingController extends AdminBaseController
 
         $variables = compact('bookingTime', 'bookings', 'company');
         if ($bookingTime->status == 'enabled') {
+            $date = Carbon::createFromDate($bookingDate)->format($company->date_format);
             if ($bookingDate->format("Y-m-d") === Carbon::today()->format("Y-m-d")) {
                 $startTime = Carbon::createFromFormat($this->settings->time_format, $bookingTime->utc_start_time);
 
@@ -466,16 +465,14 @@ class BookingController extends AdminBaseController
                     $startTime = $startTime->addMinutes($bookingTime->slot_duration);
                 }
             } else {
-//                $startTime = Carbon::createFromFormat($this->settings->time_format, $bookingTime->utc_start_time);
-                $startTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_start_time);
+                $startTime = Carbon::parse($bookingTime->utc_start_time, $company->timezone)->setTimezone('UTC')->format($this->settings->time_format);
+                $startTime = Carbon::parse("$date $startTime","UTC");
+//                $startTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_start_time);
             }
 
-            $endTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_end_time);
-            $startTime->setTimezone($company->timezone);
-            $endTime->setTimezone($company->timezone);
 
-            $startTime->setDate($bookingDate->year, $bookingDate->month, $bookingDate->day);
-            $endTime->setDate($bookingDate->year, $bookingDate->month, $bookingDate->day);
+            $endTime = Carbon::parse($bookingTime->utc_end_time, $company->timezone)->setTimezone('UTC')->format($this->settings->time_format);
+            $endTime = Carbon::parse("$date $endTime","UTC");
 
             $variables = compact('startTime', 'endTime', 'bookingTime', 'bookings', 'company');
         }

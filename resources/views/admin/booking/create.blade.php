@@ -389,6 +389,7 @@
         });
 
         var bookingDetails = {_token: $("meta[name='csrf-token']").attr('content')};
+
         function getBookingSlots(data) {
             $('#msg_div').html('');
 
@@ -429,7 +430,12 @@
                     $('#selectedBookingDate').html(data.bookingDate);
                 },
                 error: function (error){
-                    console.log(error);
+                    if (error.status === 422) {
+                        var data = error.responseJSON.errors
+                    }
+                    $.each(data, function (key, value) {
+                        $.showToastr(value[0], 'error');
+                    });
                 }
             })
         }
@@ -1276,6 +1282,8 @@
         });
 
         $('body').on('click', '#do-payment', function() {
+            @if($stripeAccountDetails)
+
             let cartItems = $("input[name='cart_prices[]']").length;
             let userId = $("#user_id").val();
 
@@ -1304,6 +1312,22 @@
             url = url.replace(':amount', amount);
             $(modal_lg + ' ' + modal_heading).html('...');
             $.ajaxModal(modal_lg, url);
+            @else
+
+            swal({
+                title: "{{__('messages.configMissed')}}",
+                icon: "warning",
+                type: "warning",
+                buttons: true,
+                closeOnConfirm: true,
+                dangerMode: true,
+            }).then((willRedirect) => {
+                if (willRedirect) {
+                    window.location.href = "https://spot-b.com/account/settings#payment";
+                }
+            });
+
+            @endif
         });
 
         $('body').on('keyup', '#prepayment_discount_percent', function() {
@@ -1318,7 +1342,10 @@
             $("#payment-modal-total").html("{{$settings->currency->currency_symbol}}"+totalAmount.toFixed(2))
         })
 
-        $('body').on('click', '#submit-cart', function() {
+        $('body').on('click', '#submit-cart', function(e) {
+            e.preventDefault()
+            e.stopPropagation()
+
             let location = $('#location-filter').val();
             let url = "{{route('admin.booking.prepayment')}}";
             if(Number.isNaN(totalAmount)){
@@ -1339,13 +1366,12 @@
                 data: dataArray,
                 redirect: true,
                 success: function (response){
-                    console.log(response);
                     if(response.status == "success"){
                         $.showToastr(response.message, 'success');
+                        window.location.href = "{{route('admin.bookings.index')}}"
                     }
                 },
                 error: function (error){
-                    console.log(error);
                     if (error.status === 422) {
                         var data = error.responseJSON.errors
                     }
@@ -1354,6 +1380,8 @@
                     });
                 }
             })
+
+
         });
 
         function checkValue(discount) {

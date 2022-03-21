@@ -417,6 +417,7 @@ return array (
   'package' => 'Package',
   'licence' => 'Licence',
   'expires' => 'expires',
+  'attention' => 'Attention',
   'on' => 'On',
   'method' => 'Method',
   'starting' => 'Starting',

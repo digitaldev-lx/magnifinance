@@ -1366,12 +1366,14 @@
                 data: dataArray,
                 redirect: true,
                 success: function (response){
+                    console.log(response);
                     if(response.status == "success"){
                         $.showToastr(response.message, 'success');
                         window.location.href = "{{route('admin.bookings.index')}}"
                     }
                 },
                 error: function (error){
+                    console.log(error);
                     if (error.status === 422) {
                         var data = error.responseJSON.errors
                     }

@@ -218,7 +218,7 @@ class StripeController extends Controller
 
         if (isset($request->advertise_id)) {
             $advertise = Advertise::where(['id' => $request->advertise_id])->first();
-        }elseif(isset($request->booking_id)) {
+        }elseif(isset($request->booking_id) && session()->has('stripe_session')) {
             $invoice = Booking::where(['id' => $request->booking_id, 'user_id' => Auth::user()->id])->first();
         }
 

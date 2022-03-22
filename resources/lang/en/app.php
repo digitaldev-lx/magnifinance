@@ -418,6 +418,7 @@ return array (
   'licence' => 'Licence',
   'expires' => 'expires',
   'attention' => 'Attention',
+  'click' => 'Click',
   'on' => 'On',
   'method' => 'Method',
   'starting' => 'Starting',

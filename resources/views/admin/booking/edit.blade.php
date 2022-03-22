@@ -342,10 +342,10 @@
                     <div class="col-md-12">
                         <table class="table table-condensed">
                             <tr class="h6">
-                                <td class="border-top-0 text-right w-50">@if($type == 'deal') @lang('app.deal') @else @lang('app.service') @endif @lang('app.total')</td>
+                                <td class="border-top-0 text-right w-50">@lang('app.service') @lang('app.total')</td>
                                 <td class="border-top-0" id="cart-sub-total">{{ currencyFormatter(number_format((float)$booking->original_amount, 2, '.', ''),myCurrencySymbol()) }}</td>
                             </tr>
-                            
+
                             <tr class="h6">
                                 <td class="text-right">@lang('app.product') @lang('app.total')</td>
                                 <td id="product-total">{{ currencyFormatter(number_format((float)($booking->product_amount), 2, '.', ''),myCurrencySymbol()) }}
@@ -359,7 +359,7 @@
                                     <td><input type="number" id="cart-discount" name="cart_discount" class="form-control" step=".01" min="0" value="{{ $booking->discount_percent }}"></td>
                                 </tr>
                             @endif
-                        
+
                             @if($booking->coupon_discount > 0)
                                 <tr class="h6">
                                     <input type="hidden" id="coupon_id" name="coupon_id" value="{{ $booking->coupon_id }}">

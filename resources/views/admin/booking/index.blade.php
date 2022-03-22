@@ -383,9 +383,13 @@
                     type: 'GET',
                     url: url,
                     success: function (response) {
+                        console.log(response);
                         if (response.status == "success") {
                             $('#booking-detail').hide().html(response.view).fadeIn('slow');
                         }
+                    },
+                    error: function(error){
+                        console.log(error);
                     }
                 });
             });

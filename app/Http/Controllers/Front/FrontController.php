@@ -692,8 +692,8 @@ dd($this->user->userBookingCount(Carbon::createFromFormat('Y-m-d', $bookingDate)
 
         $document = [
             "Type" => "T", // T = Fatura/Recibo, I = Fatura, S = Fatura Simplificada, C - Nota de Credito, D = Nota de Debito
-            "Date" => "2022-02-18", // Data do Serviço format("Y-m-d")
-            "DueDate" => "2022-02-18", // Data do Pagamento
+            "Date" => "2022-03-21", // Data do Serviço format("Y-m-d")
+            "DueDate" => "2022-03-21", // Data do Pagamento
             "Description" => "Descrição",
 //            "Serie" => "",
 //            "TaxExemptionReasonCode" => "",
@@ -702,7 +702,9 @@ dd($this->user->userBookingCount(Carbon::createFromFormat('Y-m-d', $bookingDate)
         ];
 //todo: optimizar a criação de documento para os vários tipos de transação (anuncios, planos e compra de serviços)
         $advertise = Advertise::where(['id' => 1])->first();
-       return $document = Magnifinance::emitDocumentFromOwner($advertise, $document,"pauloamserrano@gmail.com");
+        return $document = Magnifinance::emitDocumentFromOwner($advertise, $document,"pauloamserrano@gmail.com");
+
+        return $document = Magnifinance::emitDocumentFromOwner($advertise, $document,"pauloamserrano@gmail.com");
 //            $advertise->addDocument();
 //        return Magnifinance::getPartnerToken("239637712");
         return Magnifinance::getDocumentFromPartner("143373975", "239637712");

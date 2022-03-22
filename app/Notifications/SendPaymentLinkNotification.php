@@ -34,9 +34,9 @@ class SendPaymentLinkNotification extends BaseNotification implements ShouldQueu
     {
         $via = ['mail'];
 
-        /*if ($this->smsSetting->nexmo_status == 'active' && $notifiable->mobile_verified == 1) {
+        if ($this->smsSetting->nexmo_status == 'active' && $notifiable->mobile_verified == 1) {
             array_push($via, 'nexmo');
-        }*/
+        }
 
         return $via;
     }
@@ -51,6 +51,7 @@ class SendPaymentLinkNotification extends BaseNotification implements ShouldQueu
     {
         return (new MailMessage)
             ->from(config("mail.from.address"), config("mail.from.name"))
+            ->subject(__('app.bookingPayment'))
             ->greeting(__("email.hello") . " " . $notifiable->name)
             ->line(__('email.thankForYourContactAndInterest'))
             ->line(__('email.confirmAppointmentPaymentButton'))

@@ -40,8 +40,8 @@ class Magnifinance
      */
     public function getDocumentFromPartner($id, $partnerNif)
     {
-        $partnerToken = $this->getPartnerToken($partnerNif);
-        $document = $this->getRequest('document', null, 'documentId', $id, false, $partnerToken);
+//        $partnerToken = $this->getPartnerToken($partnerNif);
+        $document = $this->getRequest('document', null, 'documentId', $id, false, "ZXQ7PtAVShEAdhSbkWPMCZXTLPd49qQYrZUvGzai");
 
         return json_decode($document);
     }

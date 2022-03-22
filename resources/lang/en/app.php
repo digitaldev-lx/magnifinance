@@ -241,6 +241,7 @@ return array (
   'loadMore' => 'Load More',
   'paymentCredential' => 'Payment Credential',
   'paymentRequestSent' => 'Payment Request Sent',
+  'bookingPayment' => 'Booking Payment Request',
   'paymentsAndInvoicing' => 'Payments and Invoicing',
   'paypalCredential' => 'Paypal Credential',
   'stripeCredential' => 'Stripe Credential',

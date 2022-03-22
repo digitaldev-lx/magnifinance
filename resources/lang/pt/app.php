@@ -237,6 +237,7 @@ return array(
     'loadMore' => 'Carregar Mais',
     'paymentCredential' => 'Credenciais de Pagamento',
     'paymentRequestSent' => 'Pedido de Pagamento Enviado',
+    'bookingPayment' => 'Pagamento de Marcação',
     'paymentsAndInvoicing' => 'Pagamentos e Faturação',
     'paypalCredential' => 'Credenciais de Paypal',
     'stripeCredential' => 'Credenciais de Stripe',

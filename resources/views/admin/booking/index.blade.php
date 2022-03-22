@@ -201,6 +201,13 @@
                             $('#booking-detail').hide().html(response.view).fadeIn('slow');
                             table._fnDraw();
                         }
+                    }, error: function (error){
+                        if (error.status === 422) {
+                            var data = error.responseJSON.errors
+                        }
+                        $.each(data, function (key, value) {
+                            $.showToastr(value[0], 'error');
+                        });
                     }
                 })
             }

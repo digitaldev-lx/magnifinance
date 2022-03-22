@@ -721,7 +721,9 @@ class BookingController extends AdminBaseController
 
             $amountToPay = round($amountToPay, 2);
 
-            $booking->date_time   = Carbon::createFromFormat('Y-m-d H:i a', $request->booking_date . ' ' . $request->hidden_booking_time)->format('Y-m-d H:i:s');
+
+//            $booking->date_time   = Carbon::createFromFormat('Y-m-d H:i a', $request->booking_date . ' ' . $request->hidden_booking_time)->format('Y-m-d H:i:s');
+            $booking->date_time   = Carbon::parse($request->booking_date . ' ' . $request->hidden_booking_time, $booking->company->timezone)->format($booking->company->time_format);
             $booking->status      = $request->status;
             $booking->original_amount = $originalAmount;
             $booking->product_amount = $originalProductAmt;

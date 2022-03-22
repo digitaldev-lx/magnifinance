@@ -524,7 +524,7 @@ class BookingController extends AdminBaseController
      */
     public function edit(Request $request, $id)
     {
-//        abort_if(!$this->user->can('update_booking'), 403);
+
         abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission(['update_booking']), 403);
         $selected_booking_user = array();
         $booking_users = Booking::with([
@@ -581,7 +581,7 @@ class BookingController extends AdminBaseController
      */
     public function update(UpdateBooking $request, $id)
     {
-        abort_if(!$this->user->can('update_booking'), 403);
+        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission(['update_booking']), 403);
 
         try {
             DB::beginTransaction();

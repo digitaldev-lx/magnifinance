@@ -200,9 +200,14 @@ class StripeController extends Controller
 
     public function afterStripePayment(Request $request, $return_url, $bookingId = null)
     {
-        return $request->all();
-        $session_data = session('stripe_session');
-        $session = \Stripe\Checkout\Session::retrieve($session_data->id);
+
+        if(session()->has('stripe_session')){
+            $session_data = session('stripe_session');
+            $session = \Stripe\Checkout\Session::retrieve($session_data->id);
+        }elseif(isset($request->booking_id)){
+            $invoice = Booking::where(['id' => $request->booking_id])->first();
+            $session = \Stripe\Checkout\Session::retrieve($invoice->stripe_session_id);
+        }
 
         if (!isset($request->plan_id)) {
             $payment_method = \Stripe\PaymentIntent::retrieve(
@@ -213,15 +218,13 @@ class StripeController extends Controller
 
         if (isset($request->advertise_id)) {
             $advertise = Advertise::where(['id' => $request->advertise_id])->first();
-        } elseif (isset($request->plan_id)) {
-            $package = Package::where(['id' => $request->plan_id])->first();
-        } else {
+        }elseif(isset($request->booking_id)) {
             $invoice = Booking::where(['id' => $request->booking_id, 'user_id' => Auth::user()->id])->first();
         }
 
         $saCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
 
-        $currency = GlobalSetting::first()->currency;
+//        $currency = GlobalSetting::first()->currency;
 
         if (isset($request->booking_id)) {
             $payment = new Payment();

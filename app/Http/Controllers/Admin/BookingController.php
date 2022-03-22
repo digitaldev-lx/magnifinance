@@ -402,7 +402,8 @@ class BookingController extends AdminBaseController
 
 
         $session = \Stripe\Checkout\Session::create($data);
-
+        $booking->stripe_session_id = $session->id;
+        $booking->save();
         $user->notify(new SendPaymentLinkNotification($session));
 
         return Reply::success(__('app.paymentRequestSent'));

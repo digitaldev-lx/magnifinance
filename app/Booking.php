@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int|null $currency_id
  * @property \Illuminate\Support\Carbon $date_time
  * @property string $status
+ * @property string|null $stripe_session_id
  * @property string $payment_gateway
  * @property float|null $original_amount
  * @property float|null $product_amount

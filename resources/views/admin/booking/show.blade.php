@@ -209,7 +209,7 @@
                         @if($booking->prepayment_discount_percent > 0)
                         <tr class="h6">
                             <td class="text-right">@lang('app.prePaymentDiscount')</td>
-                            <td>{{$booking->formated_pre_payment_discount)}} </td>
+                            <td>{{$booking->formated_pre_payment_discount}} </td>
                         </tr>
                         @endif
 

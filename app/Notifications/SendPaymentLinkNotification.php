@@ -33,8 +33,9 @@ class SendPaymentLinkNotification extends BaseNotification implements ShouldQueu
     public function via($notifiable)
     {
         $via = ['mail'];
-return $this->smsSetting;
-        if ($this->smsSetting->nexmo_status == 'active' && $notifiable->mobile_verified == 1) {
+
+//        if ($this->smsSetting->nexmo_status == 'active' && $notifiable->mobile_verified == 1) {
+        if ($notifiable->mobile_verified == 1) {
             array_push($via, 'nexmo');
         }
 

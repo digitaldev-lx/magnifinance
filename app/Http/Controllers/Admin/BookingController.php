@@ -268,6 +268,10 @@ class BookingController extends AdminBaseController
 
         $amountToPay = ($originalAmount + $taxAmount);
 
+        if($request->prepayment_discount_percent > 0){
+            $amountToPay = $amountToPay - $amountToPay * ($request->prepayment_discount_percent / 100);
+        }
+
         $amountToPay = round($amountToPay, 2);
         $dateTime = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y-m-d') . ' ' . Carbon::createFromFormat('H:i:s', $request->booking_time)->format('H:i:s');
 

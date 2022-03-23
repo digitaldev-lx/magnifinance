@@ -206,6 +206,13 @@
                         </tr>
                         @endif
 
+                        @if($booking->prepayment_discount_percent > 0)
+                        <tr class="h6">
+                            <td class="text-right">@lang('app.prePaymentDiscount')</td>
+                            <td>{{currencyFormatter(number_format((float)($booking->formated_pre_payment_discount), 2, '.', ''), myCurrencySymbol())}} </td>
+                        </tr>
+                        @endif
+
                         @if($booking->coupon_discount > 0)
                         <tr class="h6">
                             <td class="text-right" >@lang('app.couponDiscount') (<a href="javascript:;" class="show-coupon">{{ $booking->coupon->title}}</a>)</td>

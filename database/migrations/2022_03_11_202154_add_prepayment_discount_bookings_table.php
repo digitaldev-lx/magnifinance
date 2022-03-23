@@ -14,7 +14,7 @@ class AddPrepaymentDiscountBookingsTable extends Migration
     public function up()
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->float('prepayment_discount_percent')->after('discount_percent');
+            $table->integer('prepayment_discount_percent')->after('discount_percent');
         });
     }
 

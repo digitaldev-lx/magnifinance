@@ -52,6 +52,7 @@ return array(
     'time' => 'Hora',
     'discount' => 'Desconto',
     'discountOnService' => 'Desconto(Em Serviço)',
+    'prePaymentDiscount' => 'Desconto em Pre-Pagamento',
     'quantity' => 'Quantidade',
     'booking' => 'Marcação',
     'add' => 'Adicionar',

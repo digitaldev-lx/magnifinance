@@ -54,6 +54,7 @@ return array (
   'showTaxOnPrice' => 'Show Tax on Price',
   'discount' => 'Discount',
   'discountOnService' => 'Discount(On Service)',
+  'prePaymentDiscount' => 'PrePayment Discount',
   'quantity' => 'Quantity',
   'booking' => 'Booking',
   'add' => 'Add',

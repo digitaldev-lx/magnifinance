@@ -6,6 +6,7 @@ use App\Advertise;
 use App\Article;
 use App\Country;
 use App\Services\StripeCustomerManager;
+use App\SmsSetting;
 use App\Tax;
 use App\Deal;
 use App\Page;
@@ -569,8 +570,15 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-        $booking = Booking::findOrFail(38);
-        return $booking->formated_pre_payment_discount;
+        $this->smsSetting = SmsSetting::first();
+
+        $via = ['mail'];
+
+        if ($this->smsSetting->nexmo_status == 'active' && $notifiable->mobile_verified == 1) {
+            array_push($via, 'nexmo');
+        }
+
+        return $via;
         return currencyFormatter(number_format((float)($booking->formated_pre_payment_discount), 2, '.', ''), myCurrencySymbol());
       /*  return Magnifinance::addPartner();
         return $company = auth()->user()->load('country');*/

@@ -259,7 +259,7 @@ class Booking extends Model
 
     public function getFormatedPrePaymentDiscountAttribute()
     {
-        return currencyFormatter($this->converted_discount);
+        return currencyFormatter($this->converted_pre_payment_discount);
     }
 
     public function getFormatedCouponDiscountAttribute()

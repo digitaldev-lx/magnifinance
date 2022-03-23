@@ -377,10 +377,9 @@ class BookingController extends AdminBaseController
             if($request->prepayment_discount_percent !== 0 || !is_null($request->prepayment_discount_percent)){
                 $price = $price - $price * ($request->prepayment_discount_percent / 100);
             }
-
             $line_items[] = [
                 'name' => $name,
-                'amount' => round(currencyConvertedPrice($value->company_id, $price), 2),
+                'amount' => round(currencyConvertedPrice($value->company_id, $price)),
                 'currency' => $this->settings->currency->currency_code,
                 'quantity' => $value->quantity,
             ];

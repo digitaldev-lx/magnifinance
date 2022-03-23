@@ -569,73 +569,9 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-        return company()->currency;
-        $service = BusinessService::with('taxServices')->firstOrFail();
-        return $service->net_price + $service->net_price * ($service->taxServices[0]->tax->percent / 100);
-        $bookingDate = Carbon::createFromFormat('Y-m-d', "2022-03-09");
-        dd($bookingDate->format("Y-m-d") === Carbon::today()->format("Y-m-d"));
-        $company = company();
-dd($this->user->userBookingCount(Carbon::createFromFormat('Y-m-d', $bookingDate)));
-        if (!is_null($this->user) && $company->booking_per_day != (0 || '') && $company->booking_per_day <= $this->user->userBookingCount(Carbon::createFromFormat('Y-m-d', $request->bookingDate))) {
-            $msg = __('messages.reachMaxBooking') . Carbon::createFromFormat('Y-m-d', $request->bookingDate)->format('Y-m-d');
-            return Reply::dataOnly(['status' => 'fail', 'msg' => $msg]);
-        }
-        return
-        $bookingDate = Carbon::createFromFormat('Y-m-d', $request->bookingDate);
-        $day = $bookingDate->format('l');
-        $bookingTime = BookingTime::withoutGlobalScope(CompanyScope::class)->where('company_id', $company->id)->where('day', strtolower($day))->first();
-        // Check if multiple booking allowed
-
-        $bookings = Booking::withoutGlobalScope(CompanyScope::class)
-            ->where('company_id', $company->id)
-            ->whereDate('date_time', '=', $bookingDate->format('Y-m-d'));
-
-        $officeLeaves = OfficeLeave::where('start_date', '<=', $bookingDate)
-            ->where('end_date', '>=', $bookingDate)
-            ->get();
-
-        if ($officeLeaves->count() > 0) {
-            $msg = __('messages.ShopClosed');
-            return Reply::dataOnly(['status' => 'shopclosed', 'msg' => $msg]);
-
-        }
-
-        if ($bookingTime->per_day_max_booking != (0 || '') && $bookingTime->per_day_max_booking <= $bookings->count()) {
-            $msg = __('messages.reachMaxBookingPerDay') . Carbon::createFromFormat('Y-m-d', $request->bookingDate)->format('Y-m-d');
-            return Reply::dataOnly(['status' => 'fail', 'msg' => $msg]);
-        }
-
-        if ($bookingTime->multiple_booking == 'no') {
-            $bookings = $bookings->get();
-        } else {
-            $bookings = $bookings->whereRaw('DAYOFWEEK(date_time) = ' . ($bookingDate->dayOfWeek + 1))->get();
-        }
-
-        $variables = compact('bookingTime', 'bookings', 'company');
-
-        if ($bookingTime->status == 'enabled') {
-            if ($bookingDate->day === Carbon::today()->day) {
-                $startTime = Carbon::createFromFormat($this->settings->time_format, $bookingTime->utc_start_time);
-
-                while ($startTime->lessThan(Carbon::now())) {
-                    $startTime = $startTime->addMinutes($bookingTime->slot_duration);
-                }
-            } else {
-//                $startTime = Carbon::createFromFormat($this->settings->time_format, $bookingTime->utc_start_time);
-                $startTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_start_time);
-            }
-
-            $endTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_end_time);
-            $startTime->setTimezone($company->timezone);
-            $endTime->setTimezone($company->timezone);
-
-            $startTime->setDate($bookingDate->year, $bookingDate->month, $bookingDate->day);
-            $endTime->setDate($bookingDate->year, $bookingDate->month, $bookingDate->day);
-
-            $variables = compact('startTime', 'endTime', 'bookingTime', 'bookings', 'company');
-        }
-        $view = view('admin.booking.booking_slots', $variables)->render();
-        return Reply::dataOnly(['status' => 'success', 'view' => $view]);
+        $booking = Booking::findOrFail(38);
+        return $booking->formated_pre_payment_discount;
+        return currencyFormatter(number_format((float)($booking->formated_pre_payment_discount), 2, '.', ''), myCurrencySymbol());
       /*  return Magnifinance::addPartner();
         return $company = auth()->user()->load('country');*/
 

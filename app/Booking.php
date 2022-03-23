@@ -221,6 +221,11 @@ class Booking extends Model
         return currencyConvertedPrice($this->company_id, $this->discount);
     }
 
+    public function getFormatedPrePaymentDiscountAttribute()
+    {
+        return currencyFormatter($this->converted_pre_payment_discount);
+    }
+
     public function getConvertedPrePaymentDiscountAttribute()
     {
         $prePaymentdiscount = $this->amount_to_pay * ($this->prepayment_discount_percent / 100);
@@ -255,11 +260,6 @@ class Booking extends Model
     public function getFormatedDiscountAttribute()
     {
         return currencyFormatter($this->converted_discount);
-    }
-
-    public function getFormatedPrePaymentDiscountAttribute()
-    {
-        return currencyFormatter($this->converted_pre_payment_discount);
     }
 
     public function getFormatedCouponDiscountAttribute()

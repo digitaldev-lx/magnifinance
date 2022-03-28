@@ -124,13 +124,18 @@ class BusinessService extends Model
 
     public function getDiscountedPriceAttribute()
     {
+
         if($this->discount > 0){
+
             if($this->discount_type == 'fixed'){
-                return $this->tax_on_price_status !== "active" ? ($this->price - $this->discount) : ($this->net_price - $this->discount);
+                return round(($this->price - $this->discount), 2);
             }
+
             elseif($this->discount_type == 'percent'){
-                $discount = $this->tax_on_price_status !== "active" ? (($this->discount / 100) * $this->price) : (($this->discount / 100) * $this->net_price);
-                return $this->tax_on_price_status !== "active" ? round(($this->price - $discount), 2) : round(($this->net_price - $discount), 2);
+
+                $discount = (($this->discount / 100) * $this->price);
+
+                return round(($this->price - $discount), 2);
             }
         }
 

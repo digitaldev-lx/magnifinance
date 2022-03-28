@@ -152,10 +152,12 @@
                 disableButton: true,
                 buttonSelector: "#nextBtn",
                 success: function (response) {
+                    console.log(response);
                     if (response.status == 'success') {
                         window.location.href = '{{ route('front.checkoutPage') }}'
                     }
                 }, error: function (err) {
+                    console.log(err);
                     var errors = err.responseJSON.errors;
                     for (var error in errors) {
                         $.showToastr(errors[error][0], 'error')

@@ -570,16 +570,19 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-        $this->smsSetting = SmsSetting::first();
+       $service = BusinessService::findOrFail(3);
 
-        $via = ['mail'];
+//return $service->price - $service->price * ($service->taxServices[0]->tax->percent / 100);
+        return ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price - $service->price * ($service->taxServices[0]->tax->percent / 100) ,myCurrencySymbol())."</s> ".currencyFormatter($service->discounted_price - $service->discounted_price * ($service->taxServices[0]->tax->percent / 100),myCurrencySymbol()) : currencyFormatter($service->net_price,myCurrencySymbol());
 
-        if ($this->smsSetting->nexmo_status == 'active' && $notifiable->mobile_verified == 1) {
-            array_push($via, 'nexmo');
-        }
 
-        return $via;
-        return currencyFormatter(number_format((float)($booking->formated_pre_payment_discount), 2, '.', ''), myCurrencySymbol());
+        if($service->tax_on_price_status == "active"){
+           return ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price,myCurrencySymbol())."</s> ".currencyFormatter(round($service->net_price * (1 + $service->taxServices[0]->tax->percent / 100)),myCurrencySymbol()) : currencyFormatter($service->net_price,myCurrencySymbol());
+       }else{
+           return ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->discounted_price,myCurrencySymbol())."</s> ".currencyFormatter($service->discounted_price,myCurrencySymbol()) : currencyFormatter($service->price,myCurrencySymbol());
+       }
+
+        return ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price,myCurrencySymbol())."</s> ".currencyFormatter($service->price + ($service->discounted_price * $service->taxServices[0]->tax->percent / 100),myCurrencySymbol()) : currencyFormatter($service->price_with_taxes,myCurrencySymbol());
       /*  return Magnifinance::addPartner();
         return $company = auth()->user()->load('country');*/
 

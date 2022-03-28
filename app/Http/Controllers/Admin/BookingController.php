@@ -236,13 +236,14 @@ class BookingController extends AdminBaseController
             $companyId = auth()->user()->company_id;
 
             if ($service->tax_on_price_status == 'active') {
-                $unit_price = $service->net_price;
+//                $unit_price = $service->net_price;
                 $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->net_price));
 
                 $Amt += ($service->net_price * $request->cart_quantity[$i]);
 //                $Amt += $net_price;
 //                $taxAmount += ($product['price'] * $product['quantity']) - $net_price;
                 $taxAmount += ($service->price - $service->net_price) * $request->cart_quantity[$i];
+                return $amount ." - ". $taxAmount;
             } else {
                 $unit_price = $service->price;
                 $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->price));

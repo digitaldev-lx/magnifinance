@@ -83,7 +83,6 @@
                 blockUI: false,
                 data: data,
                 success: function (response) {
-                    console.log(response);
                     if(response.status == 'success') {
                         $('.slots-wrapper').html(response.view);
                         $('#max_booking_per_slot').hide();
@@ -115,7 +114,12 @@
                     $('#selectedBookingDate').html(data.bookingDate);
                 },
                 error: function (error){
-                    console.log(error);
+                    if( error.status === 422 ) {
+                        var data = error.responseJSON.errors
+                    }
+                    $.each( data, function( key, value ) {
+                        $.showToastr(value[0], 'error');
+                    });
                 }
             })
         }
@@ -152,12 +156,10 @@
                 disableButton: true,
                 buttonSelector: "#nextBtn",
                 success: function (response) {
-                    console.log(response);
                     if (response.status == 'success') {
                         window.location.href = '{{ route('front.checkoutPage') }}'
                     }
                 }, error: function (err) {
-                    console.log(err);
                     var errors = err.responseJSON.errors;
                     for (var error in errors) {
                         $.showToastr(errors[error][0], 'error')

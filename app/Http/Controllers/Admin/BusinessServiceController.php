@@ -187,12 +187,15 @@ class BusinessServiceController extends AdminBaseController
 
         $tax = Tax::whereId($request->tax_ids[0])->first();
 
-        if(isset($request->tax_on_price_status) && $request->tax_on_price_status == 'active'){
+        /*if(isset($request->tax_on_price_status) && $request->tax_on_price_status == 'active'){
             $service->tax_on_price_status = 'active';
             $service->net_price = round($service->net_price / ( 1 + $tax->percent/100 ),2);
         }else{
             $service->tax_on_price_status = 'inactive';
-        }
+        }*/
+
+        $service->tax_on_price_status = 'active';
+
 
         $service->discount_type = $request->discount_type;
         $service->location_id = $request->location_id;
@@ -350,12 +353,14 @@ class BusinessServiceController extends AdminBaseController
 
         $tax = Tax::whereId($request->tax_ids[0])->first();
 
-        if(isset($request->tax_on_price_status) && $request->tax_on_price_status == 'active'){
+        /*if(isset($request->tax_on_price_status) && $request->tax_on_price_status == 'active'){
             $service->tax_on_price_status = 'active';
             $service->net_price = round($service->net_price / ( 1 + $tax->percent/100 ),2);
         }else{
             $service->tax_on_price_status = 'inactive';
-        }
+        }*/
+
+        $service->tax_on_price_status = 'active';
 
         $service->discount_type = $request->discount_type;
         $service->category_id = $request->category_id;

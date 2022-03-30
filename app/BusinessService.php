@@ -139,7 +139,8 @@ class BusinessService extends Model
             }
         }
 
-        return $this->tax_on_price_status !== "active" ? $this->price : $this->net_price;
+//        return $this->tax_on_price_status !== "active" ? $this->price : $this->net_price;
+        return $this->price;
     }
 
 
@@ -238,11 +239,13 @@ class BusinessService extends Model
             $taxPercent += $tax->tax->percent;
         }
 
-        if($this->tax_on_price_status == "active"){
+        /*if($this->tax_on_price_status == "active"){
             return $this->net_price + $this->net_price * ($taxPercent / 100);
         }else{
             return $this->price + $this->price * ($taxPercent / 100);
-        }
+        }*/
+        return $this->price + $this->price * ($taxPercent / 100);
+
     }
 
 }

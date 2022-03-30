@@ -49,7 +49,9 @@
                                         <tr id="{{ $key }}">
                                             <td>{{ $product['name'] }}
                                             </td>
-                                            @if($product['tax_on_price_status'] == 'active')
+                                            <td class="rupee">{{ currencyFormatter($product['price']) }}</td>
+
+                                            {{--@if($product['tax_on_price_status'] == 'active')
                                                 <?php
                                                 $unit_price = round($product['price'] / (1 + json_decode($product['tax'])[0]->percent / 100), 2);
                                                 $tax_amount = round($product['price'] - $unit_price, 2);
@@ -57,7 +59,7 @@
                                                 <td class="rupee">{{ currencyFormatter($unit_price) }}</td>
                                             @else
                                                 <td class="rupee">{{ currencyFormatter($product['price']) }}</td>
-                                            @endif
+                                            @endif--}}
                                             <td>
                                                 <div></div>
                                                 <div class="qty-wrap">
@@ -72,13 +74,8 @@
                                                     class="input-text qty"
                                                     data-id="{{ $product['unique_id'] }}"
                                                     data-deal-id="{{ $product['id'] }}"
-                                                    @if($product['tax_on_price_status'] == 'active')
-                                                        data-price="{{$unit_price + $tax_amount}}"
-                                                        data-tax-on-price-status="{{$product['tax_on_price_status']}}"
-                                                    @else
-                                                        data-price="{{$product['price']}}"
-                                                        data-tax-on-price-status="{{$product['tax_on_price_status']}}"
-                                                    @endif
+                                                    data-price="{{$product['price']}}"
+                                                    data-tax-on-price-status="{{$product['tax_on_price_status']}}"
                                                     data-type="{{$product['type']}}"
                                                     @if ($product['type'] == 'deal')
                                                         data-max-order="{{$product['max_order']}}"
@@ -94,7 +91,7 @@
                                                         $totalTax = 0;
                                                         $appliedTax = 0;
                                                         $taxPercent = 0;
-                                                        $subTotal = $product['quantity'] * $product['price']
+                                                        $subTotal = $product['quantity'] * $product['price'];
                                                     @endphp
 
                                                     @if (isset($product['tax']))
@@ -102,13 +99,11 @@
                                                             @if (isset($tax->percent))
                                                                 @php
                                                                     $taxPercent += $tax->percent;
-                                                                    if($product['tax_on_price_status'] == 'active'){
-                                                                        $appliedTax = $tax_amount;
-                                                                    }else{
-                                                                        $appliedTax += ($subTotal*$tax->percent)/100;
-                                                                    }
+                                                                    $appliedTax += ($subTotal*($tax->percent/100));
+
 
                                                                 @endphp
+                                                                {{-- todo: corrigir valores e imposto--}}
                                                                 {{ $tax->name }}-<span>{{ $tax->percent }}% @if(!$loop->last),@endif</span>
                                                             @endif
                                                         @empty
@@ -117,24 +112,12 @@
                                                     @endif
 
                                                     <input type="hidden" class="tax_percent" value="{{ $taxPercent }}">
-                                                    @if($product['tax_on_price_status'] == 'active')
-                                                        <input type="hidden" class="tax_amount" value="{{ $tax_amount * $product['quantity']}}">
-                                                    @else
-                                                        <input type="hidden" class="tax_amount" value="{{ $appliedTax }}">
-                                                    @endif
+                                                    <input type="hidden" class="tax_amount" value="{{ $appliedTax }}">
                                                 </td>
                                             @endif
                                             <td class="sub-total rupee">
-                                                @if($product['tax_on_price_status'] == 'active')
-                                                    @php
-                                                        $add_taxes_to_price = $unit_price + $appliedTax;
-                                                    @endphp
-                                                    <input type="hidden" value="{{ $product['quantity'] * $add_taxes_to_price }}">
-                                                    <span>{{ currencyFormatter($product['quantity'] * $add_taxes_to_price) }}</span>
-                                                @else
                                                     <input type="hidden" value="{{ $product['quantity'] * $product['price'] }}">
                                                     <span>{{ currencyFormatter($product['quantity'] * $product['price']) }}</span>
-                                                @endif
                                             </td>
                                             <td>
                                                 <a title="@lang('front.table.deleteProduct')" href="javascript:;" data-key="{{ $key }}" class="delete-item delete-btn">
@@ -315,20 +298,22 @@
                 cartTotal += parseFloat($(this).val());
             });
 
-            $('#sub-total').text(currency_format(cartTotal.toFixed(2)));
+            // $('#sub-total').text(currency_format(cartTotal.toFixed(2)));
 
             // calculate and display tax
             var totalTax = 0;
             $('.tax_detail').each(function () {
-                var tax_on_price = $(this).data('tax-on-price-status');
+                // var tax_on_price = $(this).data('tax-on-price-status');
                 var tax = $(this).closest('.tax_detail').find('.tax_amount').val();
-                totalTax += (tax_on_price == 'inactive') ? parseFloat(tax) : 0;
+                // totalTax += (tax_on_price == 'inactive') ? parseFloat(tax) : 0;
+                totalTax += parseFloat(tax);
 
             });
 
             $('#tax').text(currency_format(totalTax));
+            $('#sub-total').text(currency_format(cartTotal - totalTax));
 
-            totalAmount = cartTotal + totalTax;
+            totalAmount = cartTotal;
 
             if(couponAmount)
             {
@@ -341,7 +326,7 @@
                     totalAmount = 0;
                 }
             }
-
+            // $('.sub-total>span').text(currency_format(totalAmount.toFixed(2)));
             $('#total').text(currency_format(totalAmount.toFixed(2)));
         }
 
@@ -352,7 +337,6 @@
         $('body').on('click', '.increase', function() {
             var input = $(this).siblings('input');
             var currentValue = input.val();
-
             const type = input.data('type');
             const dealId = input.data('deal-id');
 
@@ -403,7 +387,7 @@
                                 window.location.href = response.url;
                             }, 1000);
                         } else{
-                            updateCoupon ();
+                            // updateCoupon ();
                             $(ele).parents(`tr#${key}`).remove();
                             calculateTotal();
                             $('.cart-badge').text(response.productsCount);
@@ -441,8 +425,7 @@
 
                     let subTotal = parseInt(quantity) * parseInt(price);
                     totalAmount += subTotal;
-                    console.log(totalAmount);
-                    setSubTotal(id,subTotal);
+                    // setSubTotal(id,subTotal);
                 });
 
                 $('#total').text(currency_format(totalAmount.toFixed(2)));
@@ -465,7 +448,8 @@
                     container: '.section',
                     blockUI: false,
                     success:function(response){
-                        updateCoupon();
+                        console.log(response);
+                        // updateCoupon();
                     }
                 })
             }
@@ -505,11 +489,11 @@
             var totalTax = 0;
             @if($type=='booking')
                 $('.tax_detail').each(function () {
-                var tax_on_price = $(this).data('tax-on-price-status');
+                // var tax_on_price = $(this).data('tax-on-price-status');
                 var tax = $(this).closest('.tax_detail').find('.tax_amount').val();
-                totalTax += (tax_on_price == 'inactive') ? parseFloat(tax) : 0;
-
-                // totalTax += parseFloat(tax);
+                // totalTax += (tax_on_price == 'inactive') ? parseFloat(tax) : 0;
+                //
+                totalTax += parseFloat(tax);
                 });
                 $('#tax').text(currency_format(totalTax));
             @endif
@@ -578,11 +562,11 @@
             var totalTax = 0;
             @if($type=='booking')
                 $('.tax_detail').each(function () {
-                var tax_on_price = $(this).data('tax-on-price-status');
+                // var tax_on_price = $(this).data('tax-on-price-status');
                 var tax = $(this).closest('.tax_detail').find('.tax_amount').val();
-                totalTax += (tax_on_price == 'inactive') ? parseFloat(tax) : 0;
-
-                // totalTax += parseFloat(tax);
+                // totalTax += (tax_on_price == 'inactive') ? parseFloat(tax) : 0;
+                //
+                totalTax += parseFloat(tax);
                 });
                 $('#tax').text(currency_format(totalTax));
             @endif
@@ -634,42 +618,39 @@
         $(document).on('keyup', 'input.qty', function () {
             const id = $(this).data('id');
             const price = $(this).data('price');
-            const tax_on_price_status = $(this).data('tax-on-price-status');
+
+            // const tax_on_price_status = $(this).data('tax-on-price-status');
             const quantity = $(this).val();
             const el = $(this);
 
             const type = $(this).data('type');
             const dealId = $(this).data('deal-id');
 
-            let subTotal = 0;
+            let taxPercent = $(`tr#${id}`).find('.tax_detail>.tax_percent').val();
 
             if (quantity<0) {
                 $(this).val(1);
             }
 
+            let taxAmount = price * (taxPercent/100) * quantity;
+
+            let subTotal = price * quantity - taxAmount;
+
             clearTimeout(cartUpdate);
 
-            if (quantity == '' || quantity == 0) {
-                subTotal = price * 1;
-            }
-            else {
-                subTotal = price * quantity;
-            }
-
-            // calculate and display tax
-            var taxPercent = $(`tr#${id}`).find('.tax_detail>.tax_percent').val();
-
-            if(tax_on_price_status === 'active'){
-                // tax = subTotal - subTotal / (1 + taxPercent / 100);
-                tax = 0;
-            }else{
-                tax = (taxPercent * subTotal)/100;
-            }
+            /*if (quantity == '' || quantity == 0) {
+                tax = price - (price * taxPercent / 100);
+                subTotal = price - tax;
+            }else {
+                subTotal = price - (price * taxPercent / 100) * quantity;
+                tax = tax * quantity
+                subTotal = price * quantity - tax;
+            }*/
 
 
-            $(`tr#${id}`).find('.tax_detail>.tax_amount').val(tax);
+            $(`tr#${id}`).find('.tax_detail>.tax_amount').val(taxAmount);
 
-            setSubTotal(id,subTotal);
+            setSubTotal(id, price * quantity, taxPercent, taxAmount);
 
             calculateTotal();
 
@@ -700,10 +681,11 @@
             window.location.href = url;
         });
 
-        function setSubTotal(id,value)
-        {
+        function setSubTotal(id, value, taxPercent, taxAmount){
             $(`tr#${id}`).find('.sub-total>input').val(value.toFixed(2));
             $(`tr#${id}`).find('.sub-total>span').text(currency_format(value.toFixed(2)));
+            $(`tr#${id}`).find('.tax_percent>input').val(parseFloat(taxPercent).toFixed(2));
+            $(`tr#${id}`).find('.tax_amount>span').text(currency_format(taxAmount.toFixed(2)));
         }
 
     </script>

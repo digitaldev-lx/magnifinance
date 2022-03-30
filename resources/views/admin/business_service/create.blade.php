@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                             @endif
-                            <div class="col-md-2">
+<!--                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">{{__('app.includeTaxOnPrice')}}</label>
                                     <br>
@@ -134,7 +134,7 @@
                                         <span class="slider round"></span>
                                     </label>
                                 </div>
-                            </div>
+                            </div>-->
 
                             <div class="col-md-2">
                                 <div class="form-group">

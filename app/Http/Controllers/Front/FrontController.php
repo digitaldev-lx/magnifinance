@@ -296,6 +296,7 @@ class FrontController extends FrontBaseController
 
     public function bookingPage(Request $request)
     {
+
         $bookingDetails = [];
 
         if ($request->hasCookie('bookingDetails')) {
@@ -404,28 +405,23 @@ class FrontController extends FrontBaseController
 
             foreach ($products as $key => $service) {
                 $taxes = ItemTax::with('tax')->where('service_id', $service->id)->get();
-                $tax = 0;
+                $taxPercent = 0;
 
                 foreach ($taxes as $key => $value) {
-                    $tax += $value->tax->percent;
+                    $taxPercent = $value->tax->percent;
                 }
 
-                if ($service->tax_on_price_status == 'active') {
-                    $net_price = round($service->price / (1 + $tax / 100) * $service->quantity, 2);
-//                    $Amt += ($service->price * $service->quantity);
-                    $Amt += $net_price;
-                    $taxAmount += ($service->price * $service->quantity) - $net_price;
+                $itemAmount = $service->price * $service->quantity;
+                $tax = $itemAmount * ($taxPercent / 100);
 
+                $net_price = round($service->price / (1 + $taxPercent / 100) * $service->quantity, 2);
 
-                } else {
-                    $parcel = $service->price * $service->quantity;
-                    $Amt += $parcel;
+                $Amt += $itemAmount;
+                $taxAmount += $tax;
 
-                    $taxAmount += ($parcel * $tax) / 100;
-                }
             }
 
-            $totalAmount = $Amt + $taxAmount;
+            $totalAmount = $Amt;
 
         } else {
 
@@ -786,7 +782,7 @@ class FrontController extends FrontBaseController
 
                 $companyId = auth()->user()->company_id;
 
-                if ($service->tax_on_price_status == 'active') {
+//                if ($service->tax_on_price_status == 'active') {
                     $unit_price = $service->net_price;
                     $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->net_price));
 
@@ -794,13 +790,13 @@ class FrontController extends FrontBaseController
 //                $Amt += $net_price;
 //                $taxAmount += ($product['price'] * $product['quantity']) - $net_price;
                     $taxAmount += ($service->price - $service->net_price) * $request->cart_quantity[$i];
-                } else {
+                /*} else {
                     $unit_price = $service->price;
                     $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->price));
                     $parcel = $service->price * $request->cart_quantity[$i];
                     $Amt += $parcel;
                     $taxAmount += ($parcel * $tax) / 100;
-                }
+                }*/
 
                 $originalAmount += $amount;
 
@@ -817,7 +813,7 @@ class FrontController extends FrontBaseController
 
             }
 
-            $amountToPay = ($originalAmount + $taxAmount);
+            $amountToPay = ($originalAmount);
 
             /*if ($couponData) {
                 if ($amountToPay <= $couponData['applyAmount']) {

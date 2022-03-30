@@ -13,16 +13,18 @@
                         <p class="font-weight-normal">{{ ucwords($service->name) }}</p>
                         <span class="with-tax">
                             @if($service->tax_on_price_status == "active")
-                                {!! ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price,myCurrencySymbol())."</s> ".currencyFormatter(round($service->net_price * (1 + $service->taxServices[0]->tax->percent / 100)),myCurrencySymbol()) : currencyFormatter($service->net_price,myCurrencySymbol()) !!}
+                                {!! ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price,myCurrencySymbol())."</s> ".currencyFormatter(round($service->net_price * (1 + $service->taxServices[0]->tax->percent / 100)),myCurrencySymbol()) : currencyFormatter($service->price,myCurrencySymbol()) !!}
                             @else
-                  é aqui que estou              {!! ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->net_price + $service->net_price * (1 + $service->taxServices[0]->tax->percent / 100),myCurrencySymbol())."</s> ".currencyFormatter(round($service->net_price * (1 + $service->taxServices[0]->tax->percent / 100)),myCurrencySymbol()) : currencyFormatter($service->net_price,myCurrencySymbol()) !!}
+                                {!! ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->net_price + $service->net_price * (1 + $service->taxServices[0]->tax->percent / 100),myCurrencySymbol())."</s> ".currencyFormatter(round($service->net_price * (1 + $service->taxServices[0]->tax->percent / 100)),myCurrencySymbol()) : currencyFormatter($service->net_price,myCurrencySymbol()) !!}
                             @endif
                         </span>
 
                         <span class="without-tax">
-                            @if($service->tax_on_price_status == "active")
-                                {!! ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price - $service->price * ($service->taxServices[0]->tax->percent / 100) ,myCurrencySymbol())."</s> ".currencyFormatter($service->discounted_price - $service->discounted_price * ($service->taxServices[0]->tax->percent / 100),myCurrencySymbol()) : currencyFormatter($service->net_price - $service->net_price * ($service->taxServices[0]->tax->percent / 100),myCurrencySymbol()) !!}
-                            @endif
+                                @if($service->tax_on_price_status == "active")
+                                    {!! ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price - $service->price * ($service->taxServices[0]->tax->percent / 100) ,myCurrencySymbol())."</s> ".currencyFormatter($service->discounted_price - $service->discounted_price * ($service->taxServices[0]->tax->percent / 100),myCurrencySymbol()) : currencyFormatter($service->net_price,myCurrencySymbol()) !!}
+                                @else
+                                    {!! ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->net_price + $service->net_price * (1 + $service->taxServices[0]->tax->percent / 100),myCurrencySymbol())."</s> ".currencyFormatter(round($service->net_price * (1 + $service->taxServices[0]->tax->percent / 100)),myCurrencySymbol()) : currencyFormatter($service->net_price,myCurrencySymbol()) !!}
+                                @endif
                         </span>
                     </div>
                     <div class="card-footer p-1">

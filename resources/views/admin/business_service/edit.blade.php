@@ -110,16 +110,7 @@
                                 </div>
                             @endif
 
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label class="control-label">{{__('app.includeTaxOnPrice')}}</label>
-                                    <br>
-                                    <label class="switch" style="margin-top: .2em">
-                                        <input {{ $businessService->tax_on_price_status == "active" ? 'checked' : '' }} value='active' type="checkbox" name="tax_on_price_status" id="tax_on_price_status" />
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
-                            </div>
+
 
                             <div class="col-md-2">
                                 <div class="form-group">

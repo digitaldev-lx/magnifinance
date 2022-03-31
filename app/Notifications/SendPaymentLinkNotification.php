@@ -20,7 +20,7 @@ class SendPaymentLinkNotification extends BaseNotification implements ShouldQueu
      */
     public function __construct($stripe)
     {
-        //
+        parent::__construct();
         $this->stripe = $stripe;
     }
 
@@ -34,8 +34,8 @@ class SendPaymentLinkNotification extends BaseNotification implements ShouldQueu
     {
         $via = ['mail'];
 
-//        if ($this->smsSetting->nexmo_status == 'active' && $notifiable->mobile_verified == 1) {
-        if ($notifiable->mobile_verified == 1) {
+        if ($this->smsSetting->nexmo_status == 'active' && $notifiable->mobile_verified == 1) {
+//        if ($notifiable->mobile_verified == 1) {
             array_push($via, 'nexmo');
         }
 

@@ -235,22 +235,12 @@ class BookingController extends AdminBaseController
 
             $companyId = auth()->user()->company_id;
 
-            if ($service->tax_on_price_status == 'active') {
-//                $unit_price = $service->net_price;
-                $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->net_price));
+            $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->net_price));
 
-                $Amt += ($service->net_price * $request->cart_quantity[$i]);
-//                $Amt += $net_price;
-//                $taxAmount += ($product['price'] * $product['quantity']) - $net_price;
-                $taxAmount += ($service->price - $service->net_price) * $request->cart_quantity[$i];
-                return $amount ." - ". $taxAmount;
-            } else {
-                $unit_price = $service->price;
-                $amount = convertedOriginalPrice($companyId, ($request->cart_quantity[$i] * $service->price));
-                $parcel = $service->price * $request->cart_quantity[$i];
-                $Amt += $parcel;
-                $taxAmount += ($parcel * $tax) / 100;
-            }
+            $x = $amount * ($taxPercent / 100);
+            $x = $x * $request->cart_quantity[$i];
+
+            $taxAmount += $x;
 
             $originalAmount += $amount;
 
@@ -260,14 +250,14 @@ class BookingController extends AdminBaseController
             $bookingItems[] = [
                 'business_service_id' => $business_service_id,
                 'quantity' => $request->cart_quantity[$i],
-                'unit_price' => convertedOriginalPrice($companyId, $unit_price),
+                'unit_price' => convertedOriginalPrice($companyId, $service->net_price),
                 'amount' => $amount,
                 'deal_id' => $deal_id,
             ];
 
         }
 
-        $amountToPay = ($originalAmount + $taxAmount);
+        $amountToPay = ($originalAmount);
 
         if($request->prepayment_discount_percent > 0){
             $amountToPay = $amountToPay - $amountToPay * ($request->prepayment_discount_percent / 100);
@@ -365,19 +355,24 @@ class BookingController extends AdminBaseController
         $line_items = [];
         foreach ($booking->items as $key => $value) {
 
-            if ($value->businessService->tax_on_price_status == 'inactive') {
+            /*if ($value->businessService->tax_on_price_status == 'inactive') {
                 $price = ($value->business_service_id == null) ?
                     $value->unit_price * 100 :
                     ($value->unit_price * $value->businessService->taxServices[0]->tax->percent) + $value->unit_price * 100;
             } else {
                 $price = $value->unit_price * 100;
-            }
+            }*/
+//            $price = $value->net_price * 100;
+
+            $price = $value->unit_price * 100;
+
 
             $name = ($value->business_service_id == null) ? $value->product->name ?? 'deal' : $value->businessService->name;
 
             if($request->prepayment_discount_percent !== 0 || !is_null($request->prepayment_discount_percent)){
                 $price = $price - $price * ($request->prepayment_discount_percent / 100);
             }
+
             $line_items[] = [
                 'name' => $name,
                 'amount' => round(currencyConvertedPrice($value->company_id, $price)),
@@ -385,6 +380,7 @@ class BookingController extends AdminBaseController
                 'quantity' => $value->quantity,
             ];
         }
+
         $amount = $booking->converted_amount_to_pay * 100;
         $destination = $stripeAccountDetails ? $stripeAccountDetails->account_id : '';
 
@@ -471,17 +467,25 @@ class BookingController extends AdminBaseController
                     $startTime = $startTime->addMinutes($bookingTime->slot_duration);
                 }
             } else {
-                $startTime = Carbon::parse($bookingTime->utc_start_time, $company->timezone)->setTimezone('UTC')->format($this->settings->time_format);
-                $startTime = Carbon::parse("$date $startTime","UTC");
+                $startTime = Carbon::parse($bookingTime->start_time)->format($this->settings->time_format);
+
+                $startTime = Carbon::parse("$date $startTime", $company->timezone)->setTimezone('UTC')->format($this->settings->date_format ." ". $this->settings->time_format);;
 //                $startTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_start_time);
+                $startTime = Carbon::parse($startTime, "UTC");
             }
 
+            $endTime = Carbon::parse($bookingTime->end_time)->format($this->settings->time_format);
 
-            $endTime = Carbon::parse($bookingTime->utc_end_time, $company->timezone)->setTimezone('UTC')->format($this->settings->time_format);
-            $endTime = Carbon::parse("$date $endTime","UTC");
+            $endTime = Carbon::parse("$date $endTime", $company->timezone)->setTimezone('UTC')->format($this->settings->date_format ." ". $this->settings->time_format);;
+//                $startTime = Carbon::createFromFormat($company->time_format, $bookingTime->utc_start_time);
+            $endTime = Carbon::parse($endTime, "UTC");
+
+            /*$endTime = Carbon::parse($bookingTime->utc_end_time, $company->timezone)->setTimezone('UTC')->format($this->settings->time_format);
+            $endTime = Carbon::parse("$date $endTime","UTC");*/
 
             $variables = compact('startTime', 'endTime', 'bookingTime', 'bookings', 'company');
         }
+
         $view = view('admin.booking.booking_slots', $variables)->render();
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
     }

@@ -399,6 +399,7 @@
                 blockUI: false,
                 data: data,
                 success: function (response) {
+                    console.log(response);
                     if(response.status == 'success') {
                         $('.slots-wrapper').html(response.view);
                         $('#max_booking_per_slot').hide();
@@ -430,6 +431,7 @@
                     $('#selectedBookingDate').html(data.bookingDate);
                 },
                 error: function (error){
+                    console.log(error);
                     if (error.status === 422) {
                         var data = error.responseJSON.errors
                     }
@@ -798,18 +800,14 @@
             })
         }
 
-        function calculatePrice(taxOnPriceStatus, servicePrice, taxPercent, priceWithTaxes){
+        function calculatePrice(servicePrice, taxPercent){
             let net_price;
             let tax_amount;
-            if(taxOnPriceStatus == "active"){
-                tax_amount = priceWithTaxes - servicePrice
-                net_price = priceWithTaxes - tax_amount
 
-                return {price: net_price.toFixed(2), tax_amount: tax_amount.toFixed(2)}
-            }else{
-                tax_amount = servicePrice * (taxPercent / 100)
-                return {price: servicePrice.toFixed(2), tax_amount: tax_amount.toFixed(2)}
-            }
+            tax_amount = servicePrice * (taxPercent / 100)
+            net_price = servicePrice - servicePrice * (taxPercent / 100)
+            return {price: net_price.toFixed(2), tax_amount: tax_amount.toFixed(2)}
+
         }
 
         $("body").on('click', '#show_tax_on_price', function () {
@@ -820,13 +818,11 @@
         })
 
         $("body").on('click', '.add-to-cart', function () {
-            let taxOnPriceStatus = $(this).data('tax-on-price-status');
             let serviceId = $(this).data('service-id');
             let servicePrice = $(this).data('service-price');
             let serviceName = $(this).data('service-name');
             let taxPercent = $(this).data('total_tax_percent');
-            let priceWithTaxes = $(this).data('price-with-taxes');
-            let price = calculatePrice(taxOnPriceStatus, servicePrice, taxPercent, priceWithTaxes)
+            let price = calculatePrice(servicePrice, taxPercent)
             let productId = $(this).data('product-id');
             let productPrice = $(this).data('product-price');
             let productName = $(this).data('product-name');
@@ -1079,8 +1075,15 @@
                 cartSubTotal = (cartSubTotal + (parseFloat(servicePrice) * parseInt(qty)));
 
                 let taxPercent = $("input[name='tax_percent[]']").eq(index).val();
-                taxAmount = ( (parseFloat(taxPercent)/100)* ((parseFloat(servicePrice) * parseInt(qty))));
-                tax +=parseFloat(taxAmount);
+
+                //calcular preço com imposto ********
+                let remainTax = 100 - taxPercent
+                let priceWithTax = 100 * parseFloat(servicePrice) / remainTax
+
+                //***********************************
+
+                taxAmount = ( (parseFloat(priceWithTax) * parseInt(qty)) - ((parseFloat(servicePrice) * parseInt(qty))));
+                tax += parseFloat(taxAmount);
             });
 
             $("#cart-sub-total").html(currency_format(cartSubTotal.toFixed(2)));
@@ -1125,7 +1128,13 @@
                 cartSubTotal = (cartSubTotal + (parseFloat(servicePrice) * parseInt(qty)));
 
                 let taxPercent = $("input[name='tax_percent[]']").eq(index).val();
-                taxAmount = ( (parseFloat(taxPercent)/100)* ((parseFloat(servicePrice) * parseInt(qty))));
+                //calcular preço com imposto ********
+                let remainTax = 100 - taxPercent
+                let priceWithTax = 100 * parseFloat(servicePrice) / remainTax
+
+                //***********************************
+
+                taxAmount = ( (parseFloat(priceWithTax) * parseInt(qty)) - ((parseFloat(servicePrice) * parseInt(qty))));
                 serviceTax += parseFloat(taxAmount);
             });
 

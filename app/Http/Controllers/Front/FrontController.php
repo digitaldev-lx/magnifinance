@@ -566,6 +566,7 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
+        return SmsSetting::first()->nexmo_status;
        $service = BusinessService::findOrFail(3);
 
 //return $service->price - $service->price * ($service->taxServices[0]->tax->percent / 100);

@@ -83,6 +83,7 @@
                 blockUI: false,
                 data: data,
                 success: function (response) {
+                    console.log(response);
                     if(response.status == 'success') {
                         $('.slots-wrapper').html(response.view);
                         $('#max_booking_per_slot').hide();

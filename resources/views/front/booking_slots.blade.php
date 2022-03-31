@@ -33,7 +33,7 @@
                     @php $slotAvailable = 1; @endphp
                     @if ($bookingTime->multiple_booking === 'no' && $bookings->count() > 0)
                         @foreach ($bookings as $booking)
-                            @if ($booking->date_time->format($settings->time_format) == $d->format($settings->time_format))
+                            @if ($booking->date_time->setTimezone('UTC')->format($settings->time_format) == $d->setTimezone('UTC')->format($settings->time_format))
                                 @php $slotAvailable = 0; @endphp
                             @endif
                         @endforeach
@@ -50,10 +50,10 @@
 
 
                             <input type="radio" id="radio{{ $slot_count }}" name="booking_time"
-                                   class="custom-control-input mr-3" value="{{ $d->format('H:i:s') }}">
+                                   class="custom-control-input mr-3" value="{{ $d->setTimezone('UTC')->format('H:i:s') }}">
                             <label class="custom-control-label ml-4"
                                    {{--                                        for="radio{{ $slot_count }}">{{ $d->format($settings->time_format) }}</label>--}}
-                                   for="radio{{ $slot_count }}">{{ $d->format($company->time_format) }}</label>
+                                   for="radio{{ $slot_count }}">{{ $d->setTimezone('UTC')->format($company->time_format) }}</label>
                         </div>
 
                     @endif

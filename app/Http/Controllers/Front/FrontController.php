@@ -566,12 +566,15 @@ class FrontController extends FrontBaseController
 
     public function teste()
     {
-        return SmsSetting::first()->nexmo_status;
-       $service = BusinessService::findOrFail(3);
 
-//return $service->price - $service->price * ($service->taxServices[0]->tax->percent / 100);
-        return ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price - $service->price * ($service->taxServices[0]->tax->percent / 100) ,myCurrencySymbol())."</s> ".currencyFormatter($service->discounted_price - $service->discounted_price * ($service->taxServices[0]->tax->percent / 100),myCurrencySymbol()) : currencyFormatter($service->net_price,myCurrencySymbol());
+//        return Magnifinance::getDocumentFromPartner("143373975", "239637712");
+        $booking = Booking::with('items')->whereId(60)->first();
+//        $booking->addDocument("5671235321");
+        return $booking->getDocument();
 
+        return $company = Company::find(1);
+        return get_class($company);
+        return $isCompany = get_class($company) == "App\Company";
 
         if($service->tax_on_price_status == "active"){
            return ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price,myCurrencySymbol())."</s> ".currencyFormatter(round($service->net_price * (1 + $service->taxServices[0]->tax->percent / 100)),myCurrencySymbol()) : currencyFormatter($service->net_price,myCurrencySymbol());
@@ -624,7 +627,7 @@ class FrontController extends FrontBaseController
             [
                 "Code" => "010", // Service or Product ID, min lenght 2
                 "Description" => "Advertise from day one to day ten",
-                "UnitPrice" => 67.5,
+                "UnitPrice" => 40,
                 "Quantity" => 1,
                 "Unit" => "Service",
                 "Type" => "S", // S = Service P = Product
@@ -645,7 +648,7 @@ class FrontController extends FrontBaseController
             "Lines" => $list
         ];
 //todo: optimizar a criação de documento para os vários tipos de transação (anuncios, planos e compra de serviços)
-        $advertise = Advertise::where(['id' => 1])->first();
+        $advertise = Advertise::whereId(1)->first();
         return $document = Magnifinance::emitDocumentFromOwner($advertise, $document,"pauloamserrano@gmail.com");
 
         return $document = Magnifinance::emitDocumentFromOwner($advertise, $document,"pauloamserrano@gmail.com");

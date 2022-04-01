@@ -10,6 +10,7 @@ namespace DigitalDevLX\Magnifinance\facades;
 
 use App\Article;
 use App\Company;
+use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Facade;
 use phpDocumentor\Reflection\Types\Static_;
@@ -22,7 +23,7 @@ use phpDocumentor\Reflection\Types\String_;
  * @method static string getPartnerToken($nif)
  * @method static string getDocumentFromPartner($id, $partnerNif)
  * @method static string getDocumentFromOwner($document_id)
- * @method static string emitDocumentFromPartner($partnerNif, array $client, array $document, string $sendToEmail)
+ * @method static string emitDocumentFromPartner($partnerNif, User $client, array $document, string $sendToEmail)
  * @method static string emitDocumentFromOwner(array $client, array $document, string $sendToEmail)
  */
 

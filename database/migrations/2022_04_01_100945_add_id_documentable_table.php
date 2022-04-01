@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDocumentableTable extends Migration
+class AddIdDocumentableTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateDocumentableTable extends Migration
      */
     public function up()
     {
-        Schema::create('documents', function (Blueprint $table) {
-            $table->morphs('documentable');
-            $table->text('document_id');
-            $table->timestamps();
+        Schema::table('documents', function (Blueprint $table) {
+            $table->increments('id')->first();
         });
     }
 
@@ -27,6 +25,8 @@ class CreateDocumentableTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('documents');
+        Schema::table('documents', function (Blueprint $table) {
+            $table->dropColumn(['id']);
+        });
     }
 }

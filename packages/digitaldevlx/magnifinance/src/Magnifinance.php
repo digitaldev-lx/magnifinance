@@ -3,7 +3,9 @@
 namespace DigitalDevLX\Magnifinance;
 
 use App\Company;
-use App\GlobalSetting;
+use App\User;
+use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 class Magnifinance
@@ -14,9 +16,9 @@ class Magnifinance
 
     public function __construct($owner = [], $client = [], $partner = [])
     {
-        $this->base_url = env('MAGNIFINANCE_BASE_URL');
-        $this->token = env('MAGNIFINANCE_TOKEN');
-        $this->user = env('MAGNIFINANCE_USER');
+        $this->base_url = config('magnifinance.MAGNIFINANCE_BASE_URL');
+        $this->token = config('magnifinance.MAGNIFINANCE_TOKEN');
+        $this->user = config('magnifinance.MAGNIFINANCE_USER');
     }
 
 
@@ -26,7 +28,7 @@ class Magnifinance
      * @param Company $company
      * @return array
      */
-    public function addPartner(Company $company)
+    public function addPartner(Company $company): array
     {
         return json_decode($this->postRequest($this->generatePartner($company), "partner"));
     }
@@ -40,8 +42,8 @@ class Magnifinance
      */
     public function getDocumentFromPartner($id, $partnerNif)
     {
-//        $partnerToken = $this->getPartnerToken($partnerNif);
-        $document = $this->getRequest('document', null, 'documentId', $id, false, "ZXQ7PtAVShEAdhSbkWPMCZXTLPd49qQYrZUvGzai");
+        $partnerToken = $this->getPartnerToken($partnerNif);
+        $document = $this->getRequest('document', null, 'documentId', $id, false, $partnerToken);
 
         return json_decode($document);
     }
@@ -52,7 +54,7 @@ class Magnifinance
      * @param $document_id
      * @return array
      */
-    public function getDocumentFromOwner($document_id)
+    public function getDocumentFromOwner($document_id): array
     {
         $document = $this->getRequest('document', null, 'documentId', $document_id, false);
         return json_decode($document);
@@ -62,28 +64,27 @@ class Magnifinance
      * Emit a document from partner.
      *
      * @param $partnerNif
-     * @param array $client
+     * @param User $client
      * @param array $document
      * @param string $sendToEmail
      * @return array
      */
-    public function emitDocumentFromPartner($partnerNif, array $client, array $document, string $sendToEmail)
+    public function emitDocumentFromPartner($partnerNif, User $client, array $document, string $sendToEmail): array
     {
         $partnerToken = $this->getPartnerToken($partnerNif);
 
         $data = [];
-        $dataClient = [];
         $dataDocument = [];
 
-        foreach ($client as $key => $value){
+        /*foreach ($client as $key => $value){
             $dataClient[$key] = $value;
-        }
+        }*/
 
         foreach ($document as $key => $value){
             $dataDocument[$key] = $value;
         }
 
-        $data['Client'] = $dataClient;
+        $data['Client'] = $this->generateClient($client);
         $data['Document'] = $dataDocument;
         $data['IsToClose'] = true;
         $data['SendTo'] = $sendToEmail;
@@ -95,16 +96,16 @@ class Magnifinance
     /**
      * Emit a document from owner.
      *
-     * @param array $client
+     * @param $object
      * @param array $document
      * @param string $sendToEmail
      * @return array
      */
-    public function emitDocumentFromOwner($object, array $document, string $sendToEmail)
+    public function emitDocumentFromOwner($object, array $document, string $sendToEmail): array
     {
         $company = $object->load('company')->company;
         $data = [];
-        return $dataClient = $this->generateCompanyAsClient($company);
+        $dataClient = $this->generateCompanyAsClient($company);
         $dataDocument = [];
 
         foreach ($document as $key => $value){
@@ -125,7 +126,7 @@ class Magnifinance
      * @param $nif
      * @return string
      */
-    public function getPartnerToken($nif)
+    public function getPartnerToken($nif): string
     {
         $company = company();
         if($company->partner_token !== "" || is_null($company->partner_token)){
@@ -146,7 +147,7 @@ class Magnifinance
      * @param $data
      * @param string $endpoint
      * @param null $partnerToken
-     * @return array
+     * @return PromiseInterface|Response
      */
     private function postRequest($data, string $endpoint = "", $partnerToken = null)
     {
@@ -167,7 +168,7 @@ class Magnifinance
      * @param $value
      * @param bool $withPassword
      * @param $partnerToken
-     * @return array
+     * @return PromiseInterface|Response
      */
     private function getRequest(string $endpoint, $method, string $param, $value, bool $withPassword = false, $partnerToken = null)
     {
@@ -181,13 +182,17 @@ class Magnifinance
         ];
 
         if($withPassword){
-            $headers['password'] = env('MAGNIFINANCE_PASSWORD');
+            $headers['password'] = config("magnifinance.MAGNIFINANCE_PASSWORD");
         }
 
         return Http::withHeaders($headers)->get($url);
     }
 
-    private function generatePartner($company)
+    /**
+     * @param $company
+     * @return array
+     */
+    private function generatePartner($company): array
     {
         $company->load(['owner', 'country']);
 
@@ -205,31 +210,45 @@ class Magnifinance
 
     }
 
-    private function generateClient()
+    /**
+     * @param $client
+     * @return array
+     */
+    private function generateClient($client): array
     {
-        return $this->clientResponse(auth()->user()->load('country'));
+        return $this->clientResponse($client);
     }
 
-    private function generateCompanyAsClient($company)
+    /**
+     * @param $company
+     * @return array
+     */
+    private function generateCompanyAsClient($company): array
     {
         return $this->clientResponse($company->load('country'));
     }
 
-    private function clientResponse($company){
+    /**
+     * @param $obj
+     * @return array
+     */
+    private function clientResponse($obj): array
+    {
+        $isCompany = get_class($obj) == "App\Company";
         return [
-            "Name" => $company->owner->name,
-            "NIF" => $company->vat_number,
-            "Email" => $company->company_email,
-            "Address" => $company->address == "" ?? $company->address,
-            "City" => $company->city == "" ?? $company->city,
-            "PostCode" => $company->country->iso == "PT"
-                ? is_null($company->post_code) || $company->post_code == ""
+            "Name" => $isCompany ? $obj->owner->name : $obj->name,
+            "NIF" => $obj->vat_number,
+            "Email" => $isCompany ? $obj->company_email : $obj->email,
+            "Address" => $obj->address == "" ?? $obj->address,
+            "City" => $obj->city == "" ?? $obj->city,
+            "PostCode" => $obj->country->iso == "PT"
+                ? is_null($obj->post_code) || $obj->post_code == ""
                     ? "0000-00"
-                    : $company->post_code
+                    : $obj->post_code
                 : "0000-000",
-            "CountryCode" => $company->country->iso,
-            "LegalName" => $company->company_name,
-            "PhoneNumber" => $company->company_phone
+            "CountryCode" => $obj->country->iso,
+            "LegalName" => $isCompany ? $obj->company_name: $obj->name,
+            "PhoneNumber" => $isCompany ? $obj->company_phone : $obj->mobile
         ];
     }
 }

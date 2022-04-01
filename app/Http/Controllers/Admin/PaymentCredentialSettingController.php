@@ -9,6 +9,7 @@ use App\Http\Requests\Payment\UpdateCredentialSetting;
 use App\PaymentGatewayCredentials;
 use App\User;
 use Carbon\Carbon;
+use DigitalDevLX\Magnifinance\facades\Magnifinance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Stripe\Stripe;
@@ -66,7 +67,7 @@ class PaymentCredentialSettingController extends AdminBaseController
 
         $updateLink->update();
 
-        //todo: return Magnifinance::addPartner($stripeAccountId->company);
+        Magnifinance::addPartner($stripeAccountId->company);
 
         return Redirect::to(route('admin.settings.index'));
 

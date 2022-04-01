@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\Documentable;
 use DateTime;
 use Carbon\Carbon;
 use App\Scopes\CompanyScope;
@@ -106,6 +107,8 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Booking extends Model
 {
+    use Documentable;
+
     protected $dates = ['date_time'];
     protected $guarded = ['id'];
 

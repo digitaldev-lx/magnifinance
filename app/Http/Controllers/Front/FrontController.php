@@ -567,24 +567,18 @@ class FrontController extends FrontBaseController
     public function teste()
     {
 
+        $package = company()->package_type."_price";
+        $plan = Package::find(company()->package_id);
+        return $package;
+        return round(round($plan->$package) / (1 + 23 / 100), 2, PHP_ROUND_HALF_UP);
 //        return Magnifinance::getDocumentFromPartner("143373975", "239637712");
-        $booking = Booking::with('items')->whereId(60)->first();
-//        $booking->addDocument("5671235321");
-        return $booking->getDocument();
+//        $advertise = Advertise::whereId(3)->first();
 
-        return $company = Company::find(1);
-        return get_class($company);
-        return $isCompany = get_class($company) == "App\Company";
+//        return $booking->company->country->iso == "PT" ? $booking->company->post_code : "1000-001";
+//        return $plan->getMorphClass();
+        return $plan->getDocument();
+        return $plan->emitDocument(company());
 
-        if($service->tax_on_price_status == "active"){
-           return ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price,myCurrencySymbol())."</s> ".currencyFormatter(round($service->net_price * (1 + $service->taxServices[0]->tax->percent / 100)),myCurrencySymbol()) : currencyFormatter($service->net_price,myCurrencySymbol());
-       }else{
-           return ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->discounted_price,myCurrencySymbol())."</s> ".currencyFormatter($service->discounted_price,myCurrencySymbol()) : currencyFormatter($service->price,myCurrencySymbol());
-       }
-
-        return ($service->discount > 0) ? "<s class='h6 text-danger'>".currencyFormatter($service->price,myCurrencySymbol())."</s> ".currencyFormatter($service->price + ($service->discounted_price * $service->taxServices[0]->tax->percent / 100),myCurrencySymbol()) : currencyFormatter($service->price_with_taxes,myCurrencySymbol());
-      /*  return Magnifinance::addPartner();
-        return $company = auth()->user()->load('country');*/
 
         /*$data = array(
             "UserName" => "Paulo Serrano",
@@ -647,6 +641,7 @@ class FrontController extends FrontBaseController
             "ExternalId" => 46, //transaction Id
             "Lines" => $list
         ];
+        return $document;
 //todo: optimizar a criação de documento para os vários tipos de transação (anuncios, planos e compra de serviços)
         $advertise = Advertise::whereId(1)->first();
         return $document = Magnifinance::emitDocumentFromOwner($advertise, $document,"pauloamserrano@gmail.com");

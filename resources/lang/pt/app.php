@@ -403,7 +403,7 @@ return array(
                 ),
             'ContactNumber' => 'Numero de Contacto',
             'city' => 'Cidade',
-            'post_code' => '0000-000',
+            'post_code' => '1000-001',
 
         ),
     'yourName' => 'Nome',

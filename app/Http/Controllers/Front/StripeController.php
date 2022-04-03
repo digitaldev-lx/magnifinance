@@ -251,6 +251,7 @@ class StripeController extends Controller
             $invoice->payment_gateway = 'Stripe';
             $invoice->payment_status = 'completed';
             $invoice->save();
+            $invoice->emitDocument();
             $formatted_amount = $invoice->formated_amount_to_pay;
 
             // send email notifications
@@ -268,7 +269,7 @@ class StripeController extends Controller
 
             $plan = Package::find($request->plan_id);
             $company = $this->company = company();
-            $email = $this->company->company_email;
+//            $email = $this->company->company_email;
 
             $allInvoices = DB::table('stripe_invoices')
                 ->join('packages', 'packages.id', 'stripe_invoices.package_id')
@@ -276,9 +277,9 @@ class StripeController extends Controller
                 ->whereNotNull('stripe_invoices.pay_date')
                 ->where('stripe_invoices.company_id', $company->id)->get();
 
-            $firstInvoice = $allInvoices->sortByDesc(function ($temp, $key) {
+            /*$firstInvoice = $allInvoices->sortByDesc(function ($temp, $key) {
                 return Carbon::parse($temp->paid_on)->getTimestamp();
-            })->first();
+            })->first();*/
 
             $subscription = $company->subscriptions;
 
@@ -295,7 +296,7 @@ class StripeController extends Controller
                     ]);
 
                 }
-                $company = $this->company;
+//                $company = $this->company;
 
                 $company->package_id = $plan->id;
                 $company->package_type = $request->type;
@@ -304,6 +305,9 @@ class StripeController extends Controller
                 $company->status = 'active';
                 $company->licence_expire_on = null;
                 $company->save();
+
+                $plan->emitDocument($company);
+
                 DB::commit();
                 // Send notification to admin & superadmin
                 $generatedBy = User::withoutGlobalScopes()->whereNull('company_id')->first();
@@ -330,6 +334,10 @@ class StripeController extends Controller
             $advertise->status = $payment_method->status == 'succeeded' ? 'completed' : 'pending';
 
             $advertise->save();
+
+            $advertise->emitDocument();
+
+
             $formatted_amount = $advertise->formated_amount_to_pay;
 
             $admins = User::allAdministrators()->where('company_id', $advertise->company_id)->first();

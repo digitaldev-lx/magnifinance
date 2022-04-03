@@ -52,9 +52,9 @@ class Magnifinance
      * Get document from owner.
      *
      * @param $document_id
-     * @return array
+     * @return mixed
      */
-    public function getDocumentFromOwner($document_id): array
+    public function getDocumentFromOwner($document_id)
     {
         $document = $this->getRequest('document', null, 'documentId', $document_id, false);
         return json_decode($document);
@@ -67,9 +67,9 @@ class Magnifinance
      * @param User $client
      * @param array $document
      * @param string $sendToEmail
-     * @return array
+     * @return mixed
      */
-    public function emitDocumentFromPartner($partnerNif, User $client, array $document, string $sendToEmail): array
+    public function emitDocumentFromPartner($partnerNif, User $client, array $document, string $sendToEmail)
     {
         $partnerToken = $this->getPartnerToken($partnerNif);
 
@@ -88,7 +88,6 @@ class Magnifinance
         $data['Document'] = $dataDocument;
         $data['IsToClose'] = true;
         $data['SendTo'] = $sendToEmail;
-
         $response = $this->postRequest($data, 'document', $partnerToken);
         return json_decode($response);
     }
@@ -99,11 +98,10 @@ class Magnifinance
      * @param $object
      * @param array $document
      * @param string $sendToEmail
-     * @return array
+     * @return mixed
      */
-    public function emitDocumentFromOwner($object, array $document, string $sendToEmail): array
+    public function emitDocumentFromOwner($company, array $document, string $sendToEmail)
     {
-        $company = $object->load('company')->company;
         $data = [];
         $dataClient = $this->generateCompanyAsClient($company);
         $dataDocument = [];
@@ -194,8 +192,6 @@ class Magnifinance
      */
     private function generatePartner($company): array
     {
-        $company->load(['owner', 'country']);
-
         return [
             "UserName" => $company->owner->name,
             "UserEmail" => $company->owner->email,
@@ -204,7 +200,7 @@ class Magnifinance
             "CompanyLegalName" => $company->company_name,
             "CompanyAddress" => $company->address,
             "CompanyCity" => $company->city,
-            "CompanyPostCode" => $company->country->iso == "PT" ? $company->post_code : "0000-000",
+            "CompanyPostCode" => $company->country->iso == "PT" ? $company->post_code : "1000-001",
             "CompanyCountry" => $company->country->iso
         ];
 
@@ -225,7 +221,7 @@ class Magnifinance
      */
     private function generateCompanyAsClient($company): array
     {
-        return $this->clientResponse($company->load('country'));
+        return $this->clientResponse($company);
     }
 
     /**
@@ -245,7 +241,7 @@ class Magnifinance
                 ? is_null($obj->post_code) || $obj->post_code == ""
                     ? "0000-00"
                     : $obj->post_code
-                : "0000-000",
+                : "1000-001",
             "CountryCode" => $obj->country->iso,
             "LegalName" => $isCompany ? $obj->company_name: $obj->name,
             "PhoneNumber" => $isCompany ? $obj->company_phone : $obj->mobile

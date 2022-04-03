@@ -17,7 +17,7 @@ class AddAddressCityVatNumerPostCodeUsersTable extends Migration
             $table->string('vat_number')->default("999999990")->after('email');
             $table->text('address')->nullable()->after('mobile');
             $table->string('city')->nullable()->after('mobile');
-            $table->string('post_code')->default("0000-000")->after("mobile");
+            $table->string('post_code')->default("1000-001")->after("mobile");
         });
     }
 

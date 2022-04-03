@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Observers\PackageObserver;
+use App\Traits\Documentable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Cashier\Subscription;
@@ -72,6 +73,8 @@ use Laravel\Cashier\Subscription;
  */
 class Package extends Model
 {
+    use Documentable;
+
     protected $fillable = [
         'name',
         'max_employees',

@@ -15,7 +15,7 @@ class AddAddressFieldsGlobalSettingsTable extends Migration
     {
         Schema::table('global_settings', function (Blueprint $table) {
             $table->string('city')->nullable()->after('address');
-            $table->string('post_code')->default("0000-000")->after("address");
+            $table->string('post_code')->default("1000-001")->after("address");
             $table->unsignedInteger('country_id')->nullable()->after('address');
             $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade')->onDelete('cascade');
         });

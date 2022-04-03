@@ -5,7 +5,7 @@ namespace App;
 use App\Scopes\CompanyScope;
 use App\Services\UrlManager;
 use DigitalDevLX\Magnifinance\models\Document;
-use DigitalDevLX\Magnifinance\traits\Documentable;
+use App\Traits\Documentable;
 use Illuminate\Database\Eloquent\Model;
 
 class Advertise extends Model

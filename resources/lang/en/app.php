@@ -407,7 +407,7 @@ return array (
     ),
     'ContactNumber' => 'Contact Number',
     'city' => 'City',
-    'post_code' => '0000-000',
+    'post_code' => '1000-001',
 
   ),
   'yourName' => 'Your Name',

@@ -105,6 +105,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|Booking whereUserId($value)
  * @mixin \Eloquent
  */
+
 class Booking extends Model
 {
     use Documentable;

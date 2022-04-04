@@ -6,6 +6,7 @@ use App\Company;
 use App\User;
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
 
 class Magnifinance
@@ -26,11 +27,11 @@ class Magnifinance
      * Add a new partner.
      *
      * @param Company $company
-     * @return array
+     * @return mixed
      */
-    public function addPartner(Company $company): array
+    public function addPartner($company)
     {
-        return json_decode($this->postRequest($this->generatePartner($company), "partner"));
+        return json_decode($this->postRequest($this->generatePartner($company),"partner"));
     }
 
     /**
@@ -147,6 +148,7 @@ class Magnifinance
      * @param null $partnerToken
      * @return PromiseInterface|Response
      */
+
     private function postRequest($data, string $endpoint = "", $partnerToken = null)
     {
         $url = $this->base_url.$endpoint;

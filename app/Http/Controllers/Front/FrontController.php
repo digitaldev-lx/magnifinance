@@ -567,7 +567,8 @@ class FrontController extends FrontBaseController
     public function teste()
     {
 
-        $package = company()->package_type."_price";
+
+        return Magnifinance::addPartner(company());
         $plan = Package::find(company()->package_id);
         return $package;
         return round(round($plan->$package) / (1 + 23 / 100), 2, PHP_ROUND_HALF_UP);

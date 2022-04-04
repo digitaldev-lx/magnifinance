@@ -67,8 +67,6 @@ class PaymentCredentialSettingController extends AdminBaseController
 
         $updateLink->update();
 
-        Magnifinance::addPartner($stripeAccountId->company);
-
         return Redirect::to(route('admin.settings.index'));
 
     }

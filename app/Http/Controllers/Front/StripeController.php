@@ -86,8 +86,11 @@ class StripeController extends Controller
         $details->save();
 
         if((!is_null($company->vat_number) || !empty($company->vat_number)) && $company->country->iso == "PT"){
-            Magnifinance::addPartner($company);
-            //todo: adicionar campo de magnifinace active a company model
+            $partner = Magnifinance::addPartner($company);
+            if($partner->IsSuccess){
+                $company->magnifinance_active = 1;
+                $company->save();
+            }
         }
 
         return Reply::successWithData(__('messages.createdSuccessfully'), ['details' => $account_links, 'link_expire_at' => $link_expire_at/*, 'stripe_login_link' => $stripe_login_link*/]);

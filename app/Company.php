@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int|null $package_id
  * @property string $company_name
  * @property string $vat_number
+ * @property boolean $magnifinance_active
  * @property string $partner_token
  * @property string $post_code
  * @property string $city
@@ -137,6 +138,7 @@ class Company extends Model
         'company_name',
         'company_email',
         'company_phone',
+        'magnifinance_active',
         'partner_token',
         'vat_number',
         'post_code',

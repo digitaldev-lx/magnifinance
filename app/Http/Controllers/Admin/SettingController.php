@@ -71,7 +71,7 @@ class SettingController extends AdminBaseController
         $this->moduleSettings = ModuleSetting::where('status', '=','deactive')->get();
         $employees = User::AllEmployees()->get();
 
-        $client = new Client();
+        /*$client = new Client();
         $res = $client->request('GET', config('froiden_envato.updater_file_path'), ['verify' => false]);
         $this->lastVersion = $res->getBody();
         $this->lastVersion = json_decode($this->lastVersion, true);
@@ -90,7 +90,8 @@ class SettingController extends AdminBaseController
 
         $this->appVersion = File::get('version.txt');
         $laravel = app();
-        $this->laravelVersion = $laravel::VERSION;
+        $this->laravelVersion = $laravel::VERSION;*/
+
         $this->officeLeaves = OfficeLeave::all();
 
         $this->stripePaymentSetting = GatewayAccountDetail::ofStatus('active')->ofGateway('stripe')->first();

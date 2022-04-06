@@ -249,6 +249,7 @@ return array (
   'paypal' => 'Paypal',
   'payWithPaypal' => 'Pay With Paypal',
   'stripe' => 'Stripe',
+  'magnifinance' => 'Magnifinance',
   'payWithStripe' => 'Pay With Stripe',
   'home' => 'Home',
   'offlinePaymentMethod' => 'Offline Payment Method',

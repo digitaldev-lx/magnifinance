@@ -245,6 +245,7 @@ return array(
     'paypal' => 'Paypal',
     'payWithPaypal' => 'Pagar com Paypal',
     'stripe' => 'Stripe',
+    'magnifinance' => 'Magnifinance',
     'payWithStripe' => 'Pagar com Stripe',
     'home' => 'Home',
     'offlinePaymentMethod' => 'Método de Pagamento Offline',

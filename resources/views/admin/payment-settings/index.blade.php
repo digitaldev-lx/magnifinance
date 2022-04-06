@@ -36,6 +36,28 @@
             </div>
         </div>
     </div>
+    @if($settings->magnifinance_active)
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="text-info">{{__('app.magnifinance')}}</h5>
+
+            <div class="form-group">
+                <h5 class="text-default">{{__('app.login')}}:
+                    <a href="{{config("magnifinance.MAGNIFINANCE_BO_PANEL_URL")}}" target="_blank">{{__('app.magnifinance')}} {{__('app.login')}}</a>
+                </h5>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <h5 class="text-info">@lang('app.status')</h5>
+            <div class="form-group">
+                <span
+                    class="badge {{ $settings->magnifinance_active ? 'badge-success' : 'badge-danger' }}">{{ $settings->magnifinance_active ? __('app.connected') : __('app.notConnected') }}</span>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <br>
     <div id="stripe-verification"
         class="{{ $stripePaymentSetting && $stripePaymentSetting->connection_status === 'not_connected' ? '' : 'd-none' }} row">

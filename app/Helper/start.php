@@ -12,7 +12,7 @@ if (!function_exists('cdn_storage_url')) {
 
     function cdn_storage_url($path)
     {
-       return "https://". env("DIGITALOCEAN_SPACES_BUCKET") .".". env("DIGITALOCEAN_SPACES_REGION") .".cdn.digitaloceanspaces.com/". $path;
+       return "https://". config("digitalocean.spaces.DIGITALOCEAN_SPACES_BUCKET") .".". config("digitalocean.spaces.DIGITALOCEAN_SPACES_REGION") .".cdn.digitaloceanspaces.com/". $path;
     }
 
 }

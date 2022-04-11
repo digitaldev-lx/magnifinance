@@ -257,7 +257,11 @@ class StripeController extends Controller
             $invoice->payment_gateway = 'Stripe';
             $invoice->payment_status = 'completed';
             $invoice->save();
-            $invoice->emitDocument();
+
+            if($invoice->company->magnifinance_active){
+                $invoice->emitDocument();
+            }
+
             $formatted_amount = $invoice->formated_amount_to_pay;
 
             // send email notifications
@@ -312,7 +316,9 @@ class StripeController extends Controller
                 $company->licence_expire_on = null;
                 $company->save();
 
-                $plan->emitDocument($company);
+                if($company->magnifinance_active){
+                    $plan->emitDocument($company);
+                }
 
                 DB::commit();
                 // Send notification to admin & superadmin
@@ -341,8 +347,9 @@ class StripeController extends Controller
 
             $advertise->save();
 
-            $advertise->emitDocument();
-
+            if($advertise->company->magnifinance_active){
+                $advertise->emitDocument();
+            }
 
             $formatted_amount = $advertise->formated_amount_to_pay;
 

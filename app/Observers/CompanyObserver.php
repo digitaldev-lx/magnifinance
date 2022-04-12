@@ -36,8 +36,6 @@ class CompanyObserver
 
         $company->slug = $company->company_name;
 
-
-
         if (is_null($company->package_id)) {
             $package = Package::active()->trialPackage()->first();
 

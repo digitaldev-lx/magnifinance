@@ -6,7 +6,7 @@
     .invalid-feedback {
         display: block !important;
     }
-    
+
     </style>
 @endpush
 
@@ -21,7 +21,7 @@
                 <div class="form_wrapper mx-auto position-relative">
                     <form action="{{ route('login') }}" method="post">
                         @csrf
-                        
+
                         <span class="form_icon"><i class="zmdi zmdi-key"></i></span>
 
                         <div class="form-group">
@@ -53,7 +53,7 @@
                         @if ($googleCaptchaSettings->login_page == 'active' && $googleCaptchaSettings->status == 'active')
                             <div class="form-group">
                                 <div class="centering v-center mb-2 mt-2">
-                                    <input type="hidden" name="recaptcha" class="form-control" id="recaptcha" value="">   
+                                    <input type="hidden" name="recaptcha" class="form-control" id="recaptcha" value="">
                                     <div id="captcha_container"></div>
                                 </div>
                             </div>

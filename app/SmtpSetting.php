@@ -92,7 +92,7 @@ class SmtpSetting extends Model
                                 class="fa fa-arrow-right"></i></a>
                 </div>';
         }
-        
+
         return null;
     }
 

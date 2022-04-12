@@ -71,7 +71,7 @@ class SmtpSettingController extends SuperAdminBaseController
             Notification::route('mail', \request()->test_email)->notify(new TestEmail());
             return Reply::success(__('app.testEmailSuccess'));
         }
-        
+
         return Reply::error($response['message']);
     }
 

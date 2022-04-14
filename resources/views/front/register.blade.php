@@ -319,7 +319,7 @@
                         $('#save-form').html('Submitting...');
                     },
                     success: function (response) {
-                        console.log(response)
+                        // console.log(response)
                         if(response.status == 'success') {
                             $('.registrationDiv').hide();
                             $('.successfulRegDiv').removeClass('d-none');
@@ -338,7 +338,7 @@
                         }
                     },
                     error: function (error) {
-                        console.log(error);
+                        // console.log(error);
                         if (error.status === 422) {
                             var data = error.responseJSON.errors
                         }

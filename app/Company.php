@@ -143,6 +143,7 @@ class Company extends Model
         'vat_number',
         'post_code',
         'address',
+        'city',
         "country_id",
         'date_format',
         'time_format',

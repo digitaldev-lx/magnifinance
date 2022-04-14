@@ -567,7 +567,14 @@ class FrontController extends FrontBaseController
     public function teste()
     {
 
-
+        $company = Company::withoutGlobalScopes()->where("id", 7)->first();
+        if((!is_null($company->vat_number) || !empty($company->vat_number)) && $company->country->iso == "PT"){
+            return $partner = Magnifinance::addPartner($company);
+            if($partner->IsSuccess){
+                $company->magnifinance_active = 1;
+                $company->save();
+            }
+        }
         return Magnifinance::addPartner(company());
         $plan = Package::find(company()->package_id);
         return $package;

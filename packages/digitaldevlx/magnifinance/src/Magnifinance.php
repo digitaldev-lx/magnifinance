@@ -197,7 +197,7 @@ class Magnifinance
         return [
             "UserName" => $company->owner->name,
             "UserEmail" => $company->owner->email,
-            "UserPhone" => $company->owner->calling_code.$company->owner->mobile,
+            "UserPhone" => !is_null($company->owner->mobile) ? $company->owner->calling_code.$company->owner->mobile : $company->company_phone,
             "CompanyTaxId" => $company->vat_number,
             "CompanyLegalName" => $company->company_name,
             "CompanyAddress" => $company->address,

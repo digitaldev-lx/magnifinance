@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Company;
 use App\GatewayAccountDetail;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
@@ -64,6 +65,15 @@ class PaymentCredentialSettingController extends AdminBaseController
 
         $updateLink->connection_status = $accountStatus->details_submitted ? 'connected' : 'not_connected';
         $updateLink->account_status = $accountStatus->details_submitted ? 'active' : 'inactive';
+
+        $company = Company::withoutGlobalScopes()->where("id", $stripeAccountId->company->id)->first();
+        if((!is_null($company->vat_number) || !empty($company->vat_number)) && $company->country->iso == "PT"){
+            $partner = Magnifinance::addPartner($company);
+            if($partner->IsSuccess){
+                $company->magnifinance_active = 1;
+                $company->save();
+            }
+        }
 
         $updateLink->update();
 

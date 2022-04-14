@@ -337,12 +337,17 @@
                             $('#save-form').html("{{__('app.createMyAccount')}}");
                         }
                     },
-                    error: function(data) {
-                        console.log(data.responseJSON)
-                        toastr.error(data.responseJSON.message);
+                    error: function (error) {
+                        console.log(error);
+                        if (error.status === 422) {
+                            var data = error.responseJSON.errors
+                        }
+                        $.each(data, function (key, value) {
+                            $.showToastr(value[0], 'error');
+                        });
                         $("#save-form").prop("disabled", false);
                         $('#save-form').html("{{__('app.createMyAccount')}}");
-                    },
+                    }
                 });
             }
         });

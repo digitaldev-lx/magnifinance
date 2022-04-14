@@ -35,7 +35,7 @@ use App\GlobalSetting;
 use App\BusinessService;
 use App\UniversalSearch;
 use App\EmployeeSchedule;
-use DigitalDevLX\Magnifinance\Facades\Magnifinance;
+use DigitalDevLX\Magnifinance\facades\Magnifinance;
 use Illuminate\Support\Arr;
 use App\Scopes\CompanyScope;
 use Illuminate\Http\Request;

@@ -2407,7 +2407,6 @@ class FrontController extends FrontBaseController
                     'locale' => Language::first()->language_code,
                 ];
 
-
                 DB::beginTransaction();
                     $country = Country::find($request->country_id);
                     $location = Location::updateOrCreate(

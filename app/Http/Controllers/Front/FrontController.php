@@ -2454,10 +2454,13 @@ class FrontController extends FrontBaseController
 
         $company = User::withoutGlobalScopes()->where('email', '=', Crypt::decryptString($request->email))->with('company')->first();
 
-        $superadmin = User::withoutGlobalScopes()->first();
+        $superadmins = User::notCustomer()->withoutGlobalScopes()->whereNull('company_id')->get();
 
+        // send welcome email to admin
         $company->notify(new CompanyWelcome());
-        $superadmin->notify(new SuperadminNotificationAboutNewAddedCompany($company));
+
+        // send email to superadmin
+        Notification::send($superadmins, new SuperadminNotificationAboutNewAddedCompany($company));
 
         return view('front/email_verified_success');
     }

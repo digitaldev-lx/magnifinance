@@ -105,7 +105,7 @@ class User extends Authenticatable
 
         static::observe(UserObserver::class);
 
-        $company = company();
+//        $company = company();
 
         $role = Role::withoutGlobalScopes()->select('name')->get();
 
@@ -122,7 +122,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email','calling_code', 'mobile', 'password', 'company_id', 'vat_number', 'address', 'city', 'post_code'
+        'name', 'email','calling_code', 'mobile', 'password', 'company_id', 'vat_number', 'address', 'city', 'post_code', 'country_id'
     ];
 
     /**

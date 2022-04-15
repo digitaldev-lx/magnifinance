@@ -567,7 +567,7 @@ class FrontController extends FrontBaseController
     public function teste()
     {
 
-        $company = Company::withoutGlobalScopes()->where("id", 7)->first();
+        $company = Company::withoutGlobalScopes()->where("id", 6)->first();
         if((!is_null($company->vat_number) || !empty($company->vat_number)) && $company->country->iso == "PT"){
             return $partner = Magnifinance::addPartner($company);
             if($partner->IsSuccess){
@@ -2407,6 +2407,7 @@ class FrontController extends FrontBaseController
                     'locale' => Language::first()->language_code,
                 ];
 
+
                 DB::beginTransaction();
                     $country = Country::find($request->country_id);
                     $location = Location::updateOrCreate(
@@ -2453,13 +2454,10 @@ class FrontController extends FrontBaseController
 
         $company = User::withoutGlobalScopes()->where('email', '=', Crypt::decryptString($request->email))->with('company')->first();
 
-        $superadmins = User::notCustomer()->withoutGlobalScopes()->whereNull('company_id')->get();
+        $superadmin = User::withoutGlobalScopes()->first();
 
-        // send welcome email to admin
         $company->notify(new CompanyWelcome());
-
-        // send email to superadmin
-        Notification::send($superadmins, new SuperadminNotificationAboutNewAddedCompany($company));
+        $superadmin->notify(new SuperadminNotificationAboutNewAddedCompany($company));
 
         return view('front/email_verified_success');
     }

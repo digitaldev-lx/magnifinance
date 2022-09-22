@@ -308,7 +308,7 @@ class EmployeeController extends AdminBaseController
 
             $filePath = $this->image->storeImage($request, 'avatar');
 
-            $advertise->image = $filePath;
+            $user->image = $filePath;
         }
 
         $user->save();

@@ -314,6 +314,13 @@
                 },
                 error: function (error){
                     console.log(error);
+
+                    if( error.status === 422 ) {
+                        var data = error.responseJSON.errors
+                    }
+                    $.each( data, function( key, value ) {
+                        $.showToastr(value[0], 'error');
+                    });
                 }
             })
         })
@@ -340,6 +347,7 @@
                 }
             })
         })
+
 
         @if ($smsSettings->nexmo_status == 'active' && $user && !$user->mobile_verified && !session()->has('verify:request_id'))
             sendOTPRequest();
@@ -397,6 +405,7 @@
         }
 
         function sendOTPRequest() {
+            console.log("sendOTPRequest")
             $.easyAjax({
 
                 url: '{{ route('sendOtpCode') }}',

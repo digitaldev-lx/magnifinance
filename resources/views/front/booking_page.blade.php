@@ -148,7 +148,7 @@
 
         $('body').on('click', '.add-booking-details', function() {
             bookingDetails.selected_user = $('#selected_user').val();
-
+            console.log(bookingDetails);
             $.easyAjax({
                 url: '{{ route('front.addBookingDetails') }}',
                 type: 'POST',

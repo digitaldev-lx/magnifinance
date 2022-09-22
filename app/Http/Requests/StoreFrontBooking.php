@@ -49,7 +49,8 @@ class StoreFrontBooking extends CoreRequest
     public function messages()
     {
         return [
-            'email.unique' => __('front.emailRegistered')
+            'email.unique' => __('front.emailRegistered'),
+            'phone.required' => __('validation.custom.phone_verification')
         ];
     }
 

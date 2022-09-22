@@ -128,6 +128,7 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'phone_verification' => "Tem de ter o seu numero de telefone validado. Vá ao seu perfil e faça a validação."
     ],
 
     /*

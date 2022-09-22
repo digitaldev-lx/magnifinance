@@ -128,6 +128,7 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'phone_verification' => "You must verify your phone number in you profile."
     ],
 
     /*

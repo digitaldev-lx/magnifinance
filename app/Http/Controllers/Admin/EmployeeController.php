@@ -12,6 +12,8 @@ use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\Employee\StoreRequest;
 use App\Http\Requests\Employee\UpdateRequest;
+use App\Services\ImagesManager;
+use App\Services\UrlManager;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\Employee\ChangeRoleRequest;
@@ -22,9 +24,12 @@ use Illuminate\Support\Facades\DB;
 class EmployeeController extends AdminBaseController
 {
 
+    private $image;
+
     public function __construct()
     {
         parent::__construct();
+        $this->image = new ImagesManager();
         view()->share('pageTitle', __('menu.employee'));
     }
 
@@ -167,7 +172,10 @@ class EmployeeController extends AdminBaseController
         }
 
         if ($request->hasFile('image')) {
-            $user->image = Files::upload($request->image, 'avatar');
+
+            $filePath = $this->image->storeImage($request, 'avatar');
+
+            $data['image'] = $filePath;
         }
 
         $user->save();
@@ -295,7 +303,12 @@ class EmployeeController extends AdminBaseController
         $user->calling_code = $request->calling_code;
 
         if ($request->hasFile('image')) {
-            $user->image = Files::upload($request->image, 'avatar');
+
+            $this->image->deleteImage($user->image,'avatar');
+
+            $filePath = $this->image->storeImage($request, 'avatar');
+
+            $advertise->image = $filePath;
         }
 
         $user->save();

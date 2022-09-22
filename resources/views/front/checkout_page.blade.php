@@ -405,7 +405,9 @@
         }
 
         function sendOTPRequest() {
-            console.log("sendOTPRequest")
+            var data = $('#request-otp-form').serialize()
+            console.log("Antes do pedido", data)
+
             $.easyAjax({
 
                 url: '{{ route('sendOtpCode') }}',
@@ -434,7 +436,6 @@
                         // intialize countdown
                     }
                     if (response.status == 'fail') {
-                        $('#verify-mobile').html(response.view);
                         $('#mobile').focus();
                     }
                 },

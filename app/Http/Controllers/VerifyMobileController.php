@@ -26,7 +26,6 @@ class VerifyMobileController extends AdminBaseController
 
     public function sendVerificationCode(Request $request)
     {
-        return $request->all();
         $user = User::select('id', 'mobile_verified', 'calling_code', 'mobile')->where('id', $this->user->id)->first();
 
         if ($user->mobile_verified == 1) {

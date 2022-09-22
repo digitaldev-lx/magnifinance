@@ -434,6 +434,7 @@
                         // intialize countdown
                     }
                     if (response.status == 'fail') {
+                        $('#verify-mobile').html(response.view);
                         $('#mobile').focus();
                     }
                 },

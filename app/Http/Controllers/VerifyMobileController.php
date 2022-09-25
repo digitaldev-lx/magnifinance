@@ -35,7 +35,6 @@ class VerifyMobileController extends AdminBaseController
         $settings = config('nexmo.settings');
         $settings = Arr::add($settings, 'number', $user->mobile_with_code);
         $settings = Arr::add($settings, 'brand', $this->smsSettings->nexmo_from);
-
         try {
             $verification = Nexmo::verify()->start($settings);
             session()->put('verify:request_id', $verification->getRequestId());

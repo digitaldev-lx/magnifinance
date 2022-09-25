@@ -187,7 +187,7 @@
                     },
                     success: function(response){
                         console.log(response)
-                        jQuery("#page-loader").addClass("d-none");
+                        /*jQuery("#page-loader").addClass("d-none");
 
                         stripe.redirectToCheckout({
                             sessionId: response.id,
@@ -197,7 +197,7 @@
                                     url: '{{route('front.redirectToErrorPage')}}',
                                 });
                             }
-                        });
+                        });*/
                     },
                     error: function(response){
                         console.log(response)

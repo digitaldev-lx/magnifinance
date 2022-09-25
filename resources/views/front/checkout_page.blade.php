@@ -335,6 +335,9 @@
                 blockUI: false,
                 disableButton: true,
                 buttonSelector: ".save-booking",
+                success: (resp) => {
+                    console.log(resp);
+                },
                 error: function (error){
                     console.log(error);
 
@@ -420,7 +423,7 @@
                 },
                 success: function (response) {
                     console.log(response);
-                    if (response.status == 'success') {
+                    /*if (response.status == 'success') {
                         localStorage.setItem('otp_attempts', 3);
 
                         $('#verify-mobile').html(response.view);
@@ -437,7 +440,7 @@
                     }
                     if (response.status == 'fail') {
                         $('#mobile').focus();
-                    }
+                    }*/
                 },
                 error: function (error){
                     console.log(error);

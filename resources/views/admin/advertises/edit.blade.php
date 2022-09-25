@@ -430,8 +430,10 @@
 
 
         $('body').on('click', '#save-form', function() {
+            let path = "/account/advertises/update/{{$advertise->id}}"
+            console.log(path);
             $.easyAjax({
-                url: '{{route('admin.advertises.update', $advertise->id)}}',
+                url: path,
                 headers: { 'X-CSRF-TOKEN': '{{csrf_token()}}' },
                 container: '#editForm',
                 type: "POST",

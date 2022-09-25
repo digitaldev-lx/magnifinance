@@ -9,9 +9,9 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <div id="verify-mobile">
+                    {{--<div id="verify-mobile">
                         @include('partials.admin_verify_phone')
-                    </div>
+                    </div>--}}
                     <form role="form" id="createForm"  class="ajax-form" method="POST">
                         @csrf
 
@@ -27,6 +27,32 @@
                                 <div class="form-group">
                                     <label>@lang('app.email')</label>
                                     <input type="email" class="form-control" name="email" value="{{ $user->email }}">
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="mobile">@lang('app.mobile')</label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-row">
+                                                <div class="col-sm-2">
+                                                    <select name="calling_code" id="calling_code" class="form-control select2">
+                                                        @foreach ($calling_codes as $code => $value)
+                                                            <option value="{{ $value['dial_code'] }}"
+                                                            @if ($user->calling_code)
+                                                                {{ $user->calling_code == $value['dial_code'] ? 'selected' : '' }}
+                                                                @endif>{{ $value['dial_code'] . ' - ' . $value['name'] }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="mobile" name="mobile" value="{{ $user->mobile }}" autofocus />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -173,7 +199,10 @@
                 type: "POST",
                 redirect: true,
                 file:true,
-                data: $('#createForm').serialize()
+                data: $('#createForm').serialize(),
+                success: (resp) => {
+                    console.log(resp);
+                }
             })
         });
 

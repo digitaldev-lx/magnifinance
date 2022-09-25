@@ -395,14 +395,12 @@ class FrontController extends FrontBaseController
 
         $bookingDetails = request()->hasCookie('bookingDetails') ? json_decode(request()->cookie('bookingDetails'), true) : [];
         $couponData = request()->hasCookie('couponData') ? json_decode(request()->cookie('couponData'), true) : [];
-
         $Amt = 0;
         $tax = 0;
         $totalAmount = 0;
         $taxAmount = 0;
 
         if ($request_type !== 'deal') {
-
             foreach ($products as $key => $service) {
                 $taxes = ItemTax::with('tax')->where('service_id', $service->id)->get();
                 $taxPercent = 0;
@@ -830,7 +828,9 @@ class FrontController extends FrontBaseController
         }else{
             if ($this->user) {
                 $user = $this->user;
-            } else {
+            }
+            else
+            {
                 // User type from email/username
                 $user = User::where($this->user, $request->{$this->user})->first();
 
@@ -870,7 +870,7 @@ class FrontController extends FrontBaseController
             $type = $products[$keys[0]]->type == 'deal' ? 'deal' : 'booking';
 
             // get products and bookingDetails
-            $products = json_decode($request->cookie('products'), true);
+//            return $products = json_decode($request->cookie('products'), true);
 
             // Get Applied Coupon Details
             $couponData = request()->hasCookie('couponData') ? json_decode(request()->cookie('couponData'), true) : [];
@@ -909,11 +909,10 @@ class FrontController extends FrontBaseController
             foreach ($products as $key => $product) {
 
                 if ($type !== 'deal') {
-                    $taxes = ItemTax::with('tax')->where('service_id', $product['id'])->get();
+                    $taxes = ItemTax::with('tax')->where('service_id', $product->id)->get();
                 } else {
-                    $taxes = ItemTax::with('tax')->where('deal_id', $product['id'])->get();
+                    $taxes = ItemTax::with('tax')->where('deal_id', $product->id)->get();
                 }
-
                 $tax = 0;
 
                 foreach ($taxes as $key => $value) {
@@ -922,40 +921,41 @@ class FrontController extends FrontBaseController
                     $taxPercent += $value->tax->percent;
                 }
 
-                $companyId = $product['companyId'];
+                $companyId = $product->companyId;
 
-                if ($product['tax_on_price_status'] == 'active') {
-                    $net_price = round($product['price'] / (1 + $tax / 100) * $product['quantity'], 2);
-                    $amount = convertedOriginalPrice($companyId, ($product['quantity'] * $product['price']));
+                if ($product->tax_on_price_status == 'active') {
+                    $net_price = round($product->price / (1 + $tax / 100) * $product->quantity, 2);
+                    $amount = convertedOriginalPrice($companyId, ($product->quantity * $product->price));
 
-                    $Amt += ($product['price'] * $product['quantity']);
+                    $Amt += ($product->price * $product->quantity);
 //                $Amt += $net_price;
 //                $taxAmount += ($product['price'] * $product['quantity']) - $net_price;
                     $taxAmount += 0;
                 } else {
 
-                    $amount = convertedOriginalPrice($companyId, ($product['quantity'] * $product['price']));
-                    $parcel = $product['price'] * $product['quantity'];
+                    $amount = convertedOriginalPrice($companyId, ($product->quantity * $product->price));
+                    $parcel = $product->price * $product->quantity;
                     $Amt += $parcel;
                     $taxAmount += ($parcel * $tax) / 100;
                 }
 
                 $originalAmount += $amount;
 
-                $deal_id = ($product['type'] == 'deal') ? $product['id'] : null;
-                $business_service_id = ($product['type'] == 'service') ? $product['id'] : null;
+                $deal_id = ($product->type == 'deal') ? $product->id : null;
+                $business_service_id = ($product->type == 'service') ? $product->id : null;
 
                 $bookingItems[] = [
                     'business_service_id' => $business_service_id,
-                    'quantity' => $product['quantity'],
-                    'unit_price' => convertedOriginalPrice($companyId, $product['price']),
+                    'quantity' => $product->quantity,
+                    'unit_price' => convertedOriginalPrice($companyId, $product->price),
                     'amount' => $amount,
                     'deal_id' => $deal_id,
                 ];
 
             }
 
-            $amountToPay = ($originalAmount + $taxAmount);
+//            $amountToPay = ($originalAmount + $taxAmount);
+            $amountToPay = $originalAmount;
 
             if ($couponData) {
                 if ($amountToPay <= $couponData['applyAmount']) {
@@ -972,7 +972,6 @@ class FrontController extends FrontBaseController
             $dateTime = $type !== 'deal' ? Carbon::createFromFormat('Y-m-d', $bookingDetails['bookingDate'])->format('Y-m-d') . ' ' . Carbon::createFromFormat('H:i:s', $bookingDetails['bookingTime'])->format('H:i:s') : '';
             $currencyId = Company::withoutGlobalScope(CompanyScope::class)->find($companyId)->currency_id;
         }
-
         try {
             DB::beginTransaction();
 
@@ -1015,7 +1014,6 @@ class FrontController extends FrontBaseController
                     $deal->update();
                 }
             }
-
             $booking->amount_to_pay = $amountToPay;
             $booking->save();
 

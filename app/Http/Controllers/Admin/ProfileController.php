@@ -38,19 +38,21 @@ class ProfileController extends AdminBaseController
         $user->post_code = $request->post_code;
         $user->country_id = $request->country_id;
         $user->vat_number = $request->vat_number;
+        $user->mobile = $request->mobile;
+        $user->calling_code = $request->calling_code;
 
         if($request->password != ''){
             $user->password = $request->password;
         }
 
-        if ($request->has('mobile')) {
+        /*if ($request->has('mobile')) {
             if ($user->mobile !== $request->mobile || $user->calling_code !== $request->calling_code) {
                 $user->mobile_verified = 0;
             }
 
             $user->mobile = $request->mobile;
             $user->calling_code = $request->calling_code;
-        }
+        }*/
 
         if ($request->hasFile('image')) {
             $this->image->deleteImage($user->image);

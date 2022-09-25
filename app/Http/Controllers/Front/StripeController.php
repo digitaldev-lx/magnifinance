@@ -198,7 +198,6 @@ class StripeController extends Controller
 
     public function afterStripePayment(Request $request, $return_url, $bookingId = null)
     {
-        return $return_url;
         if(session()->has('stripe_session')){
             $session_data = session('stripe_session');
             $session = \Stripe\Checkout\Session::retrieve($session_data->id);

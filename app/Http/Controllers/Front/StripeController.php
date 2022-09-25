@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Front;
 
 use App\Advertise;
-use App\BookingItem;
 use App\Notifications\AdvertiseCompanyInfo;
 use App\Notifications\AdvertisePurchased;
 use App\Notifications\CompanyUpdatedPlan;
@@ -99,6 +98,7 @@ class StripeController extends Controller
     {
 //        $tax_amount = Tax::active()->first();
         $paymentCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
+
         if (isset($request->booking_id)) {
             $booking = Booking::with('items')->whereId($request->booking_id)->first();
             $stripeAccountDetails = GatewayAccountDetail::activeConnectedOfGateway('stripe')->first();
@@ -198,7 +198,7 @@ class StripeController extends Controller
 
     public function afterStripePayment(Request $request, $return_url, $bookingId = null)
     {
-        return $request->all();
+        return $return_url;
         if(session()->has('stripe_session')){
             $session_data = session('stripe_session');
             $session = \Stripe\Checkout\Session::retrieve($session_data->id);

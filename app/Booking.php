@@ -160,7 +160,7 @@ class Booking extends Model
 
     public function items()
     {
-        return $this->hasMany(BookingItem::class);
+        return $this->hasMany(BookingItem::class, "booking_id", "id")->withoutGlobalScopes();
     }
 
     public function payment()

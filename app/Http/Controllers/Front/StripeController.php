@@ -97,12 +97,13 @@ class StripeController extends Controller
     public function paymentWithStripe(Request $request)
     {
 //        $tax_amount = Tax::active()->first();
+//        return $request->all();
         $paymentCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
 
         if (isset($request->booking_id)) {
             $booking = Booking::with('items')->whereId($request->booking_id)->first();
-            $stripeAccountDetails = GatewayAccountDetail::activeConnectedOfGateway('stripe')->first();
 
+            $stripeAccountDetails = GatewayAccountDetail::activeConnectedOfGateway('stripe')->first();
             $line_items = [];
             foreach ($booking->items as $key => $value) {
 
@@ -123,6 +124,7 @@ class StripeController extends Controller
                     'quantity' => $value->quantity,
                 ];
             }
+
             $amount = $booking->converted_amount_to_pay * 100;
             $destination = $stripeAccountDetails ? $stripeAccountDetails->account_id : '';
 
@@ -146,7 +148,7 @@ class StripeController extends Controller
                 $data = [
                     'payment_method_types' => ['card'],
                     'line_items' => [$line_items],
-                    'success_url' => route('front.afterStripePayment', $request->return_url), //todo: possivelmente tem que se passar parametro para indocar o plano
+                    'success_url' => route('front.afterStripePayment', ['return_url' => $request->return_url]),//todo: possivelmente tem que se passar parametro para indocar o plano
                     'cancel_url' => route('front.payment-gateway'),
                 ];
             }
@@ -222,7 +224,6 @@ class StripeController extends Controller
         $saCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
 
 //        $currency = GlobalSetting::first()->currency;
-
         if (isset($request->booking_id)) {
             $payment = new Payment();
             $payment->booking_id = $invoice->id;

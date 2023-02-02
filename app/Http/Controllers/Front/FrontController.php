@@ -2085,7 +2085,11 @@ class FrontController extends FrontBaseController
                         $q->whereHas('category', function ($q) use ($categories) {
                             $q->whereIn('id', $categories);
                         });
-                    })->orderByDesc('amount')->orderByDesc('avg_amount')->get();
+                    })
+                    ->where('to', '>=', now())
+                    ->orderByDesc('amount')
+                    ->orderByDesc('avg_amount')
+                    ->get();
 
                 $professionals = BusinessService::where('location_id', $request->location)
                     ->whereHas('category', function ($q) use ($categories) {

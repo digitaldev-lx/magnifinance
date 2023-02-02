@@ -59,7 +59,7 @@ class BookingItem extends Model
 
     public function businessService()
     {
-        return $this->belongsTo(BusinessService::class);
+        return $this->belongsTo(BusinessService::class)->withoutGlobalScopes();
     }
 
     public function deal()

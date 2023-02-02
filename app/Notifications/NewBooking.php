@@ -33,13 +33,13 @@ class NewBooking extends BaseNotification
     {
         $via = ['mail'];
 
-        if ($this->smsSetting->nexmo_status == 'active' && $notifiable->mobile_verified == 1) {
+        /*if ($this->smsSetting->nexmo_status == 'active' && $notifiable->mobile_verified == 1) {
             array_push($via, 'nexmo');
         }
 
         if ($this->smsSetting->msg91_status == 'active' && $notifiable->mobile_verified == 1) {
             array_push($via, 'msg91');
-        }
+        }*/
 
         return $via;
     }

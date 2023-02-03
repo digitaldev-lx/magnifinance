@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Advertise;
+namespace App\Http\Requests\Tout;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateAdvertise extends FormRequest
+class UpdateTout extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdateAdvertise extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('update_advertise');
+        return auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('update_tout');
     }
 
     public function rules()

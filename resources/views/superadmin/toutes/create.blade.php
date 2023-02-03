@@ -98,12 +98,12 @@
 @endpush
 
 @section('content')
-    <div id="createAdvertiseContainer">
+    <div id="createToutContainer">
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-dark">
                     <div class="card-header">
-                        <h3 class="card-title">@lang('app.add') @lang('menu.advertises')</h3>
+                        <h3 class="card-title">@lang('app.add') @lang('menu.toutes')</h3>
                     </div>
                     <div class="card-body">
                         <form role="form" id="createForm" class="ajax-form" method="POST">
@@ -139,7 +139,7 @@
                                                 </select>
                                             </div>
                                             <div class="form-group" id="article_div">
-                                                <label id="label">{{__('app.advertiseInArticle')}}</label>
+                                                <label id="label">{{__('app.toutInArticle')}}</label>
                                                 <select name="article_id" id="article_id"
                                                         class="form-control form-control-md select2">
                                                     <option value="">{{__('app.selectArticle')}}</option>
@@ -255,12 +255,12 @@
                                 <div class="col-md-6 bg-gray-light p-3 shadow-2" style="border-radius: 10px">
                                     <div class="row text-center shadow-sm p-2 mb-5 bg-white rounded" style="border-radius: 10px">
                                         <div class="col-md-12">
-                                            <h4>{{__('app.advertise')}}</h4>
+                                            <h4>{{__('app.tout')}}</h4>
                                         </div>
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col-md-6">
-                                            <label id="label">{{__('app.advertise')}} {{__('app.from')}}</label>
+                                            <label id="label">{{__('app.tout')}} {{__('app.from')}}</label>
 
                                             <div class="form-group">
                                                 <input type="text" class="form-control datepicker" name="from" id="from"
@@ -431,7 +431,7 @@
 
         $('body').on('click', '#submit-form', function() {
             $.easyAjax({
-                url: '{{route('admin.advertises.store')}}',
+                url: '{{route('admin.toutes.store')}}',
                 container: '#createForm',
                 type: "POST",
                 file: true,
@@ -440,7 +440,7 @@
                 success: function (response){
                     console.log(response);
                     if(response.status){
-                        $("#createAdvertiseContainer").html(response.view)
+                        $("#createToutContainer").html(response.view)
                     }
                 },
                 error: function (error){

@@ -51,28 +51,28 @@
                              <!-- Content -->
                              <div class="header-title">
                                 <h1 style="font-family:&quot;Helvetica Neue&quot;, Helvetica, Arial, &quot;Lucida Grande&quot;, sans-serif;margin-bottom:15px;color:#47505E;margin:0px 0 10px;line-height:1.2;font-weight:200;font-size:28px;font-weight:bold;margin-bottom:30px">
-                                    {{__('email.newAdvertiseRegistered')}} {{__('app.in')}} {{ $globalSetting->company_name }} </h1>
+                                    {{__('email.newToutRegistered')}} {{__('app.in')}} {{ $globalSetting->company_name }} </h1>
                              </div>
                              <p style="font-weight:normal;padding:0;font-family:&quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif;line-height:1.7;margin-bottom:1.3em;font-size:15px;color:#47505E;font-size:16px;margin-bottom:0">
-                                 {{__('email.advertiseDetailsAreFollowing')}} :
+                                 {{__('email.toutDetailsAreFollowing')}} :
                              </p>
                              <ul class="list" style="font-weight:normal;padding:0;font-family:&quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif;line-height:1.7;margin-bottom:1.3em;font-size:15px;color:#47505E">
-                                <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>@lang('app.name')</b> : {{ $advertise->company->company_name }}</li>
-                                <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.advertise_local')}} </b>: {{$advertise->ads_in_all_category == 'yes' ? __('app.category') : __('app.article')}}</li>
-                                 @if (!is_null($advertise->article_id))
-                                     <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.advertise_in')}}</b> : {{ $advertise->article->title }}</li>
-                                 @elseif(!is_null($advertise->category_id))
-                                     <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.advertise_in')}}</b> : {{ $advertise->category->name }}</li>
+                                <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>@lang('app.name')</b> : {{ $tout->company->company_name }}</li>
+                                <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.tout_local')}} </b>: {{$tout->ads_in_all_category == 'yes' ? __('app.category') : __('app.article')}}</li>
+                                 @if (!is_null($tout->article_id))
+                                     <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.tout_in')}}</b> : {{ $tout->article->title }}</li>
+                                 @elseif(!is_null($tout->category_id))
+                                     <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.tout_in')}}</b> : {{ $tout->category->name }}</li>
                                  @endif
-                                <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.advertise')}} {{__('app.from')}} </b>: {{ $advertise->from }}</li>
-                                 <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.advertise')}} {{__('app.to')}} </b>: {{ $advertise->to }}</li>
-                                <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.amount')}}</b> : {{ $advertise->formated_amount_to_pay }}</li>
-                                <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.avgAmount')}}</b> : {{ $advertise->formated_avg_amount_to_pay }}</li>
-                                 <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.paid_on')}}</b> : {{ $advertise->paid_on }}</li>
+                                <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.tout')}} {{__('app.from')}} </b>: {{ $tout->from }}</li>
+                                 <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.tout')}} {{__('app.to')}} </b>: {{ $tout->to }}</li>
+                                <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.amount')}}</b> : {{ $tout->formated_amount_to_pay }}</li>
+                                <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.avgAmount')}}</b> : {{ $tout->formated_avg_amount_to_pay }}</li>
+                                 <li style="margin-left:5px;list-style-position:inside;line-height:2.5"><b>{{__('app.paid_on')}}</b> : {{ $tout->paid_on }}</li>
                              </ul>
                               <br>
                               <p style="font-weight:normal;padding:0;font-family:&quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, Helvetica, Arial, sans-serif;line-height:1.7;margin-bottom:1.3em;font-size:15px;color:#47505E;font-size:16px;margin-bottom:0">
-                                  {!! __('email.advertiseInfoForComany') !!}
+                                  {!! __('email.toutInfoForComany') !!}
                               </p>
                              <br><br>
                              <center>

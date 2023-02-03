@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Advertise;
+use App\Tout;
 use App\Article;
 use App\Country;
 use App\Services\StripeCustomerManager;
@@ -578,7 +578,7 @@ class FrontController extends FrontBaseController
         return $package;
         return round(round($plan->$package) / (1 + 23 / 100), 2, PHP_ROUND_HALF_UP);
 //        return Magnifinance::getDocumentFromPartner("143373975", "239637712");
-//        $advertise = Advertise::whereId(3)->first();
+//        $tout = Tout::whereId(3)->first();
 
 //        return $booking->company->country->iso == "PT" ? $booking->company->post_code : "1000-001";
 //        return $plan->getMorphClass();
@@ -626,14 +626,14 @@ class FrontController extends FrontBaseController
         $list = [
             [
                 "Code" => "010", // Service or Product ID, min lenght 2
-                "Description" => "Advertise from day one to day ten",
+                "Description" => "Tout from day one to day ten",
                 "UnitPrice" => 40,
                 "Quantity" => 1,
                 "Unit" => "Service",
                 "Type" => "S", // S = Service P = Product
                 "TaxValue" => 23, // percentage
                 "ProductDiscount" => 0, // Percentage
-                "CostCenter" => "Advertises"
+                "CostCenter" => "Toutes"
             ]
             ];
 
@@ -649,11 +649,11 @@ class FrontController extends FrontBaseController
         ];
         return $document;
 //todo: optimizar a criação de documento para os vários tipos de transação (anuncios, planos e compra de serviços)
-        $advertise = Advertise::whereId(1)->first();
-        return $document = Magnifinance::emitDocumentFromOwner($advertise, $document,"pauloamserrano@gmail.com");
+        $tout = Tout::whereId(1)->first();
+        return $document = Magnifinance::emitDocumentFromOwner($tout, $document,"pauloamserrano@gmail.com");
 
-        return $document = Magnifinance::emitDocumentFromOwner($advertise, $document,"pauloamserrano@gmail.com");
-//            $advertise->addDocument();
+        return $document = Magnifinance::emitDocumentFromOwner($tout, $document,"pauloamserrano@gmail.com");
+//            $tout->addDocument();
 //        return Magnifinance::getPartnerToken("239637712");
         return Magnifinance::getDocumentFromPartner("143373975", "239637712");
         return Magnifinance::emitDocumentFromOwner($client, $document, "pauloamserrano@gmail.com");
@@ -1841,7 +1841,7 @@ class FrontController extends FrontBaseController
         $service = BusinessService::find(3);
 
         if ($request->ajax()) {
-            $advertises = Advertise::paid()
+            $toutes = Tout::paid()
                 ->where(function ($q) use ($request) {
                     $q->where('location_id', $request->location);
                     $q->orWhere('location_id', null);
@@ -1880,9 +1880,9 @@ class FrontController extends FrontBaseController
             })->first();
 
             $view = view('front.filtered_professionals', compact('professionals', 'article'))->render();
-            $viewAds = view('front.filtered_advertises', compact('advertises'))->render();
+            $viewAds = view('front.filtered_toutes', compact('toutes'))->render();
 
-            return Reply::dataOnly(['view' => $view, 'viewAds' => $viewAds, 'articles' => $articles, 'article' => $article, 'location' => $location, 'professionals' => $professionals, 'advertises' => $advertises]);
+            return Reply::dataOnly(['view' => $view, 'viewAds' => $viewAds, 'articles' => $articles, 'article' => $article, 'location' => $location, 'professionals' => $professionals, 'toutes' => $toutes]);
         }
 
         return view('front.article_detail', compact('article', 'service'));
@@ -2076,7 +2076,7 @@ class FrontController extends FrontBaseController
                 $categories = explode(',', $request->categories);
                 $services->whereIn('category_id', $categories);
 
-                $advertises = Advertise::paid()
+                $toutes = Tout::paid()
                     ->where(function ($q) use ($request) {
                         $q->where('location_id', $request->location);
                         $q->orWhere('location_id', null);
@@ -2101,7 +2101,7 @@ class FrontController extends FrontBaseController
                     ->take(12)->get();
 
             } else {
-                $advertises = Advertise::paid()
+                $toutes = Tout::paid()
                     ->where(function ($q) use ($request) {
                         $q->where('location_id', $request->location);
                         $q->orWhere('location_id', null);
@@ -2183,7 +2183,7 @@ class FrontController extends FrontBaseController
             })->first();
 
             $viewProfessionals = view('front.filtered_professionals', compact('professionals'))->render();
-            $viewAds = view('front.filtered_advertises', compact('advertises'))->render();
+            $viewAds = view('front.filtered_toutes', compact('toutes'))->render();
 
             $view = view('front.filtered_services', compact('services'))->render();
             return Reply::dataOnly(['view' => $view, 'viewAds' => $viewAds, 'viewProfessionals' => $viewProfessionals, 'service_count' => $services->count(), 'service_total' => $services->total(), 'location' => $location]);

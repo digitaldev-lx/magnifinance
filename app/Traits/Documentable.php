@@ -49,7 +49,7 @@ trait Documentable
                     return response()->json(["success" => $document->IsSuccess, "message" => $document], 403);
                 }
                 break;
-            case ("App\Advertise"):
+            case ("App\Tout"):
             case ("App\Package"):
 
                 $company = is_null($company) ? $this->company : $company;
@@ -80,7 +80,7 @@ trait Documentable
                 "ExternalId" => $this->payment->transaction_id, //transaction Id
                 "Lines" => $this->generateItemsList($this->items)
             ];
-        }elseif ($this->getMorphClass() == "App\Advertise"){
+        }elseif ($this->getMorphClass() == "App\Tout"){
             $data = [
                 "Type" => "T", // T = Fatura/Recibo, I = Fatura, S = Fatura Simplificada, C - Nota de Credito, D = Nota de Debito
                 "Date" => $this->paid_on->format("Y-m-d"), // Data do Serviço format("Y-m-d")

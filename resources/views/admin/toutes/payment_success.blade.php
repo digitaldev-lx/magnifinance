@@ -34,7 +34,7 @@
 <div class="mt-5">
     <div class="row">
         <div class="col-10 col-md-10 col-lg-8 col-xl-8 offset-1 offset-md-1 offset-lg-2 offset-xl-2 adsContainer">
-            <p style="width: 100%">{{__('app.advertiseSuccess')}}</p>
+            <p style="width: 100%">{{__('app.toutSuccess')}}</p>
         </div>
     </div>
 
@@ -42,9 +42,9 @@
         <div class="col-10 col-md-6 col-lg-4 col-xl-6 offset-1 offset-md-3 offset-lg-4 offset-xl-3">
             <div class="row">
                 <div class="col-md-6 col-12 mb-3 pb-lg-0 pb-md-0">
-                    <a class="payment_icon_name" href="{{route('admin.advertises.index')}}" id="back">
+                    <a class="payment_icon_name" href="{{route('admin.toutes.index')}}" id="back">
 
-                        <span class="payment_name">{{__('menu.advertises')}}</span>
+                        <span class="payment_name">{{__('menu.toutes')}}</span>
                     </a>
                 </div>
                 <div class="col-md-6 col-12 mb-3 pb-lg-0 pb-md-0">

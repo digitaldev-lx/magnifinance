@@ -10,8 +10,8 @@ use App\EmployeeSchedule;
 use App\GatewayAccountDetail;
 use App\Http\Requests\StoreFrontBooking;
 use App\Leave;
-use App\Notifications\AdvertiseCompanyInfo;
-use App\Notifications\AdvertisePurchased;
+use App\Notifications\ToutCompanyInfo;
+use App\Notifications\ToutPurchased;
 use App\Notifications\SendPaymentLinkNotification;
 use App\OfficeLeave;
 use App\Role;
@@ -409,7 +409,7 @@ class BookingController extends AdminBaseController
 
         return Reply::success(__('app.paymentRequestSent'));
         /*$superadmins = User::notCustomer()->withoutGlobalScopes()->whereNull('company_id')->get();
-        Notification::send($superadmins, new AdvertisePurchased($advertise));*/
+        Notification::send($superadmins, new ToutPurchased($tout));*/
 
     }
 

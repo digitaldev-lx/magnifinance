@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Advertise;
+use App\Tout;
 use App\User;
 use App\Booking;
 use App\Category;
@@ -51,7 +51,7 @@ class ShowDashboard extends SuperAdminBaseController
                 ->where('payment_status', 'completed')
                 ->sum('amount_to_pay');
 
-            $totalAdvertises = Advertise::withoutGlobalScopes()->whereDate('paid_on', '>=', $startDate)
+            $totalToutes = Tout::withoutGlobalScopes()->whereDate('paid_on', '>=', $startDate)
                 ->whereDate('paid_on', '<=', $endDate)
                 ->where('status', 'completed')
                 ->sum('amount');
@@ -65,7 +65,7 @@ class ShowDashboard extends SuperAdminBaseController
                 ->whereDate('created_at', '<=', $endDate)
                 ->count();
             // return $totalCustomers;
-            return Reply::dataOnly(['status' => 'success', 'totalCustomers' => $totalCustomers, 'totalAdvertises' => $totalAdvertises, 'totalEarnings' => round($totalEarnings, 2), 'totalVendors' => $totalVendors, 'activeCompanies' => $activeCompanies, 'deActiveCompanies' => $deActiveCompanies,]);
+            return Reply::dataOnly(['status' => 'success', 'totalCustomers' => $totalCustomers, 'totalToutes' => $totalToutes, 'totalEarnings' => round($totalEarnings, 2), 'totalVendors' => $totalVendors, 'activeCompanies' => $activeCompanies, 'deActiveCompanies' => $deActiveCompanies,]);
         }
 
 

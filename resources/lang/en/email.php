@@ -31,7 +31,7 @@ return array(
     'congratulationNote13' => 'Recebeu esta mensagem porque recentemente fez registo em :name.',
     'excitedToHaveYou' => "Agradecidos pela sua confiança",
     'welcomeEmail' => 'Benvindo a',
-    'newAdvertiseRegistered' => 'Novo Anuncio Registado',
+    'newToutRegistered' => 'Novo Anuncio Registado',
     'congratsForYourNewAdvertising' => 'Felicitações pela sua nova publicidade',
     'newCompanyRegistered' => 'Novo registo',
     'hello' => 'Olá',
@@ -109,10 +109,10 @@ return array(
         ),
     'cheers' => 'Saúde',
     'newCompanyAddedBy' => 'Nova empresa adicionada por',
-    'newAdvertiseAddedBy' => 'Novo anuncio adicionado por',
+    'newToutAddedBy' => 'Novo anuncio adicionado por',
     'companyDetailsAreFollowing' => 'A seguir estão os detalhes da nova empresa adicionada',
-    'advertiseDetailsAreFollowing' => 'A seguir estão os detalhes do anuncio',
-    'advertiseInfoForComany' => '<p>Mais uma vez a SpotB agradece a sua utilização da plataforma. O nosso objetivo é ajudar no alcance do seu sucesso. Para isso disponibilizamos a possibilidade de anunciar o seu negócio e serviços a todos os consumidores de conteúdos e serviços da SpotB.</p>
+    'toutDetailsAreFollowing' => 'A seguir estão os detalhes do anuncio',
+    'toutInfoForComany' => '<p>Mais uma vez a SpotB agradece a sua utilização da plataforma. O nosso objetivo é ajudar no alcance do seu sucesso. Para isso disponibilizamos a possibilidade de anunciar o seu negócio e serviços a todos os consumidores de conteúdos e serviços da SpotB.</p>
                                 <p>Informamos assim que o seu anuncio foi publicado no local por si escolhido e com informações da sua responsabilidade.</p>
                                 <p>Os anuncios são publicados automaticamente logo após o seu pagamento e entre as datas escolhidas para a sua publicação.</p>
                                 <p>Quando existir mais do que um anunciante no mesmo local e no mesmo periodo, os anuncios são ordenados seguindo os seguintes parametros:</p>

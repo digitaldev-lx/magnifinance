@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdvertisesTable extends Migration
+class CreateToutesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAdvertisesTable extends Migration
      */
     public function up()
     {
-        Schema::create('advertises', function (Blueprint $table) {
+        Schema::create('toutes', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade')->onDelete('cascade');
@@ -51,6 +51,6 @@ class CreateAdvertisesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('advertises');
+        Schema::dropIfExists('toutes');
     }
 }

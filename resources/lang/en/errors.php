@@ -71,7 +71,7 @@ return array (
   'error' => 'error?',
   'errorMessage' => 'Some error occur, sorry for inconvenient',
   'invalidLink' => 'This link is not a valid url',
-  'adsAtLeast3Days' => 'Your advertisement must be at least 3 days long.',
+  'adsAtLeast3Days' => 'Your tout must be at least 3 days long.',
   'connectionTimeOut' => 'Connection timeout',
   'unknownError' => 'Unknown error occurred',
   'paymentFailed' => 'Payment failed',

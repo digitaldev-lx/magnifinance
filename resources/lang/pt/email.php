@@ -32,7 +32,7 @@ return array(
     'welcomeEmail' => 'Welcome to',
     'excitedToHaveYou' => "We're excited to have you with us",
     'newCompanyRegistered' => 'New company registered',
-    'newAdvertiseRegistered' => 'New Advertise Registered',
+    'newToutRegistered' => 'New tout Registered',
     'congratsForYourNewAdvertising' => 'Congratulations for your new advertising',
     'hello' => 'Hello',
     'regards' => 'Regards',
@@ -109,13 +109,13 @@ return array(
         ),
     'cheers' => 'Cheers',
     'newCompanyAddedBy' => 'New company added by',
-    'newAdvertiseAddedBy' => 'New advertise added by',
+    'newToutAddedBy' => 'New tout added by',
     'companyDetailsAreFollowing' => 'Following is the details of new added Company',
-    'advertiseDetailsAreFollowing' => 'Following is the details of new added Advertise',
-    'advertiseInfoForComany' => '<p>Once again SpotB thanks you for using the platform. Our goal is to help you achieve your success. For this we provide the possibility to advertise your business and services to all consumers of SpotB content and services.</p>
+    'toutDetailsAreFollowing' => 'Following is the details of new added tout',
+    'toutInfoForComany' => '<p>Once again SpotB thanks you for using the platform. Our goal is to help you achieve your success. For this we provide the possibility to tout your business and services to all consumers of SpotB content and services.</p>
                                 <p>We inform you that your ad has been published in the place chosen by you and with information of your responsibility.</p>
                                 <p>Ads are automatically published right after your payment and between the dates chosen for publication.</p>
-                                <p>When there is more than one advertiser in the same place and in the same period, the ads are ordered according to the following parameters:</p>
+                                <p>When there is more than one toutr in the same place and in the same period, the ads are ordered according to the following parameters:</p>
                                 <ul>
                                     <li>Higher amount paid</li>
                                     <li>Higher average daily amount</li>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Advertise;
+use App\Tout;
 use App\User;
 use App\Payment;
 use Carbon\Carbon;
@@ -290,7 +290,7 @@ class ReportController extends SuperAdminBaseController
             ->toJson();
     }
 
-    public function advertisesRevenue(Request $request)
+    public function toutesRevenue(Request $request)
     {
         $startDate = Carbon::createFromFormat($this->settings->date_format, $request->startDate)->format('Y-m-d');
         $endDate = Carbon::createFromFormat($this->settings->date_format, $request->endDate)->format('Y-m-d');
@@ -300,7 +300,7 @@ class ReportController extends SuperAdminBaseController
 
         foreach ($dateRange as $key => $date) {
             $data['labels'][] = date_format( $date, 'd-M');
-            $data['data'][] = Advertise::withoutGlobalScopes()
+            $data['data'][] = Tout::withoutGlobalScopes()
                 ->where('status', 'completed')->whereNotNull('paid_on')
                 ->whereDate('paid_on', '>=', $date)
                 ->whereDate('paid_on', '<=', $date)
@@ -310,13 +310,13 @@ class ReportController extends SuperAdminBaseController
         return Reply::dataOnly($data);
     }
 
-    public function advertisesRevenueTable(Request $request)
+    public function toutesRevenueTable(Request $request)
     {
 
         $startDate = Carbon::createFromFormat($this->settings->date_format, $request->startDate)->format('Y-m-d');
         $endDate = Carbon::createFromFormat($this->settings->date_format, $request->endDate)->format('Y-m-d');
 
-        $payments = Advertise::withoutGlobalScopes()
+        $payments = Tout::withoutGlobalScopes()
             ->where('status', 'completed')->whereNotNull('paid_on')
             ->whereDate('paid_on', '>=', $startDate)
             ->whereDate('paid_on', '<=', $endDate)

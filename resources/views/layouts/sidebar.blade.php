@@ -331,19 +331,19 @@
             </li>
         @endif
 
-        @if ($user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_advertise','create_advertise', 'update_advertise', 'delete_advertise']))
+        @if ($user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_tout','create_tout', 'update_tout', 'delete_tout']))
             <li class="nav-item">
                 @if($user->is_admin)
-                    <a href="{{ route('admin.advertises.index') }}"
-                       class="nav-link {{ request()->is('account/advertises/*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.toutes.index') }}"
+                       class="nav-link {{ request()->is('account/toutes/*') ? 'active' : '' }}">
                         @elseif($user->is_superadmin)
-                            <a href="{{ route('superadmin.advertises.index') }}"
-                               class="nav-link {{ request()->is('super-admin/advertises/*') ? 'active' : '' }}">
+                            <a href="{{ route('superadmin.toutes.index') }}"
+                               class="nav-link {{ request()->is('super-admin/toutes/*') ? 'active' : '' }}">
                                 @endif
                                 <i class="fa fa-bullhorn fa-2x"></i>
 
                                 <p>
-                                    {{__('menu.advertises')}}
+                                    {{__('menu.toutes')}}
                                 </p>
                             </a>
             </li>

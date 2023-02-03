@@ -24,7 +24,7 @@ class CompanySeeder extends Seeder
             'company_name' => 'Centro Ana Garcia',
             'company_email' => 'geral@centroanagarcia.com',
             'company_phone' => '00351963958684',
-            'address' => 'Rua dos Arneiros 32A, 1500-055 Lisboa',
+            'address' => 'Rua dos Arneiros 21C, 1500-055 Lisboa',
             'date_format' => 'd-m-Y',
             'time_format' => 'h:i a',
             'logo' => 'company.png',

@@ -231,14 +231,14 @@
                     @if(auth()->check())
                             @if(auth()->user()->is_admin)
                                 @if(isset($article))
-                                    <a href="{{route('admin.advertises.create' , ['id' => $article->id])}}" class="btn btn-link">{{__('app.advertiseHere')}}</a>
+                                    <a href="{{route('admin.toutes.create' , ['id' => $article->id])}}" class="btn btn-link">{{__('app.toutHere')}}</a>
                                 @else
-                                    <a href="{{route('admin.advertises.create')}}" class="btn btn-link">{{__('app.advertiseHere')}}</a>
+                                    <a href="{{route('admin.toutes.create')}}" class="btn btn-link">{{__('app.toutHere')}}</a>
 
                                 @endif
                             @endif
                         @else
-                            <a href="{{route('front.register')}}" class="btn btn-link">{{__('app.advertiseHere')}}</a>
+                            <a href="{{route('front.register')}}" class="btn btn-link">{{__('app.toutHere')}}</a>
                         @endif
                 </span>
                 </p>

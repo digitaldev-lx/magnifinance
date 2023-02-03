@@ -203,27 +203,27 @@
         <div class="col-10 col-md-10 col-lg-8 col-xl-8 offset-1 offset-md-1 offset-lg-2 offset-xl-2 adsContainer">
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-6 deal_detail_img">
-                    <img src="{{$advertise->advertise_image_url}}" class="adsImage" alt="{{ $advertise->title }} "/>
+                    <img src="{{$tout->tout_image_url}}" class="adsImage" alt="{{ $tout->title }} "/>
                 </div>
                 <div class="col-lg-6 col-md-6 deal_detail_box">
-                    <h2 class="title">{{ $advertise->title }}</h2>
-                    <p class="description">{{ $advertise->description }}</p>
+                    <h2 class="title">{{ $tout->title }}</h2>
+                    <p class="description">{{ $tout->description }}</p>
                     {{--                    <a href="{{route('front.vendorPage',$service->company->slug)}}"><h3 class="mt-lg-1 mt-4">{{ $service->company->company_name }}</h3></a>--}}
 
                     <div class="deal_detail_contact mt-1">
-                        <h6 class="info"><i class="fa fa-dot-circle-o mr-2"></i>{{ $advertise->info1 }}</h6>
-                        <h6 class="info">@if(!is_null($advertise->info2))<i
-                                class="fa fa-dot-circle-o mr-2"></i>{{ $advertise->info2 }}@endif</h6>
-                        <h6 class="info">@if(!is_null($advertise->info3))<i
-                                class="fa fa-dot-circle-o mr-2"></i>{{ $advertise->info3 }}@endif</h6>
+                        <h6 class="info"><i class="fa fa-dot-circle-o mr-2"></i>{{ $tout->info1 }}</h6>
+                        <h6 class="info">@if(!is_null($tout->info2))<i
+                                class="fa fa-dot-circle-o mr-2"></i>{{ $tout->info2 }}@endif</h6>
+                        <h6 class="info">@if(!is_null($tout->info3))<i
+                                class="fa fa-dot-circle-o mr-2"></i>{{ $tout->info3 }}@endif</h6>
                     </div>
-                    <div class="priceContainer {{$advertise->price == 0 ? 'd-none' : ''}}">
-                        <p class="badge badge-danger text-white text-bold mt-0 price">{{ $advertise->formated_price }}</p>
+                    <div class="priceContainer {{$tout->price == 0 ? 'd-none' : ''}}">
+                        <p class="badge badge-danger text-white text-bold mt-0 price">{{ $tout->formated_price }}</p>
                     </div>
 
                     <div class="call-to-action">
-                        <a href="{{$advertise->link}}"
-                           class="btn btn-dark btn-block">{{ $advertise->call_to_action }}</a>
+                        <a href="{{$tout->link}}"
+                           class="btn btn-dark btn-block">{{ $tout->call_to_action }}</a>
                     </div>
 
                 </div>
@@ -236,37 +236,37 @@
             style="border-radius: 10px">
             <div class="row text-center shadow-sm p-2 mb-5 bg-white rounded" style="border-radius: 10px">
                 <div class="col-md-12">
-                    <h4>{{__('app.advertise')}}</h4>
+                    <h4>{{__('app.tout')}}</h4>
                 </div>
             </div>
             <div class="row mt-3">
-                @if($advertise->ads_in_all_category == 'yes')
+                @if($tout->ads_in_all_category == 'yes')
                     <input type="hidden" name="ads_in_all_category" id="ads_in_all_category"
-                           value="{{$advertise->ads_in_all_category}}">
+                           value="{{$tout->ads_in_all_category}}">
                     <div class="col-md-12">
-                        <label id="label">{{__('app.advertiseAcrossThisCategory')}}</label>
+                        <label id="label">{{__('app.toutAcrossThisCategory')}}</label>
                         <div class="form-group">
                             <input type="text" class="form-control" readonly name="category_id" id="category_id"
-                                   value="{{$advertise->category->name}}">
+                                   value="{{$tout->category->name}}">
                         </div>
                     </div>
                 @else
                     <div class="col-md-12">
-                        <label id="label">{{__('app.advertiseInArticle')}}</label>
+                        <label id="label">{{__('app.toutInArticle')}}</label>
                         <div class="form-group">
                             <input type="text" class="form-control" readonly name="article_id" id="article_id"
-                                   value="{{$advertise->article->title}}">
+                                   value="{{$tout->article->title}}">
                         </div>
                     </div>
                 @endif
             </div>
             <div class="row mt-3">
                 <div class="col-md-6">
-                    <label id="label">{{__('app.advertise')}} {{__('app.from')}}</label>
+                    <label id="label">{{__('app.tout')}} {{__('app.from')}}</label>
 
                     <div class="form-group">
                         <input type="text" class="form-control" readonly name="from" id="from"
-                               placeholder="@lang('app.startDate')" value="{{$advertise->from}}">
+                               placeholder="@lang('app.startDate')" value="{{$tout->from}}">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -274,21 +274,21 @@
 
                     <div class="form-group">
                         <input type="text" class="form-control" readonly name="to" id="to"
-                               placeholder="@lang('app.endDate')" value="{{$advertise->to}}">
+                               placeholder="@lang('app.endDate')" value="{{$tout->to}}">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>{{__('app.amount')}}</label>
                         <input type="text" class="form-control" readonly name="amount"
-                               id="amount" value="{{$advertise->formated_amount_to_pay}}"/>
+                               id="amount" value="{{$tout->formated_amount_to_pay}}"/>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>{{__('app.averageDaily')}}</label>
                         <input type="text" class="form-control" name="avg_amount" readonly id="avg_amount"
-                               value="{{$advertise->formated_avg_amount_to_pay}}">
+                               value="{{$tout->formated_avg_amount_to_pay}}">
                     </div>
                 </div>
             </div>
@@ -299,7 +299,7 @@
         <div class="col-10 col-md-6 col-lg-4 col-xl-6 offset-1 offset-md-3 offset-lg-4 offset-xl-3">
             <div class="row">
                 <div class="col-md-6 col-12 mb-3 pb-lg-0 pb-md-0">
-                    <a class="payment_icon_name" href="{{route('admin.advertises.create')}}" id="back">
+                    <a class="payment_icon_name" href="{{route('admin.toutes.create')}}" id="back">
                         <div class="payment_icon_box">
                         <span>
                             <i class="fa fa-backward"></i>
@@ -340,7 +340,7 @@
                     type: "POST",
                     redirect: true,
                     async: false,
-                    data: {"_token" : "{{ csrf_token() }}", 'advertise_id' : {{$advertise->id }}, 'return_url' : 'advertises'},
+                    data: {"_token" : "{{ csrf_token() }}", 'tout_id' : {{$tout->id }}, 'return_url' : 'toutes'},
                     beforeSend: function ( xhr ) {
                         jQuery("#page-loader").removeClass("d-none");
                         $("#page-loader").show();
@@ -478,7 +478,7 @@
 
         $('body').on('click', '#submit-form', function () {
             $.easyAjax({
-                url: '{{route('admin.advertises.store')}}',
+                url: '{{route('admin.toutes.store')}}',
                 container: '#createForm',
                 type: "POST",
                 file: true,

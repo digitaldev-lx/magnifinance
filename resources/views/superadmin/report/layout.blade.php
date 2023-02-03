@@ -57,14 +57,14 @@
                 aria-selected="false">@lang('menu.customerReport')</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="customers-tab" data-toggle="tab" href="#advertises" role="tab" aria-controls="advertises"
-               aria-selected="false">@lang('menu.advertisesReport')</a>
+            <a class="nav-link" id="customers-tab" data-toggle="tab" href="#toutes" role="tab" aria-controls="toutes"
+               aria-selected="false">@lang('menu.toutesReport')</a>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="commission" role="tabpanel" aria-labelledby="commission-tab">@include('superadmin.report.commission')</div>
         <div class="tab-pane fade" id="customers" role="tabpanel" aria-labelledby="customers-tab">@include('superadmin.report.customer-report')</div>
-        <div class="tab-pane fade" id="advertises" role="tabpanel" aria-labelledby="advertises-tab">@include('superadmin.report.advertises')</div>
+        <div class="tab-pane fade" id="toutes" role="tabpanel" aria-labelledby="toutes-tab">@include('superadmin.report.toutes')</div>
     </div>
 @endsection
 

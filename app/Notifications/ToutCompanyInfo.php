@@ -2,13 +2,13 @@
 
 namespace App\Notifications;
 
-use App\Advertise;
+use App\Tout;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AdvertisePurchased extends BaseNotification implements ShouldQueue
+class ToutCompanyInfo extends BaseNotification implements ShouldQueue
 {
     use Queueable;
 
@@ -17,12 +17,12 @@ class AdvertisePurchased extends BaseNotification implements ShouldQueue
      *
      * @return void
      */
-    private $advertise;
+    private $tout;
 
-    public function __construct(Advertise $advertise)
+    public function __construct(Tout $tout)
     {
         parent::__construct();
-        $this->advertise = $advertise;
+        $this->tout = $tout;
     }
 
     /**
@@ -34,7 +34,25 @@ class AdvertisePurchased extends BaseNotification implements ShouldQueue
     // @codingStandardsIgnoreLine
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    // @codingStandardsIgnoreLine
+    public function toArray($notifiable)
+    {
+        return [
+            'booking_id' => $this->tout->id,
+            'from' => $this->tout->from,
+            'to' => $this->tout->to,
+            'amount' => $this->tout->amount,
+            'paid_on' => $this->tout->paid_on,
+        ];
     }
 
     /**
@@ -48,6 +66,6 @@ class AdvertisePurchased extends BaseNotification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject(__('email.appointo', ['name' => $this->globalSetting->company_name]))
-            ->view('emails.new_advertise_alert_to_superadmin', ['advertise' => $this->advertise, 'socialLinks' => $this->socialLinks, 'globalSetting' => $this->globalSetting]);
+            ->view('emails.new_tout_alert_to_company', ['tout' => $this->tout, 'socialLinks' => $this->socialLinks, 'globalSetting' => $this->globalSetting]);
     }
 }

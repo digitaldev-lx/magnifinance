@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Advertise;
+use App\Tout;
 use App\Article;
 use App\Category;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
-use App\Http\Requests\Advertise\StoreAdvertise;
-use App\Http\Requests\Advertise\UpdateAdvertise;
+use App\Http\Requests\Tout\StoreTout;
+use App\Http\Requests\Tout\UpdateTout;
 use App\Location;
 use App\Scopes\CompanyScope;
 use App\Services\ImagesManager;
@@ -16,14 +16,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
-class AdvertiseController extends SuperAdminBaseController
+class ToutController extends SuperAdminBaseController
 {
 
     public function __construct()
     {
         parent::__construct();
         $this->image = new ImagesManager();
-        view()->share('pageTitle', __('menu.advertises'));
+        view()->share('pageTitle', __('menu.toutes'));
     }
 
     /**
@@ -33,16 +33,16 @@ class AdvertiseController extends SuperAdminBaseController
      */
     public function index()
     {
-        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission(['read_advertise']), 403);
+        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission(['read_tout']), 403);
 
         if (\request()->ajax()) {
-            $advertises = Advertise::orderByDesc('created_at')->get();
+            $toutes = Tout::orderByDesc('created_at')->get();
 
-            return \datatables()->of($advertises)
+            return \datatables()->of($toutes)
                 ->addColumn('action', function ($row) {
                     $action = '<div class="text-right">';
 
-                    $action .= '<a href="' . route('superadmin.advertises.edit', $row->id) . '" class="btn btn-primary btn-circle"
+                    $action .= '<a href="' . route('superadmin.toutes.edit', $row->id) . '" class="btn btn-primary btn-circle"
                       data-toggle="tooltip" data-original-title="' . __('app.edit') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
 
                     /*if (($this->user->is_admin || $this->user->can('delete_article')) && $row->id !== $this->user->id) {
@@ -55,7 +55,7 @@ class AdvertiseController extends SuperAdminBaseController
                     return $action;
                 })
                 /*->addColumn('image', function ($row) {
-                    return '<img src="' . $row->advertise_image_url . '" class="img" width="120em"/> ';
+                    return '<img src="' . $row->tout_image_url . '" class="img" width="120em"/> ';
                 })*/
                 ->editColumn('status', function ($row) {
                     if ($row->status == 'pending') {
@@ -77,7 +77,7 @@ class AdvertiseController extends SuperAdminBaseController
                 ->editColumn('created_at', function ($row) {
                     return $row->created_at;
                 })
-                ->editColumn('advertise_local', function ($row) {
+                ->editColumn('tout_local', function ($row) {
                     if ($row->category !== null) {
                         return '<label class="badge badge-primary">' . __('app.category') . '</label>';
                     } else {
@@ -85,7 +85,7 @@ class AdvertiseController extends SuperAdminBaseController
 
                     }
                 })
-                ->editColumn('advertise_in', function ($row) {
+                ->editColumn('tout_in', function ($row) {
                     if (!is_null($row->article)) {
                         return '<label class="badge badge-primary">' . $row->article->limit_title . '</label>';
                     } elseif(!is_null($row->category)) {
@@ -94,11 +94,11 @@ class AdvertiseController extends SuperAdminBaseController
                     }
                 })
                 ->addIndexColumn()
-                ->rawColumns(['action', 'image', 'status', 'advertise_local', 'advertise_in'])
+                ->rawColumns(['action', 'image', 'status', 'tout_local', 'tout_in'])
                 ->toJson();
         }
 
-        return view('superadmin.advertises.index');
+        return view('superadmin.toutes.index');
     }
 
     /**
@@ -108,7 +108,7 @@ class AdvertiseController extends SuperAdminBaseController
      */
     public function create(Request $request)
     {
-        /*abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission(['create_advertise']), 403);
+        /*abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission(['create_tout']), 403);
         $id = $request->get('id');
         $article = !is_null($id) ? Article::withoutGlobalScopes()->whereId($id)->first() : null;
         $credentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
@@ -117,7 +117,7 @@ class AdvertiseController extends SuperAdminBaseController
         $categories = Category::withoutGlobalScopes()->whereStatus('active')->get();
         $articles = Article::published()->withoutGlobalScope(CompanyScope::class)->get();
         $locale = App::getLocale();
-        return view('superadmin.advertises.create', compact('categories', 'articles', 'article', 'locale', 'locations', 'credentials'));
+        return view('superadmin.toutes.create', compact('categories', 'articles', 'article', 'locale', 'locations', 'credentials'));
     */
     }
 
@@ -127,11 +127,11 @@ class AdvertiseController extends SuperAdminBaseController
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAdvertise $request)
+    public function store(StoreTout $request)
     {
         /*try{
             DB::beginTransaction();
-            $advertise = new Advertise();
+            $tout = new Tout();
             $credentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
 
             $data = $request->except( 'data');
@@ -139,15 +139,15 @@ class AdvertiseController extends SuperAdminBaseController
             $data['status'] = "pending";
             if ($request->hasFile('image')) {
 
-                $filePath = $this->image->storeImage($request, 'advertises');
+                $filePath = $this->image->storeImage($request, 'toutes');
 
                 $data['image'] = $filePath;
             }
-            $advertise = $advertise->create($data);
+            $tout = $tout->create($data);
             DB::commit();
-            $advertise = $advertise->load('category', 'article');
+            $tout = $tout->load('category', 'article');
             $locale = App::getLocale();
-            $view = view('superadmin.advertises.advertise_payment', compact('advertise', 'locale', 'credentials'))->render();
+            $view = view('superadmin.toutes.tout_payment', compact('tout', 'locale', 'credentials'))->render();
         }catch (Exception $e){
             DB::rollBack();
             abort_and_log(403, $e->getMessage());
@@ -166,7 +166,7 @@ class AdvertiseController extends SuperAdminBaseController
     public function show($id)
     {
         /*view()->share('pageTitle', __('messages.paymentSuccess'));
-        return view('admin.advertises.payment_success');*/
+        return view('admin.toutes.payment_success');*/
     }
 
     /**
@@ -177,12 +177,12 @@ class AdvertiseController extends SuperAdminBaseController
      */
     public function edit($id)
     {
-        $advertise = Advertise::find($id);
+        $tout = Tout::find($id);
         $locations = Location::withoutGlobalScope(CompanyScope::class)->orderBy('name', 'ASC')->get();
         $categories = Category::withoutGlobalScopes()->whereStatus('active')->get();
         $articles = Article::published()->withoutGlobalScope(CompanyScope::class)->get();
         $locale = App::getLocale();
-        return view('superadmin.advertises.edit', compact('advertise', 'locations', 'categories', 'articles', 'locale'));
+        return view('superadmin.toutes.edit', compact('tout', 'locations', 'categories', 'articles', 'locale'));
         //todo: fazer o editar do anuncio e criar campos de contagem de impressões e cliques em cada anuncio
     }
 
@@ -193,42 +193,42 @@ class AdvertiseController extends SuperAdminBaseController
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAdvertise $request, $id)
+    public function update(UpdateTout $request, $id)
     {
         try {
             DB::beginTransaction();
-            $advertise = Advertise::find($id);
-            $advertise->ads_in_all_category = $request->ads_in_all_category;
-            $advertise->category_id = $request->ads_in_all_category == 'yes' ? $request->category_id : null;
-            $advertise->article_id = $request->ads_in_all_category == 'no' ? $request->article_id : null;
-            $advertise->location_id = $request->location_id;
-            $advertise->description = $request->description;
-            $advertise->info1 = $request->info1;
-            $advertise->info2 = $request->info2;
-            $advertise->info3 = $request->info3;
-            $advertise->from = $request->from;
-            $advertise->to = $request->to;
-            $advertise->call_to_action = $request->call_to_action;
-            $advertise->link = $request->link;
-            $advertise->price = $request->price;
-            $advertise->status = $request->status;
+            $tout = Tout::find($id);
+            $tout->ads_in_all_category = $request->ads_in_all_category;
+            $tout->category_id = $request->ads_in_all_category == 'yes' ? $request->category_id : null;
+            $tout->article_id = $request->ads_in_all_category == 'no' ? $request->article_id : null;
+            $tout->location_id = $request->location_id;
+            $tout->description = $request->description;
+            $tout->info1 = $request->info1;
+            $tout->info2 = $request->info2;
+            $tout->info3 = $request->info3;
+            $tout->from = $request->from;
+            $tout->to = $request->to;
+            $tout->call_to_action = $request->call_to_action;
+            $tout->link = $request->link;
+            $tout->price = $request->price;
+            $tout->status = $request->status;
 
             if ($request->hasFile('image')) {
 
-                $this->image->deleteImage($advertise->image,'advertises');
+                $this->image->deleteImage($tout->image,'toutes');
 
-                $filePath = $this->image->storeImage($request, 'advertises');
+                $filePath = $this->image->storeImage($request, 'toutes');
 
-                $advertise->image = $filePath;
+                $tout->image = $filePath;
             }
-            $advertise->save();
+            $tout->save();
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             abort_and_log(403, $e->getMessage());
         }
 
-        return Reply::redirect(route('superadmin.advertises.index'), __('messages.updatedSuccessfully'));
+        return Reply::redirect(route('superadmin.toutes.index'), __('messages.updatedSuccessfully'));
     }
 
     /**

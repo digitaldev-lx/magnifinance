@@ -98,16 +98,16 @@
 @endpush
 
 @section('content')
+    <div id="createToutContainer">
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-dark">
                     <div class="card-header">
-                        <h3 class="card-title">@lang('app.add') @lang('menu.advertises')</h3>
+                        <h3 class="card-title">@lang('app.add') @lang('menu.toutes')</h3>
                     </div>
                     <div class="card-body">
-                        <form role="form" id="editForm" class="ajax-form" method="POST">
+                        <form role="form" id="createForm" class="ajax-form" method="POST">
                             @csrf
-                            @method('PUT')
                             <div class="row">
 
                                 <div class="col-md-6">
@@ -117,8 +117,8 @@
                                                 <label>{{__('app.ads_in_all_category')}}</label>
                                                 <select name="ads_in_all_category" id="ads_in_all_category"
                                                         class="form-control form-control-md ">
-                                                    <option {{$advertise->ads_in_all_category == 'yes' ? 'selected' : ''}} value="yes">{{__('app.yes')}}</option>
-                                                    <option {{$advertise->ads_in_all_category == 'no' ? 'selected' : ''}} value="no">{{__('app.no')}}</option>
+                                                    <option value="yes">{{__('app.yes')}}</option>
+                                                    <option value="no">{{__('app.no')}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -129,19 +129,27 @@
                                                         class="form-control form-control-md select2">
                                                     <option value="">{{__('app.selectCategory')}}</option>
                                                     @foreach($categories as $category)
-                                                            <option {{$category->id == $advertise->category_id ? 'selected' : ''}} value="{{ $category->id }}">{{ $category->name }}</option>
+                                                        @if(!is_null($article))
+                                                            <option {{$category->id == $article->category_id ? 'selected' : ''}} value="{{ $category->id }}">{{ $category->name }}</option>
+                                                        @else
+                                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                        @endif
 
                                                     @endforeach
                                                 </select>
                                             </div>
                                             <div class="form-group" id="article_div">
-                                                <label id="label">{{__('app.advertiseInArticle')}}</label>
+                                                <label id="label">{{__('app.toutInArticle')}}</label>
                                                 <select name="article_id" id="article_id"
                                                         class="form-control form-control-md select2">
                                                     <option value="">{{__('app.selectArticle')}}</option>
+                                                    @php($art = $article)
                                                     @foreach($articles as $article)
-                                                            <option {{$article->id == $advertise->article_id ? 'selected' : ''}} value="{{ $article->id }}">{{ $article->title }}</option>
-
+                                                        @if(!is_null($art))
+                                                            <option {{$article->id == $art->id ? 'selected' : ''}} value="{{ $article->id }}">{{ $article->title }}</option>
+                                                        @else
+                                                            <option value="{{ $article->id }}">{{ $article->title }}</option>
+                                                        @endif
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -149,7 +157,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>@lang('app.title') </label>
-                                                <input type="text" class="form-control" name="title" id="title" value="{{$advertise->title}}"
+                                                <input type="text" class="form-control" name="title" id="title" value=""
                                                        autocomplete="off">
                                             </div>
                                         </div>
@@ -160,7 +168,7 @@
                                                     <select name="location_id" id="location_id" class="form-control form-control-md">
                                                         <option value="">{{ __('front.allLocations') }}</option>
                                                         @foreach($locations as $location)
-                                                            <option {{$location->id == $advertise->location_id ? 'selected' : ''}} value="{{ $location->id }}">{{ $location->name }}</option>
+                                                            <option value="{{ $location->id }}">{{ $location->name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -170,21 +178,21 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>{{__('Info 1')}}</label>
-                                                <input type="text" class="form-control" name="info1" id="info1" value="{{$advertise->info1}}"
+                                                <input type="text" class="form-control" name="info1" id="info1" value=""
                                                        autocomplete="off">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>{{__('Info 2')}}</label>
-                                                <input type="text" class="form-control" name="info2" id="info2" value="{{$advertise->info2}}"
+                                                <input type="text" class="form-control" name="info2" id="info2" value=""
                                                        autocomplete="off">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>{{__('Info 3')}}</label>
-                                                <input type="text" class="form-control" name="info3" id="info3" value="{{$advertise->info3}}"
+                                                <input type="text" class="form-control" name="info3" id="info3" value=""
                                                        autocomplete="off">
                                             </div>
                                         </div>
@@ -197,13 +205,13 @@
                                             <div class="form-group">
                                                 <label>@lang('app.description') <small>(Min 150 - Max 200)</small> - <span class="text-bold" id="charNum">0</span> {{__('app.characters')}}</label>
                                                 <textarea type="text" class="form-control" name="description" onkeyup="countChar(this)"
-                                                          id="description">{{$advertise->description}}</textarea>
+                                                          id="description"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>{{__('Call To Action')}}</label>
-                                                <input type="text" class="form-control" name="call_to_action" id="call_to_action" value="{{$advertise->call_to_action}}"
+                                                <input type="text" class="form-control" name="call_to_action" id="call_to_action" value=""
                                                        autocomplete="off">
                                             </div>
                                         </div>
@@ -212,28 +220,17 @@
                                             <div class="form-group">
                                                 <label>{{__('Link')}} <span class="font-weight-bold red invalid-link"></span>
                                                 </label>
-                                                <input type="text" class="form-control" name="link" id="link" value="{{$advertise->link}}"
+                                                <input type="text" class="form-control" name="link" id="link" value=""
                                                        autocomplete="off">
 
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>{{__('app.price')}}</label>
-                                                <input type="number" class="form-control" placeholder="0.00" required name="price" min="0" value="{{$advertise->price}}" step="0.01" title="Currency" pattern="^\d+(?:\.\d{1,2})?$"
+                                                <input type="number" class="form-control" placeholder="0.00" required name="price" min="0" value="0" step="0.01" title="Currency" pattern="^\d+(?:\.\d{1,2})?$"
                                                        onblur="this.parentNode.parentNode.style.backgroundColor=/^\d+(?:\.\d{1,2})?$/.test(this.value)?'inherit':'red'" />
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>{{__('app.status')}}</label>
-                                                <select name="status" id="status"
-                                                        class="form-control form-control-md ">
-                                                    <option {{$advertise->status == 'completed' ? 'selected' : ''}} value="Completed">{{__('app.completed')}}</option>
-                                                    <option {{$advertise->status == 'pending' ? 'selected' : ''}} value="Pending">{{__('app.pending')}}</option>
-                                                </select>
                                             </div>
                                         </div>
 
@@ -247,7 +244,7 @@
                                                 <label for="image">@lang('app.image')</label>
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <input type="file" id="input-file-now" name="image" accept=".png,.jpg,.jpeg" data-default-file="{{ asset($advertise->image)  }}" class="dropify" />
+                                                        <input type="file" id="input-file-now" name="image" accept=".png,.jpg,.jpeg" data-default-file="{{ asset('img/no-image.jpg')  }}" class="dropify" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -258,15 +255,15 @@
                                 <div class="col-md-6 bg-gray-light p-3 shadow-2" style="border-radius: 10px">
                                     <div class="row text-center shadow-sm p-2 mb-5 bg-white rounded" style="border-radius: 10px">
                                         <div class="col-md-12">
-                                            <h4>{{__('app.advertise')}}</h4>
+                                            <h4>{{__('app.tout')}}</h4>
                                         </div>
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col-md-6">
-                                            <label id="label">{{__('app.advertise')}} {{__('app.from')}}</label>
+                                            <label id="label">{{__('app.tout')}} {{__('app.from')}}</label>
 
                                             <div class="form-group">
-                                                <input type="text" class="form-control datepicker" name="from" id="from" value="{{$advertise->from}}"
+                                                <input type="text" class="form-control datepicker" name="from" id="from"
                                                        placeholder="@lang('app.startDate')" required>
                                             </div>
                                         </div>
@@ -274,20 +271,21 @@
                                             <label id="label"> {{__('app.to')}}</label>
 
                                             <div class="form-group">
-                                                <input type="text" class="form-control datepicker" name="to" id="to" value="{{$advertise->to}}"
+                                                <input type="text" class="form-control datepicker" name="to" id="to"
                                                        placeholder="@lang('app.endDate')" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>{{__('app.amount')}}</label>
-                                                <input type="text" class="form-control" placeholder="0.00" required readonly name="amount" id="amount" value="{{$advertise->formated_amount_to_pay}}" title="{{__('app.amount')}}" />
+                                                <input type="number" class="form-control" placeholder="0.00" required name="amount" id="amount" min="0" value="0" step="0.01" title="{{__('app.amount')}}" pattern="^\d+(?:\.\d{1,2})?$"
+                                                       onblur="this.parentNode.parentNode.style.backgroundColor=/^\d+(?:\.\d{1,2})?$/.test(this.value)?'inherit':'red'" />
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>{{__('app.averageDaily')}}</label>
-                                                <input type="text" class="form-control" name="avg_amount" readonly id="avg_amount" value="{{$advertise->formated_avg_amount_to_pay}}">
+                                                <input type="text" class="form-control" name="avg_amount" readonly id="avg_amount" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -296,8 +294,8 @@
 
                                 <div class="col-md-12 mt-3">
                                     <div class="form-group">
-                                        <button type="button" id="save-form" class="btn btn-success btn-light-round">
-                                            <i class="fa fa-check mr-2"></i>{{__('app.save')}}
+                                        <button type="button" id="submit-form" class="btn btn-success btn-light-round">
+                                            <i class="fa fa-check mr-2"></i>{{__('app.submit')}}
                                         </button>
                                     </div>
                                 </div>
@@ -309,12 +307,15 @@
                 <!-- /.card -->
             </div>
         </div>
+    </div>
 
 @endsection
 
 @push('footer-js')
     <script src="{{ asset('front/js/bootstrap-datepicker.min.js') }}"></script>
-
+    @if($credentials->stripe_status == 'active')
+        <script src="https://js.stripe.com/v3/"></script>
+    @endif
     <script>
         adsDays = 0;
         function validateURL(textval) {
@@ -368,6 +369,17 @@
                 }
             )
 
+            $("#from").change(function (){
+                calculateAdsDuration()
+            })
+
+            $("#to").change(function (){
+                calculateAdsDuration()
+            })
+
+            $("#amount").change(function (){
+                calculateAvgAmount()
+            })
         });
 
         $('.datepicker').datepicker({
@@ -390,8 +402,6 @@
             }
         });
 
-
-
         $('#ads_in_all_category').change(function () {
             if ($(this).val() == "no") {
                 $("#article_div").removeClass('d-none');
@@ -407,17 +417,8 @@
         });
 
         $(document).ready(function () {
-            let ads_in_all_category = $('#ads_in_all_category').val()
-            if(ads_in_all_category == 'no'){
-                $("#category_div").addClass('d-none');
-                $("#category_id").prop('disabled', true);
-            }else{
-                $("#article_div").addClass('d-none');
-                $("#article_id").prop('disabled', true);
-            }
-
-
-
+            $("#article_div").addClass('d-none');
+            $("#article_id").prop('disabled', true);
         })
 
         function isNumberKey(evt) {
@@ -427,17 +428,20 @@
             return true;
         }
 
-        $('body').on('click', '#save-form', function() {
+
+        $('body').on('click', '#submit-form', function() {
             $.easyAjax({
-                url: '{{route('superadmin.advertises.update', $advertise->id)}}',
-                headers: { 'X-CSRF-TOKEN': '{{csrf_token()}}' },
-                container: '#editForm',
+                url: '{{route('admin.toutes.store')}}',
+                container: '#createForm',
                 type: "POST",
                 file: true,
                 formReset:false,
-                data: {data: $('#editForm').serialize()},
+                data: {data: $('#createForm').serialize()},
                 success: function (response){
-
+                    console.log(response);
+                    if(response.status){
+                        $("#createToutContainer").html(response.view)
+                    }
                 },
                 error: function (error){
                     console.log(error);

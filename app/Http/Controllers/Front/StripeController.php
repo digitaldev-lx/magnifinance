@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Advertise;
-use App\Notifications\AdvertiseCompanyInfo;
-use App\Notifications\AdvertisePurchased;
+use App\Tout;
+use App\Notifications\ToutCompanyInfo;
+use App\Notifications\ToutPurchased;
 use App\Notifications\CompanyUpdatedPlan;
 use App\Package;
 use App\Services\StripeCustomerManager;
@@ -153,12 +153,12 @@ class StripeController extends Controller
                 ];
             }
 
-        } elseif (isset($request->advertise_id)) {
-            $advertise = Advertise::find($request->advertise_id);
+        } elseif (isset($request->tout_id)) {
+            $tout = Tout::find($request->tout_id);
 
             $line_items[] = [
-                'name' => __('app.advertise') . ' ' . __('app.from') . ' ' . $advertise->from . ' ' . __('app.to') . ' ' . $advertise->to,
-                'amount' => round(currencyConvertedPrice(company()->id, $advertise->amount * 100), 2),
+                'name' => __('app.tout') . ' ' . __('app.from') . ' ' . $tout->from . ' ' . __('app.to') . ' ' . $tout->to,
+                'amount' => round(currencyConvertedPrice(company()->id, $tout->amount * 100), 2),
                 'currency' => $this->settings->currency->currency_code,
                 'quantity' => 1,
             ];
@@ -166,7 +166,7 @@ class StripeController extends Controller
             $data = [
                 'payment_method_types' => ['card'],
                 'line_items' => [$line_items],
-                'success_url' => route('front.afterStripePayment', ['return_url' => $request->return_url, 'advertise_id' => $advertise->id]),
+                'success_url' => route('front.afterStripePayment', ['return_url' => $request->return_url, 'tout_id' => $tout->id]),
                 'cancel_url' => route('front.payment-gateway'),
             ];
 
@@ -215,8 +215,8 @@ class StripeController extends Controller
             );
         }
 
-        if (isset($request->advertise_id)) {
-            $advertise = Advertise::whereId($request->advertise_id)->first();
+        if (isset($request->tout_id)) {
+            $tout = Tout::whereId($request->tout_id)->first();
         }elseif(isset($request->booking_id) && session()->has('stripe_session')) {
             $invoice = Booking::where(['id' => $request->booking_id, 'user_id' => Auth::user()->id])->first();
         }
@@ -332,23 +332,23 @@ class StripeController extends Controller
             return Reply::redirect(route('admin.billing.index'), 'Plan has been subscribed');
 
         } else {
-            $advertise->transaction_id = $payment_method->id;
+            $tout->transaction_id = $payment_method->id;
 
-            $advertise->paid_on = Carbon::now();
-            $advertise->status = $payment_method->status == 'succeeded' ? 'completed' : 'pending';
+            $tout->paid_on = Carbon::now();
+            $tout->status = $payment_method->status == 'succeeded' ? 'completed' : 'pending';
 
-            $advertise->save();
+            $tout->save();
 
-            if($advertise->company->magnifinance_active){
-                $advertise->emitDocument();
+            if($tout->company->magnifinance_active){
+                $tout->emitDocument();
             }
 
-            $formatted_amount = $advertise->formated_amount_to_pay;
+            $formatted_amount = $tout->formated_amount_to_pay;
 
-            $admins = User::allAdministrators()->where('company_id', $advertise->company_id)->first();
+            $admins = User::allAdministrators()->where('company_id', $tout->company_id)->first();
             $superadmins = User::notCustomer()->withoutGlobalScopes()->whereNull('company_id')->get();
-            Notification::send($admins, new AdvertiseCompanyInfo($advertise));
-            Notification::send($superadmins, new AdvertisePurchased($advertise));
+            Notification::send($admins, new ToutCompanyInfo($tout));
+            Notification::send($superadmins, new ToutPurchased($tout));
         }
 
         Session::put('success', __('messages.paymentSuccessAmount') . $formatted_amount);
@@ -361,9 +361,9 @@ class StripeController extends Controller
 
             return redirect()->route('admin.calendar');
 
-        } elseif ($return_url == 'advertises') {
+        } elseif ($return_url == 'toutes') {
 
-            return redirect()->route('admin.advertises.show', $advertise->id);
+            return redirect()->route('admin.toutes.show', $tout->id);
         }
         elseif ($return_url == 'packages') {
 
@@ -378,11 +378,11 @@ class StripeController extends Controller
             return $this->redirectToPayment($request->booking_id, null, 'Payment success');
 
         }
-        return $this->redirectToPayment(null, $request->advertise_id, 'Payment success');
+        return $this->redirectToPayment(null, $request->tout_id, 'Payment success');
 
     }
 
-    public function redirectToPayment($bookingId = null, $advertiseId = null, $message)
+    public function redirectToPayment($bookingId = null, $toutId = null, $message)
     {
         if ($bookingId == null) {
             return redirect()->route('front.payment.success')->with(['message' => $message]);

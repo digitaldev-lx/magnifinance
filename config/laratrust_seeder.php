@@ -61,7 +61,7 @@ return [
             'superadmin' => 'm',
             'administrator' => 'c,r,u',
         ],
-        'advertise' => [
+        'tout' => [
             'superadmin' => 'm',
             'administrator' => 'c,r,u',
         ],

@@ -148,10 +148,10 @@
                 <span class="float-right">
                     @if(auth()->check())
                         @if(auth()->user()->is_admin)
-                            <a href="{{route('admin.advertises.create' , ['id' => $article->id])}}" class="btn btn-link">{{__('app.advertiseHere')}}</a>
+                            <a href="{{route('admin.toutes.create' , ['id' => $article->id])}}" class="btn btn-link">{{__('app.toutHere')}}</a>
                         @endif
                     @else
-                        <a href="{{route('front.register')}}" class="btn btn-link">{{__('app.advertiseHere')}}</a>
+                        <a href="{{route('front.register')}}" class="btn btn-link">{{__('app.toutHere')}}</a>
                     @endif
                 </span>
                 </p>

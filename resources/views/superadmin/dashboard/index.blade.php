@@ -179,8 +179,8 @@
                 <div class="info-box">
                     <span class="info-box-icon bg-primary"><i class="fa fa-bullhorn"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">{{__('modules.dashboard.totalInAdvertises')}}</span>
-                        <span class="info-box-number" id="total-advertises">0</span>
+                        <span class="info-box-text">{{__('modules.dashboard.totalInToutes')}}</span>
+                        <span class="info-box-number" id="total-toutes">0</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -225,9 +225,9 @@
                 <div class="col-lg-12 ">
                     <div class="info-box">
                         <div class="info-box-content">
-                            <h6>@lang('menu.advertisesRevenue')</h6>
-                            <div id="advertises-revenue-graph-container">
-                                <canvas id="advertisesRevenueChart"></canvas>
+                            <h6>@lang('menu.toutesRevenue')</h6>
+                            <div id="toutes-revenue-graph-container">
+                                <canvas id="toutesRevenueChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -616,16 +616,16 @@
                     'line'
                 );
         }
-    function advertisesRevenue_callback(startDate,endDate) {
+    function toutesRevenue_callback(startDate,endDate) {
         chartRequest(
-            '{{ route("superadmin.reports.advertisesRevenueChart") }}',
+            '{{ route("superadmin.reports.toutesRevenueChart") }}',
             {
                 startDate: startDate,
                 endDate: endDate,
             },
-            'advertisesRevenueChart',
-            'advertises-revenue-graph-container',
-            '@lang("menu.advertisesRevenue")',
+            'toutesRevenueChart',
+            'toutes-revenue-graph-container',
+            '@lang("menu.toutesRevenue")',
             'line'
         );
     }
@@ -639,7 +639,7 @@
             newCustomers_callback(startDate,endDate);
             newVendors_callback(startDate,endDate);
             commissionRevenue_callback(startDate,endDate);
-            advertisesRevenue_callback(startDate,endDate);
+            toutesRevenue_callback(startDate,endDate);
             $.easyAjax({
                 type: 'GET',
                 url: '{{ route("superadmin.dashboard") }}',
@@ -653,7 +653,7 @@
                         $('#total-customers').html(response.totalCustomers);
                         $('#total-vendors').html(response.totalVendors);
                         $('#total-earning').html(response.totalEarnings);
-                        $('#total-advertises').html(response.totalAdvertises);
+                        $('#total-toutes').html(response.totalToutes);
                     }
                 }
             });

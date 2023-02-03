@@ -12,10 +12,10 @@
         padding: 9px 15px;
         border: 1px solid #ccc;
     }
-    #advertisesRevenueChart {
+    #toutesRevenueChart {
         height: 400px !important;
     }
-    #advertisesRevenueTable {
+    #toutesRevenueTable {
         width: 100% !important;
     }
 </style>
@@ -38,17 +38,17 @@
                 <!-- Custom Tabs -->
                 <div class="card">
                     <div class="card-header d-flex p-0">
-                        <h3 class="card-title p-3">{{__('menu.advertisesRevenue')}}</h3>
+                        <h3 class="card-title p-3">{{__('menu.toutesRevenue')}}</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_1">
-                                <div id="advertises-revenue-graph-container">
-                                    <canvas id="advertisesRevenueChart"></canvas>
+                                <div id="toutes-revenue-graph-container">
+                                    <canvas id="toutesRevenueChart"></canvas>
                                 </div> <hr>
                                 <div class="table-responsive">
-                                    <table id="advertisesRevenueTable" class="table">
+                                    <table id="toutesRevenueTable" class="table">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -94,19 +94,19 @@
                 $('#end-date').val(end.format('YYYY-MM-DD'));
 
                 chartRequest(
-                    '{{ route("superadmin.reports.advertisesRevenueChart") }}',
+                    '{{ route("superadmin.reports.toutesRevenueChart") }}',
                     {
                         startDate: $('#start-date').val(),
                         endDate: $('#end-date').val(),
                     },
-                    'advertisesRevenueChart',
-                    'advertises-revenue-graph-container',
-                    '@lang("menu.advertisesRevenue")',
+                    'toutesRevenueChart',
+                    'toutes-revenue-graph-container',
+                    '@lang("menu.toutesRevenue")',
                 );
 
                 renderTable(
-                    'advertisesRevenueTable',
-                    '{!! route('superadmin.reports.advertisesRevenueTable') !!}', {
+                    'toutesRevenueTable',
+                    '{!! route('superadmin.reports.toutesRevenueTable') !!}', {
                         "startDate": $('#start-date').val(),
                         "endDate": $('#end-date').val(),
                     },

@@ -294,7 +294,7 @@ return array (
     'ActiveCompanies' => 'Active Companies',
     'InActiveCompanies' => 'Inactive Companies',
     'totalEarning' => 'Total Earnings',
-    'totalInAdvertises' => 'Total In Advertises',
+    'totalInToutes' => 'Total In Toutes',
     'recentBookings' => 'Recent Bookings',
     'walkInBookings' => 'Walk-In Bookings',
     'onlineBookings' => 'Online Bookings',

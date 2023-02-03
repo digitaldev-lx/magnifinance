@@ -39,12 +39,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('articles/{article}', 'ArticleController@update')->name('articles.update');
             Route::post('articles/approve/{article}', 'ArticleController@approve')->name('articles.approve');
 
-            Route::post('advertises/update/{id}', [
-                'as' => 'advertises.update',
-                'uses' => 'AdvertiseController@update'
+            Route::post('toutes/update/{id}', [
+                'as' => 'toutes.update',
+                'uses' => 'ToutController@update'
             ]);
 
-            Route::resource('advertises', 'AdvertiseController', ['except' => ['update']]);
+            Route::resource('toutes', 'ToutController', ['except' => ['update']]);
 
             Route::resources([
                 'pages' => 'PageController',
@@ -80,7 +80,7 @@ Route::group(['middleware' => 'auth'], function () {
                 'ratings' => 'RatingController',
                 'social-auth-settings' => 'SocialAuthSettingController',
                 'articles'     => 'ArticleController',
-                'advertises'     => 'AdvertiseController'
+                'toutes'     => 'ToutController'
             ]);
 
             Route::get('payment-settings/offline-payments', ['uses' => 'PaymentSettingController@offlinePayments'])->name('payment-settings.offlinePayments');
@@ -127,11 +127,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('reports/newCustomers', ['uses' => 'ReportController@newCustomers'])->name('reports.newCustomersChart');
             Route::post('reports/newVendors', ['uses' => 'ReportController@newVendors'])->name('reports.newVendorsChart');
             Route::post('reports/commissionRevenue', ['uses' => 'ReportController@commissionRevenue'])->name('reports.commissionRevenueChart');
-            Route::post('reports/advertisesRevenue', ['uses' => 'ReportController@advertisesRevenue'])->name('reports.advertisesRevenueChart');
+            Route::post('reports/toutesRevenue', ['uses' => 'ReportController@toutesRevenue'])->name('reports.toutesRevenueChart');
 
             Route::get('reports', ['uses' => 'ReportController@index'])->name('reports.index');
             Route::get('reports/commissionRevenueTable', ['uses' => 'ReportController@commissionRevenueTable'])->name('reports.commissionRevenueTable');
-            Route::get('reports/advertisesRevenueTable', ['uses' => 'ReportController@advertisesRevenueTable'])->name('reports.advertisesRevenueTable');
+            Route::get('reports/toutesRevenueTable', ['uses' => 'ReportController@toutesRevenueTable'])->name('reports.toutesRevenueTable');
             Route::get('reports/customerTable', ['uses' => 'ReportController@customerTable'])->name('reports.customerTable');
 
             Route::post('currency-formate-settings', 'CurrencySettingController@formateUpdate')->name('currency.formateSettingsUpdate');
@@ -190,17 +190,17 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('articles/save/{slug}', 'ArticleController@save')->name('articles.save');
             Route::post('articles/{article}', 'ArticleController@update')->name('articles.update');
 
-            Route::get('advertises/create/{id?}', [
-                'as' => 'advertises.create',
-                'uses' => 'AdvertiseController@create'
+            Route::get('toutes/create/{id?}', [
+                'as' => 'toutes.create',
+                'uses' => 'ToutController@create'
             ]);
 
-            Route::post('advertises/update/{id}', [
-                'as' => 'advertises.update',
-                'uses' => 'AdvertiseController@update'
+            Route::post('toutes/update/{id}', [
+                'as' => 'toutes.update',
+                'uses' => 'ToutController@update'
             ]);
 
-            Route::resource('advertises', 'AdvertiseController', ['except' => ['create', 'update']]);
+            Route::resource('toutes', 'ToutController', ['except' => ['create', 'update']]);
 
             Route::resources(
                 [

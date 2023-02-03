@@ -338,7 +338,7 @@ class Company extends Model
 
     public function getExpensesAttribute()
     {
-        $payments = Advertise::withoutGlobalScopes()
+        $payments = Tout::withoutGlobalScopes()
             ->where('status', 'completed')->whereNotNull('paid_on')->where('company_id', $this->id);
 
         return $payments->sum('amount');

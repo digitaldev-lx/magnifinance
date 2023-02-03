@@ -8,9 +8,11 @@ use DigitalDevLX\Magnifinance\models\Document;
 use App\Traits\Documentable;
 use Illuminate\Database\Eloquent\Model;
 
-class Advertise extends Model
+class Tout extends Model
 {
     use Documentable;
+
+    protected $table = "toutes";
 
     protected $guarded = [];
 
@@ -24,12 +26,12 @@ class Advertise extends Model
     }
 
     protected $appends = [
-        'advertise_image_url',
+        'tout_image_url',
         'formated_price',
         'formated_amount_to_pay',
     ];
 
-    public function getAdvertiseImageUrlAttribute()
+    public function getToutImageUrlAttribute()
     {
         if(is_null($this->image)){
             return "https://media.istockphoto.com/photos/multi-racial-ethnic-group-of-womans-with-diffrent-types-of-skin-and-picture-id1193184402?k=20&m=1193184402&s=612x612&w=0&h=cXQVcuS46oM0ya0OVH7hpjxPSwW_NdOKb5pM7zLJ2Sw=";

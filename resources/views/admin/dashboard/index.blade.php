@@ -13,6 +13,8 @@
 @endpush
 
 @section('content')
+    @dd($user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_tout','create_tout', 'update_tout']));
+
     <div class="row mb-2">
         @if (!$user->mobile_verified && $smsSettings->nexmo_status == 'active')
             <div id="verify-mobile-info" class="col-md-12">

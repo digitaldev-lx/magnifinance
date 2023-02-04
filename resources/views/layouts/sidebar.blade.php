@@ -330,22 +330,21 @@
                             </a>
             </li>
         @endif
-
-        @if ($user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_tout','create_tout', 'update_tout', 'delete_tout']))
+        @if ($user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_tout','create_tout', 'update_tout']))
             <li class="nav-item">
                 @if($user->is_admin)
                     <a href="{{ route('admin.toutes.index') }}"
                        class="nav-link {{ request()->is('account/toutes/*') ? 'active' : '' }}">
-                        @elseif($user->is_superadmin)
-                            <a href="{{ route('superadmin.toutes.index') }}"
-                               class="nav-link {{ request()->is('super-admin/toutes/*') ? 'active' : '' }}">
-                                @endif
-                                <i class="fa fa-bullhorn fa-2x"></i>
+                @elseif($user->is_superadmin)
+                    <a href="{{ route('superadmin.toutes.index') }}"
+                       class="nav-link {{ request()->is('super-admin/toutes/*') ? 'active' : '' }}">
+                @endif
+                        <i class="fa fa-bullhorn fa-2x"></i>
 
-                                <p>
-                                    {{__('menu.toutes')}}
-                                </p>
-                            </a>
+                        <p>
+                            {{__('menu.toutes')}}
+                        </p>
+                    </a>
             </li>
         @endif
 

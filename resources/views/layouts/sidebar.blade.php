@@ -330,7 +330,7 @@
                             </a>
             </li>
         @endif
-        @if ($user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_tout','create_tout', 'update_tout']))
+{{--        @if ($user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_tout','create_tout', 'update_tout']))--}}
             <li class="nav-item">
                 @if($user->is_admin)
                     <a href="{{ route('admin.toutes.index') }}"
@@ -346,7 +346,7 @@
                         </p>
                     </a>
             </li>
-        @endif
+{{--        @endif--}}
 
         @if ($user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_ticket','create_ticket', 'update_ticket', 'delete_ticket']))
             <li class="nav-item">

@@ -14,6 +14,7 @@
 @endpush
 
 @section('content')
+
 <div class="row mb-2">
     @if($user->is_superadmin)
 

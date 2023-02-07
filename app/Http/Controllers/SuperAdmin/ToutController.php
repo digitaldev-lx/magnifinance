@@ -33,7 +33,7 @@ class ToutController extends SuperAdminBaseController
      */
     public function index()
     {
-        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission(['read_tout']), 403);
+        abort_if(!auth()->user()->hasPermission(["manage_tout"]), 403);
 
         if (\request()->ajax()) {
             $toutes = Tout::orderByDesc('created_at')->get();

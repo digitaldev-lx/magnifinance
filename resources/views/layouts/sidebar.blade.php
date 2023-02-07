@@ -330,24 +330,23 @@
                             </a>
             </li>
         @endif
-{{--        @if ($user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_tout','create_tout', 'update_tout']))--}}
-            <li class="nav-item">
-                @if($user->is_admin)
-                    <a href="{{ route('admin.toutes.index') }}"
-                       class="nav-link {{ request()->is('account/toutes/*') ? 'active' : '' }}">
-                @elseif($user->is_superadmin)
-                    <a href="{{ route('superadmin.toutes.index') }}"
-                       class="nav-link {{ request()->is('super-admin/toutes/*') ? 'active' : '' }}">
-                @endif
-                        <i class="fa fa-bullhorn fa-2x"></i>
+        @if(auth()->user()->hasPermission(["manage_tout", "read_tout", "create_tout", "update_tout"]))
+        <li class="nav-item">
+            @if($user->is_admin)
+                <a href="{{ route('admin.toutes.index') }}"
+                   class="nav-link {{ request()->is('account/toutes/*') ? 'active' : '' }}">
+            @elseif($user->is_superadmin)
+                <a href="{{ route('superadmin.toutes.index') }}"
+                   class="nav-link {{ request()->is('super-admin/toutes/*') ? 'active' : '' }}">
+            @endif
+                    <i class="fa fa-bullhorn fa-2x"></i>
 
-                        <p>
-                            {{__('menu.toutes')}}
-                        </p>
-                    </a>
-            </li>
-{{--        @endif--}}
-
+                    <p>
+                        {{__('menu.toutes')}}
+                    </p>
+                </a>
+        </li>
+        @endif
         @if ($user->roles()->withoutGlobalScopes()->first()->hasPermission(['read_ticket','create_ticket', 'update_ticket', 'delete_ticket']))
             <li class="nav-item">
                 <a href="{{ $user->is_superadmin_employee ? route('superadmin.tickets.index') : route('admin.tickets.index') }}"

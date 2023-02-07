@@ -256,6 +256,9 @@
                                                         <li>
                                                             @lang('app.employeeSchedule')
                                                         </li>
+                                                        <li>
+                                                            @lang('app.googleCalendar')
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -324,6 +327,7 @@
                                                                             <i class="zmdi zmdi-close-circle"></i>
                                                                         @endif
                                                                     </li>
+
                                                                     <li>
                                                                         @if (in_array('Google Calendar', $package_modules))
                                                                             <i class="zmdi zmdi-check-circle blue"></i>

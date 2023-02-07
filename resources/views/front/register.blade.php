@@ -215,8 +215,7 @@
                         <div class="form-group remember_box mt-3 d-block d-lg-flex d-md-flex justify-content-between">
                             <input autocomplete="off"  id="read_agreement" type="checkbox">
                             <label for="read_agreement" class="mb-3">
-                                <span></span>{{ $settings->terms_note }}&nbsp;
-
+                                <span></span>{!! $settings->terms_note !!}
                             </label>
                         </div>
 

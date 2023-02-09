@@ -200,11 +200,11 @@
 
         function submitForm(){
             $.easyAjax({
-                url: '{{route('superadmin.articles.update', $article->id)}}',
+                url: '{{route('superadmin.articles.approve', $article->id)}}',
                 container: '#createForm',
                 type: "POST",
-                file:true,
-                formReset:false,
+                file: true,
+                formReset: false,
                 data: {data: $('#createForm').serialize()},
                 success: function (response){
                     console.log(response);

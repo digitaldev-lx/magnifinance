@@ -130,7 +130,7 @@ class ArticleController extends SuperAdminBaseController
      */
     public function store(StoreArticle $request)
     {
-        
+
         $article = new Article();
 
         $redirect_url = $request->redirect_url;
@@ -216,8 +216,9 @@ class ArticleController extends SuperAdminBaseController
      * @param  Article $article
      * @return array
      */
-    public function approve(Article $article)
+    public function approve(Request $request, Article $article)
     {
+        return $request->all();
         $article->status = "approved";
         $article->published_at = Carbon::now()->format('Y-m-d H:i');
 

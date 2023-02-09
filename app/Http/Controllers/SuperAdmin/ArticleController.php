@@ -112,7 +112,7 @@ class ArticleController extends SuperAdminBaseController
      */
     public function create()
     {
-        abort_if(!$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('create_article'), 403);
+        abort_if(!$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('manage_article'), 403);
 
         $categories = Cache::remember('categories', 60*60*24, function (){
             return Category::all();
@@ -168,7 +168,7 @@ class ArticleController extends SuperAdminBaseController
      */
     public function edit(Article $article)
     {
-        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('update_article'), 403);
+        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('manage_article'), 403);
 
         $categories = Category::withoutGlobalScope(CompanyScope::class)->orderBy('name', 'ASC')->get();
 

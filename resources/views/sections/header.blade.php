@@ -442,6 +442,7 @@
                     blockUI: false,
                     success: function (response)
                     {
+                        console.log(response.articles);
                         // CATEGORIES START
                             @if (array_search('Category Section', array_column($sections, 'name')) !== false)
                                 if(response.categories.length>0)

@@ -130,7 +130,7 @@ class ArticleController extends SuperAdminBaseController
      */
     public function store(StoreArticle $request)
     {
-        return $request->all();
+        
         $article = new Article();
 
         $redirect_url = $request->redirect_url;

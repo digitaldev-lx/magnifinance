@@ -42,7 +42,7 @@ class ArticleController extends SuperAdminBaseController
      */
     public function index()
     {
-        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('read_article'), 403);
+        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('manage_article'), 403);
 
         if(\request()->ajax()){
             $articles = Article::withoutGlobalScope(CompanyScope::class)->get();

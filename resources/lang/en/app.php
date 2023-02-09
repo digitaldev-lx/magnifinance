@@ -156,6 +156,7 @@ return array (
   'translations' => 'Translations',
   'page' => 'Page',
   'title' => 'Title',
+  'author' => 'Author',
   'content' => 'Content',
   'call_to_action' => 'Call To Action',
   'filter' => 'Filter',

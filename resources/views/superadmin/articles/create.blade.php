@@ -189,7 +189,7 @@
 
         $('body').on('click', '#submit-form', function() {
             $.easyAjax({
-                url: '{{route('admin.articles.store')}}',
+                url: '{{route('superadmin.articles.store')}}',
                 container: '#createForm',
                 type: "POST",
                 file:true,

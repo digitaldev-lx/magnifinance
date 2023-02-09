@@ -38,6 +38,8 @@ return array(
     'ticketSettings' => 'Definições de Tickets',
     'deal' => 'Oferta',
     'deals' => 'Ofertas',
+    'article' => 'Artigo',
+    'articles' => 'Artigos',
     'blog' => 'Blog',
     'bookingSettings' => 'Configurações de reserva',
     'TncNote' => 'Termos & Condições',

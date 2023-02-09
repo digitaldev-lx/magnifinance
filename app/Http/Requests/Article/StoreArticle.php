@@ -13,7 +13,7 @@ class StoreArticle extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('manage_article');
+        return auth()->user()->hasPermission('manage_article');
     }
 
     /**

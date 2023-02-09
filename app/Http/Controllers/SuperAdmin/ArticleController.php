@@ -218,8 +218,7 @@ class ArticleController extends SuperAdminBaseController
      */
     public function approve(Request $request, Article $article)
     {
-        return $request->all();
-        $article->status = "approved";
+        $article->status = $request->status;
         $article->published_at = Carbon::now()->format('Y-m-d H:i');
 
         $article->save();

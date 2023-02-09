@@ -537,44 +537,49 @@
                             } else {
                                 $('#spotlightSection').hide();
                             }
-
-                        if (response.articles.length > 0) {
-                            var slider_length = $('.spot_box').length;
-                            for (var i = 0; i < slider_length; i++) {
-                                $("#articles_slider").trigger('remove.owl.carousel', [i]).trigger('refresh.owl.carousel');
-                            }
-
-                            response.articles.forEach(article => {
-                                let detail_url = '/blog/'+article.slug;
-                                let image_url = article.article_image_url;
-
-                                $('#articles_slider').trigger('add.owl.carousel', [jQuery(` <div class="item spot_box">
-                                    <div class="spot_box_img">
-                                        <a class="ml-auto" href="${detail_url}">
-                                            <img src="{{asset('front/images/pixel.gif')}}" data-src="${image_url}" alt="Image" />
-                                        </a>
-                                    </div>
-                                    <div>
-                                        <h2 class="title" title="${article.title}">${article.limit_title}</h2>
-
-                                        <p class="">${article.limit_excerpt}</p>
-                                    </div>
-
-                                    <p class="px-0">
-                                        <div class="col-12 spot_article pt-2">
-                                            <a href="${detail_url}" class="w-100">{{__('front.readMore')}}</a>
-                                        </div>
-                                    </p>
-                                </div>`)]).trigger('refresh.owl.carousel');
-                            });
-
-                            $('#relatedArticlesSection').show();
-
-                        } else {
-                            $('#relatedArticlesSection').hide();
-                        }
                             @endif
+
                         // SPOTLIGHT END
+                        
+                        // BLOG SECTION
+                            @if (array_search('Blog Section', array_column($sections, 'name')) !== false)
+                                if (response.articles.length > 0) {
+                                    var slider_length = $('.spot_box').length;
+                                    for (var i = 0; i < slider_length; i++) {
+                                        $("#articles_slider").trigger('remove.owl.carousel', [i]).trigger('refresh.owl.carousel');
+                                    }
+
+                                    response.articles.forEach(article => {
+                                        let detail_url = '/blog/'+article.slug;
+                                        let image_url = article.article_image_url;
+
+                                        $('#articles_slider').trigger('add.owl.carousel', [jQuery(` <div class="item spot_box">
+                                            <div class="spot_box_img">
+                                                <a class="ml-auto" href="${detail_url}">
+                                                    <img src="{{asset('front/images/pixel.gif')}}" data-src="${image_url}" alt="Image" />
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <h2 class="title" title="${article.title}">${article.limit_title}</h2>
+
+                                                <p class="">${article.limit_excerpt}</p>
+                                            </div>
+
+                                            <p class="px-0">
+                                                <div class="col-12 spot_article pt-2">
+                                                    <a href="${detail_url}" class="w-100">{{__('front.readMore')}}</a>
+                                                </div>
+                                            </p>
+                                        </div>`)]).trigger('refresh.owl.carousel');
+                                    });
+
+                                    $('#relatedArticlesSection').show();
+
+                                } else {
+                                    $('#relatedArticlesSection').hide();
+                                }
+                            @endif
+                        // BLOG END
 
                         /* DEAL START */
                             @if (array_search('Deal Section', array_column($sections, 'name')) !== false)

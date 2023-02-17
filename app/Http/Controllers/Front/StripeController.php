@@ -97,7 +97,7 @@ class StripeController extends Controller
     public function paymentWithStripe(Request $request)
     {
 //        $tax_amount = Tax::active()->first();
-//        return $request->all();
+        return $request->all();
         $paymentCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
 
         if (isset($request->booking_id)) {

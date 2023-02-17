@@ -174,7 +174,7 @@ class StripeController extends Controller
             $plan = Package::find($request->plan_id);
             $customer_id = (new StripeCustomerManager())->handleCustomerId();
 
-            return $data = [
+            $data = [
                 'customer' => $customer_id,
                 'payment_method_types' => ['card'],
                 'line_items' => [[

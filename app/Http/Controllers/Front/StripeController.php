@@ -97,7 +97,6 @@ class StripeController extends Controller
     public function paymentWithStripe(Request $request)
     {
 //        $tax_amount = Tax::active()->first();
-        return $request->all();
         $paymentCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
 
         if (isset($request->booking_id)) {
@@ -175,7 +174,7 @@ class StripeController extends Controller
             $plan = Package::find($request->plan_id);
             $customer_id = (new StripeCustomerManager())->handleCustomerId();
 
-            $data = [
+            return $data = [
                 'customer' => $customer_id,
                 'payment_method_types' => ['card'],
                 'line_items' => [[

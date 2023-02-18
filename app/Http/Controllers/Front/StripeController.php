@@ -275,9 +275,9 @@ class StripeController extends Controller
 
         } elseif (isset($request->plan_id)) {
 
-//            $token = $payment_method;
-            return $request->all();
-            $token = $request->payment_method;
+            $token = $payment_method;
+//            return $request->all();
+//            $token = $request->payment_method;
 
             $plan = Package::find($request->plan_id);
             $company = $this->company = company();

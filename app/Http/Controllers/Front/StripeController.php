@@ -194,6 +194,7 @@ class StripeController extends Controller
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();
+                return response()->json(["success" => false, "message" => $e->getMessage()]);
                 abort_and_log(403, $e->getMessage());
             }
 

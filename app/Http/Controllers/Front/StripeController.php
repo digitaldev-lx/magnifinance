@@ -190,7 +190,9 @@ class StripeController extends Controller
                     'success_url' => route('front.afterStripePayment', ['return_url' => $request->return_url, 'plan_id' => $plan->id, 'type'=> $request->type]),
                     'cancel_url' => route('front.payment-gateway'),
                 ];
+                $session = \Stripe\Checkout\Session::create($data);
 
+                session(['stripe_session' => $session]);
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -200,9 +202,7 @@ class StripeController extends Controller
 
         }
 
-        return $session = \Stripe\Checkout\Session::create($data);
 
-        session(['stripe_session' => $session]);
 
         return Reply::dataOnly(['id' => $session->id]);
     }

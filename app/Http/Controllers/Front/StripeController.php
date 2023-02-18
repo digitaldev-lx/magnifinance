@@ -209,6 +209,8 @@ class StripeController extends Controller
 
     public function afterStripePayment(Request $request, $return_url, $bookingId = null)
     {
+        return $request->all();
+
         if(session()->has('stripe_session')){
             $session_data = session('stripe_session');
             $session = \Stripe\Checkout\Session::retrieve($session_data->id);
@@ -218,7 +220,6 @@ class StripeController extends Controller
         }
 
         if (!isset($request->plan_id)) {
-            return $request->all();
             $payment_method = \Stripe\PaymentIntent::retrieve(
                 $session->payment_intent,
                 []

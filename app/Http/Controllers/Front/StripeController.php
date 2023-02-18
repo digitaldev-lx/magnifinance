@@ -218,6 +218,7 @@ class StripeController extends Controller
         }
 
         if (!isset($request->plan_id)) {
+            return $request->all();
             $payment_method = \Stripe\PaymentIntent::retrieve(
                 $session->payment_intent,
                 []

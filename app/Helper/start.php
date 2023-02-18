@@ -21,7 +21,7 @@ if (!function_exists('abort_and_log')) {
 
     function abort_and_log($code, $message)
     {
-        //todo: insert log package
+        Log::error($code ." - ". $message);
         abort($code, $message);
     }
 
@@ -31,6 +31,7 @@ if (!function_exists('log')) {
 
     function log($message)
     {
+        Log::error($message);
 //        ActivityLogger::activity($message);
     }
 

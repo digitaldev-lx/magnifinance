@@ -503,7 +503,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/digitaldevlx/laravel-mysql-spatial-8.1",
-                "reference": "51e3ba947b3eea9a36ae33f39d65d8679e6b2bd7"
+                "reference": "5872bc23c9b99bc728f2ddaae7a57a129e0bd063"
             },
             "require": {
                 "ext-json": "*",
@@ -521,9 +521,6 @@
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "4.0.x-dev"
-                },
                 "laravel": {
                     "providers": [
                         "DigitalDevLX\\LaravelMysqlSpatial\\SpatialServiceProvider"

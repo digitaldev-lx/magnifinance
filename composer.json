@@ -36,7 +36,6 @@
         "stripe/stripe-php": "^7.68",
         "yajra/laravel-datatables-oracle": "^10.3.1",
         "spatie/laravel-sitemap": "^6.2.3",
-        "digitaldevlx/laravel-mysql-spatial-8.1": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
@@ -45,12 +44,6 @@
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.0"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "packages/digitaldevlx/laravel-mysql-spatial-8.1"
-        }
-    ],
     "autoload": {
         "classmap": [
             "database/seeds",

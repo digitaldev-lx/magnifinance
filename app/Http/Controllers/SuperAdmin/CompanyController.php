@@ -18,7 +18,7 @@ use App\Package;
 use App\Role;
 use App\User;
 use Carbon\Carbon;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
+use DigitalDevLX\LaravelMySqlSpatial\Types\Point;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;

@@ -3,7 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
+use DigitalDevLX\LaravelMySqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Support\Str;
 use Laravel\Cashier\Billable;
 use App\Observers\CompanyObserver;

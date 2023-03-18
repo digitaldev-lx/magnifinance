@@ -58,7 +58,8 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "DigitalDevLX\\Magnifinance\\": "packages/digitaldevlx/magnifinance/src"
+            "DigitalDevLX\\Magnifinance\\": "packages/digitaldevlx/magnifinance/src",
+            "DigitalDevLX\\LaravelMySqlSpatial\\": "packages/digitaldevlx/laravel-mysql-spatial-8.1/src"
         },
         "files": [
             "app/Helper/start.php"

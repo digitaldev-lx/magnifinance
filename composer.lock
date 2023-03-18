@@ -503,7 +503,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/digitaldevlx/laravel-mysql-spatial-8.1",
-                "reference": "f9c84bf7396fdf23a93e2f73c3c41301d0cc3e3f"
+                "reference": "51e3ba947b3eea9a36ae33f39d65d8679e6b2bd7"
             },
             "require": {
                 "ext-json": "*",
@@ -526,13 +526,13 @@
                 },
                 "laravel": {
                     "providers": [
-                        "Grimzy\\LaravelMysqlSpatial\\SpatialServiceProvider"
+                        "DigitalDevLX\\LaravelMysqlSpatial\\SpatialServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Grimzy\\LaravelMysqlSpatial\\": "src/"
+                    "DigitalDevLX\\LaravelMysqlSpatial\\": "src/"
                 }
             },
             "autoload-dev": {

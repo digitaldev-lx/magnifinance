@@ -153,7 +153,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Grimzy\LaravelMysqlSpatial\SpatialServiceProvider::class,
+        DigitalDevLX\LaravelMySqlSpatial\SpatialServiceProvider::class,
         DigitalDevLX\Magnifinance\MagnifinanceServiceProvider::class,
         /*
          * Application Service Providers...

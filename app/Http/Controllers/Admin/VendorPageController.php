@@ -6,7 +6,7 @@ use App\Services\ImagesManager;
 use App\Services\UrlManager;
 use App\VendorPage;
 use App\Helper\Files;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
+use DigitalDevLX\LaravelMySqlSpatial\Types\Point;
 use Illuminate\Http\Request;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;

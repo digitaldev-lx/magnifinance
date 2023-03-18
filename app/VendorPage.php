@@ -3,7 +3,7 @@
 namespace App;
 
 use App\Scopes\CompanyScope;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
+use DigitalDevLX\LaravelMySqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Shetabit\Visitor\Traits\Visitable;

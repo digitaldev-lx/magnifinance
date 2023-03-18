@@ -26,7 +26,7 @@
                         @permission('read_employee_group')
                         <a href="{{ route('admin.employee-group.index') }}" class="btn btn-rounded btn-info mb-1 mr-2"><i class="fa fa-list"></i> @lang('app.employeeGroup')</a>
                         @endpermission--}}
-                        @permission('create_article')
+                        @permission('manage_article')
                         <a href="{{ route('superadmin.articles.create') }}" class="btn btn-rounded btn-primary mb-1"><i
                                 class="fa fa-plus"></i> @lang('app.createNew')</a>
                         @endpermission

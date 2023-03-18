@@ -146,6 +146,7 @@ class ToutController extends AdminBaseController
                 $data['image'] = $filePath;
             }
             $tout = $tout->create($data);
+
             DB::commit();
             $tout = $tout->load('category', 'article');
             $locale = App::getLocale();

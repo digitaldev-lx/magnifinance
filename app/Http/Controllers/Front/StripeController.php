@@ -97,7 +97,6 @@ class StripeController extends Controller
     public function paymentWithStripe(Request $request)
     {
 //        $tax_amount = Tax::active()->first();
-//        return $request->all();
         $paymentCredentials = PaymentGatewayCredentials::withoutGlobalScopes()->first();
 
         if (isset($request->booking_id)) {
@@ -172,34 +171,45 @@ class StripeController extends Controller
 
         } elseif (isset($request->plan_id)) {
 
-            $plan = Package::find($request->plan_id);
-            $customer_id = (new StripeCustomerManager())->handleCustomerId();
+            try {
+                DB::beginTransaction();
 
-            $data = [
-                'customer' => $customer_id,
-                'payment_method_types' => ['card'],
-                'line_items' => [[
-                    'price' => $plan->{'stripe_' . $request->type . '_plan_id'},
+                $plan = Package::find($request->plan_id);
+                $customer_id = (new StripeCustomerManager())->handleCustomerId();
+
+                $data = [
+                    'customer' => $customer_id,
+                    'payment_method_types' => ['card'],
+                    'line_items' => [[
+                        'price' => $plan->{'stripe_' . $request->type . '_plan_id'},
 //                    'amount' => $plan->{$request->type . '_price'},
 //                    'currency' => $this->settings->currency->currency_code,
-                    'quantity' => 1,
-                ]],
-                'mode' => 'subscription',
-                'success_url' => route('front.afterStripePayment', ['return_url' => $request->return_url, 'plan_id' => $plan->id, 'type'=> $request->type]),
-                'cancel_url' => route('front.payment-gateway'),
-            ];
+                        'quantity' => 1,
+                    ]],
+                    'mode' => 'subscription',
+                    'success_url' => route('front.afterStripePayment', ['return_url' => $request->return_url, 'plan_id' => $plan->id, 'type'=> $request->type]),
+                    'cancel_url' => route('front.payment-gateway'),
+                ];
+                $session = \Stripe\Checkout\Session::create($data);
+
+                session(['stripe_session' => $session]);
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json(["success" => false, "message" => $e->getMessage()]);
+                abort_and_log(403, $e->getMessage());
+            }
 
         }
 
-        $session = \Stripe\Checkout\Session::create($data);
 
-        session(['stripe_session' => $session]);
 
         return Reply::dataOnly(['id' => $session->id]);
     }
 
     public function afterStripePayment(Request $request, $return_url, $bookingId = null)
     {
+
         if(session()->has('stripe_session')){
             $session_data = session('stripe_session');
             $session = \Stripe\Checkout\Session::retrieve($session_data->id);
@@ -266,8 +276,10 @@ class StripeController extends Controller
 
         } elseif (isset($request->plan_id)) {
 
-//            $token = $payment_method;
-            $token = $request->payment_method;
+            $token = $payment_method = \Stripe\PaymentIntent::retrieve(
+                $session->payment_intent,
+                []
+            );
 
             $plan = Package::find($request->plan_id);
             $company = $this->company = company();

@@ -37,6 +37,8 @@ return array (
     'ticketSettings' => 'Tickets Settings',
     'deal' => 'Deal',
     'deals' => 'Deals',
+    'article' => 'Article',
+    'articles' => 'Articles',
     'blog' => 'Blog',
     'bookingSettings' => 'Booking Settings',
     'TncNote' => 'Terms & Conditions',

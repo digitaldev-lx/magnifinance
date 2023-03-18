@@ -42,7 +42,7 @@ class ArticleController extends SuperAdminBaseController
      */
     public function index()
     {
-        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('read_article'), 403);
+        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('manage_article'), 403);
 
         if(\request()->ajax()){
             $articles = Article::withoutGlobalScope(CompanyScope::class)->get();
@@ -112,7 +112,7 @@ class ArticleController extends SuperAdminBaseController
      */
     public function create()
     {
-        abort_if(!$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('create_article'), 403);
+        abort_if(!$this->user->roles()->withoutGlobalScopes()->first()->hasPermission('manage_article'), 403);
 
         $categories = Cache::remember('categories', 60*60*24, function (){
             return Category::all();
@@ -130,6 +130,7 @@ class ArticleController extends SuperAdminBaseController
      */
     public function store(StoreArticle $request)
     {
+
         $article = new Article();
 
         $redirect_url = $request->redirect_url;
@@ -168,7 +169,7 @@ class ArticleController extends SuperAdminBaseController
      */
     public function edit(Article $article)
     {
-        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('update_article'), 403);
+        abort_if(!auth()->user()->roles()->withoutGlobalScopes()->first()->hasPermission('manage_article'), 403);
 
         $categories = Category::withoutGlobalScope(CompanyScope::class)->orderBy('name', 'ASC')->get();
 
@@ -215,9 +216,9 @@ class ArticleController extends SuperAdminBaseController
      * @param  Article $article
      * @return array
      */
-    public function approve(Article $article)
+    public function approve(Request $request, Article $article)
     {
-        $article->status = "approved";
+        $article->status = $request->status;
         $article->published_at = Carbon::now()->format('Y-m-d H:i');
 
         $article->save();

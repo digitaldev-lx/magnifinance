@@ -256,6 +256,9 @@
                                                         <li>
                                                             @lang('app.employeeSchedule')
                                                         </li>
+                                                        <li>
+                                                            @lang('app.googleCalendar')
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -294,6 +297,9 @@
                                                                         {{ $package->max_roles }}
                                                                     </li>
                                                                     <li>
+                                                                        @php
+                                                                            $package_modules = !is_null($package->package_modules) ? json_decode($package->package_modules, true) : [];
+                                                                        @endphp
                                                                         @if (in_array('Reports', $package_modules))
                                                                             <i class="zmdi zmdi-check-circle blue"></i>
                                                                         @else
@@ -321,6 +327,7 @@
                                                                             <i class="zmdi zmdi-close-circle"></i>
                                                                         @endif
                                                                     </li>
+
                                                                     <li>
                                                                         @if (in_array('Google Calendar', $package_modules))
                                                                             <i class="zmdi zmdi-check-circle blue"></i>

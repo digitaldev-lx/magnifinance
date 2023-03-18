@@ -189,7 +189,7 @@
 
         $('body').on('click', '#submit-form', function() {
             $.easyAjax({
-                url: '{{route('admin.articles.store')}}',
+                url: '{{route('superadmin.articles.store')}}',
                 container: '#createForm',
                 type: "POST",
                 file:true,
@@ -199,6 +199,7 @@
                     console.log(response);
                 },
                 error: function (error){
+                    console.log(error);
                     if( error.status === 422 ) {
                         var data = error.responseJSON.errors
                     }

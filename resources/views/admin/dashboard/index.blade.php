@@ -13,6 +13,7 @@
 @endpush
 
 @section('content')
+
     <div class="row mb-2">
         @if (!$user->mobile_verified && $smsSettings->nexmo_status == 'active')
             <div id="verify-mobile-info" class="col-md-12">

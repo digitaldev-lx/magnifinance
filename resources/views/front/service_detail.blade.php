@@ -43,7 +43,7 @@
                         @forelse($service->image ?: [] as $image)
                             <div class="item">
                                 <div class="deal_detail_img position-relative">
-                                    <img src="{{asset('front/images/pixel.gif')}}" data-src="{{ asset('user-uploads/service/'.$service->id.'/'.$image) }}" alt="Image" />
+                                    <img src="{{asset('front/images/pixel.gif')}}" data-src="{{ cdn_storage_url($image) }}" alt="{{$service->name}}" />
                                 </div>
                             </div>
                             @php $count++ @endphp

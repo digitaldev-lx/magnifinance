@@ -152,6 +152,7 @@ return array(
     'translations' => 'Tradução',
     'page' => 'Página',
     'title' => 'Titulo',
+    'author' => 'Autor',
     'content' => 'Conteúdo',
     'call_to_action' => 'Chamada para Ação',
     'filter' => 'Filtro',

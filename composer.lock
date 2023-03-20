@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f714e6a7496d04b68c0429cdb085ded",
+    "content-hash": "cfc7008092c3baf4438cd912032e3bc3",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -499,11 +499,17 @@
         },
         {
             "name": "digitaldevlx/laravel-mysql-spatial-8.1",
-            "version": "dev-develop",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/digitaldev-lx/laravel-mysql-spatial-8.1.git",
+                "reference": "282b3f6c86d7cff640384d4c51fa38aae1a8eb29"
+            },
             "dist": {
-                "type": "path",
-                "url": "packages/digitaldevlx/laravel-mysql-spatial-8.1",
-                "reference": "5872bc23c9b99bc728f2ddaae7a57a129e0bd063"
+                "type": "zip",
+                "url": "https://api.github.com/repos/digitaldev-lx/laravel-mysql-spatial-8.1/zipball/282b3f6c86d7cff640384d4c51fa38aae1a8eb29",
+                "reference": "282b3f6c86d7cff640384d4c51fa38aae1a8eb29",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -532,23 +538,7 @@
                     "DigitalDevLX\\LaravelMysqlSpatial\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "classmap": [
-                    "tests/Unit",
-                    "tests/Integration"
-                ]
-            },
-            "scripts": {
-                "test": [
-                    "phpunit -c phpunit.xml.dist"
-                ],
-                "test:unit": [
-                    "phpunit -c phpunit.xml.dist --testsuite unit"
-                ],
-                "test:integration": [
-                    "phpunit -c phpunit.xml.dist --testsuite integration"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -559,9 +549,10 @@
                 }
             ],
             "description": "MySQL spatial data types extension for Laravel.",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/digitaldev-lx/laravel-mysql-spatial-8.1/tree/1.0.1"
+            },
+            "time": "2023-03-18T17:34:18+00:00"
         },
         {
             "name": "doctrine/cache",

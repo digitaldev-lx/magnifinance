@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.261.14",
+            "version": "3.261.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "121638bb7e62ee2f71838c52e79884f4301a9400"
+                "reference": "7d17f3187a4d5bebc41ca5d363570ed632b698c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/121638bb7e62ee2f71838c52e79884f4301a9400",
-                "reference": "121638bb7e62ee2f71838c52e79884f4301a9400",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7d17f3187a4d5bebc41ca5d363570ed632b698c0",
+                "reference": "7d17f3187a4d5bebc41ca5d363570ed632b698c0",
                 "shasum": ""
             },
             "require": {
@@ -146,9 +146,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.261.14"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.261.15"
             },
-            "time": "2023-03-17T18:21:00+00:00"
+            "time": "2023-03-20T18:19:46+00:00"
         },
         {
             "name": "barryvdh/laravel-dompdf",
@@ -499,17 +499,11 @@
         },
         {
             "name": "digitaldevlx/laravel-mysql-spatial-8.1",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/digitaldev-lx/laravel-mysql-spatial-8.1.git",
-                "reference": "282b3f6c86d7cff640384d4c51fa38aae1a8eb29"
-            },
+            "version": "dev-master",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/digitaldev-lx/laravel-mysql-spatial-8.1/zipball/282b3f6c86d7cff640384d4c51fa38aae1a8eb29",
-                "reference": "282b3f6c86d7cff640384d4c51fa38aae1a8eb29",
-                "shasum": ""
+                "type": "path",
+                "url": "packages/digitaldevlx/laravel-mysql-spatial-8.1",
+                "reference": "282b3f6c86d7cff640384d4c51fa38aae1a8eb29"
             },
             "require": {
                 "ext-json": "*",
@@ -538,7 +532,23 @@
                     "DigitalDevLX\\LaravelMysqlSpatial\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "classmap": [
+                    "tests/Unit",
+                    "tests/Integration"
+                ]
+            },
+            "scripts": {
+                "test": [
+                    "phpunit -c phpunit.xml.dist"
+                ],
+                "test:unit": [
+                    "phpunit -c phpunit.xml.dist --testsuite unit"
+                ],
+                "test:integration": [
+                    "phpunit -c phpunit.xml.dist --testsuite integration"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -549,10 +559,9 @@
                 }
             ],
             "description": "MySQL spatial data types extension for Laravel.",
-            "support": {
-                "source": "https://github.com/digitaldev-lx/laravel-mysql-spatial-8.1/tree/1.0.1"
-            },
-            "time": "2023-03-18T17:34:18+00:00"
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "doctrine/cache",
@@ -1614,7 +1623,7 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.290.1",
+            "version": "v0.291.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
@@ -1652,7 +1661,7 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.290.1"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.291.0"
             },
             "time": "2023-03-13T21:05:11+00:00"
         },
@@ -10778,16 +10787,16 @@
         },
         {
             "name": "nunomaduro/collision",
-            "version": "v7.1.2",
+            "version": "v7.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/collision.git",
-                "reference": "f502ff3b2051124c89b4dd3a8a497ca65f3ce26c"
+                "reference": "8ee125cb0888cf694b559caa015e104f577bb4f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/f502ff3b2051124c89b4dd3a8a497ca65f3ce26c",
-                "reference": "f502ff3b2051124c89b4dd3a8a497ca65f3ce26c",
+                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/8ee125cb0888cf694b559caa015e104f577bb4f0",
+                "reference": "8ee125cb0888cf694b559caa015e104f577bb4f0",
                 "shasum": ""
             },
             "require": {
@@ -10801,13 +10810,13 @@
             },
             "require-dev": {
                 "brianium/paratest": "^7.1.1",
-                "laravel/framework": "^10.3.3",
+                "laravel/framework": "^10.4.1",
                 "laravel/pint": "^1.6.0",
                 "laravel/sail": "^1.21.2",
                 "laravel/sanctum": "^3.2.1",
                 "laravel/tinker": "^2.8.1",
                 "nunomaduro/larastan": "^2.5.1",
-                "orchestra/testbench-core": "^8.0.5",
+                "orchestra/testbench-core": "^8.1.0",
                 "pestphp/pest": "^2.0.0",
                 "phpunit/phpunit": "^10.0.16",
                 "sebastian/environment": "^6.0.0",
@@ -10870,7 +10879,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2023-03-14T14:34:49+00:00"
+            "time": "2023-03-19T17:08:17+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -11303,16 +11312,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.0.16",
+            "version": "10.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "07d386a11ac7094032900f07cada1c8975d16607"
+                "reference": "b75eddcabca052312ae38c8a2bc69ff1a7b89b77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/07d386a11ac7094032900f07cada1c8975d16607",
-                "reference": "07d386a11ac7094032900f07cada1c8975d16607",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b75eddcabca052312ae38c8a2bc69ff1a7b89b77",
+                "reference": "b75eddcabca052312ae38c8a2bc69ff1a7b89b77",
                 "shasum": ""
             },
             "require": {
@@ -11383,7 +11392,8 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.0.16"
+                "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.0.17"
             },
             "funding": [
                 {
@@ -11399,7 +11409,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-13T09:02:40+00:00"
+            "time": "2023-03-20T14:42:33+00:00"
         },
         {
             "name": "sebastian/cli-parser",

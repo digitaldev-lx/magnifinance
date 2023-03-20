@@ -3,7 +3,7 @@
 use DigitalDevLX\Magnifinance\facades\MagnifinanceFacade as Magnifinance;
 
 Route::get('magnifinance', function(){
-    $data = [
+    return $data = [
         "UserName" => 'teste',
         "UserEmail" => 'teste',
         "UserPhone" => 'teste',

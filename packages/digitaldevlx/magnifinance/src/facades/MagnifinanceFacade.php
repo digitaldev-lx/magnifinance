@@ -27,7 +27,7 @@ use phpDocumentor\Reflection\Types\String_;
  * @method static string emitDocumentFromOwner(array $client, array $document, string $sendToEmail)
  */
 
-class Magnifinance extends Facade
+class MagnifinanceFacade extends Facade
 {
 
     protected static function getFacadeAccessor()

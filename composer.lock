@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4cc3db1e92fe00fdabf42f6759ad19b2",
+    "content-hash": "1794035907084aee580bf8518f7cff31",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -496,72 +496,6 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.2"
             },
             "time": "2022-10-27T11:44:00+00:00"
-        },
-        {
-            "name": "digitaldevlx/laravel-mysql-spatial-8.1",
-            "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "packages/digitaldevlx/laravel-mysql-spatial-8.1",
-                "reference": "282b3f6c86d7cff640384d4c51fa38aae1a8eb29"
-            },
-            "require": {
-                "ext-json": "*",
-                "ext-pdo": "*",
-                "geo-io/wkb-parser": "^1.0.2",
-                "jmikola/geojson": "^1.1.2",
-                "php": "^8.1"
-            },
-            "require-dev": {
-                "doctrine/dbal": "^3.0",
-                "laravel/browser-kit-testing": "^7.0.0",
-                "laravel/laravel": "^10.0",
-                "mockery/mockery": "^1.5.1",
-                "phpunit/phpunit": "^10.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "DigitalDevLX\\LaravelMysqlSpatial\\SpatialServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "DigitalDevLX\\LaravelMysqlSpatial\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "classmap": [
-                    "tests/Unit",
-                    "tests/Integration"
-                ]
-            },
-            "scripts": {
-                "test": [
-                    "phpunit -c phpunit.xml.dist"
-                ],
-                "test:unit": [
-                    "phpunit -c phpunit.xml.dist --testsuite unit"
-                ],
-                "test:integration": [
-                    "phpunit -c phpunit.xml.dist --testsuite integration"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Paulo Serrano",
-                    "email": "geral@digitaldev.pt"
-                }
-            ],
-            "description": "MySQL spatial data types extension for Laravel.",
-            "transport-options": {
-                "relative": true
-            }
         },
         {
             "name": "doctrine/cache",
@@ -1454,102 +1388,6 @@
                 }
             ],
             "time": "2022-02-20T15:07:15+00:00"
-        },
-        {
-            "name": "geo-io/interface",
-            "version": "v1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/geo-io/interface.git",
-                "reference": "cf46fe7b013de20ab8b601238c7d91b480810644"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/geo-io/interface/zipball/cf46fe7b013de20ab8b601238c7d91b480810644",
-                "reference": "cf46fe7b013de20ab8b601238c7d91b480810644",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "GeoIO\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jan Sorgalla",
-                    "email": "jsorgalla@gmail.com"
-                }
-            ],
-            "description": "Geo I/O base interfaces.",
-            "keywords": [
-                "geo",
-                "geometry",
-                "io"
-            ],
-            "support": {
-                "issues": "https://github.com/geo-io/interface/issues",
-                "source": "https://github.com/geo-io/interface/tree/v1.0.1"
-            },
-            "time": "2016-07-28T07:17:02+00:00"
-        },
-        {
-            "name": "geo-io/wkb-parser",
-            "version": "v1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/geo-io/wkb-parser.git",
-                "reference": "d6c3101e6fa255c2a5064fedb33551c4d50e58f6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/geo-io/wkb-parser/zipball/d6c3101e6fa255c2a5064fedb33551c4d50e58f6",
-                "reference": "d6c3101e6fa255c2a5064fedb33551c4d50e58f6",
-                "shasum": ""
-            },
-            "require": {
-                "geo-io/interface": "~1.0",
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "mockery/mockery": "~0.9.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "GeoIO\\WKB\\Parser\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jan Sorgalla",
-                    "email": "jsorgalla@gmail.com"
-                }
-            ],
-            "description": "Well-known binary (WKB) Parser.",
-            "keywords": [
-                "geo",
-                "geometry",
-                "io",
-                "parser",
-                "wkb"
-            ],
-            "support": {
-                "issues": "https://github.com/geo-io/wkb-parser/issues",
-                "source": "https://github.com/geo-io/wkb-parser/tree/v1.0.2"
-            },
-            "time": "2022-01-15T16:29:24+00:00"
         },
         {
             "name": "google/apiclient",
@@ -2470,65 +2308,6 @@
                 }
             ],
             "time": "2020-06-13T08:05:20+00:00"
-        },
-        {
-            "name": "jmikola/geojson",
-            "version": "1.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jmikola/geojson.git",
-                "reference": "3699d2be8961f2c2f20b33041b6f0608d2cf4332"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jmikola/geojson/zipball/3699d2be8961f2c2f20b33041b6f0608d2cf4332",
-                "reference": "3699d2be8961f2c2f20b33041b6f0608d2cf4332",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": "^7.4 || ^8.0",
-                "symfony/polyfill-php80": "^1.25"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5",
-                "scrutinizer/ocular": "^1.8.1",
-                "slevomat/coding-standard": "^8.0",
-                "squizlabs/php_codesniffer": "^3.6"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GeoJson\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeremy Mikola",
-                    "email": "jmikola@gmail.com"
-                }
-            ],
-            "description": "GeoJSON implementation for PHP",
-            "homepage": "https://github.com/jmikola/geojson",
-            "keywords": [
-                "geo",
-                "geojson",
-                "geospatial"
-            ],
-            "support": {
-                "issues": "https://github.com/jmikola/geojson/issues",
-                "source": "https://github.com/jmikola/geojson/tree/1.1.2"
-            },
-            "time": "2023-02-20T01:27:38+00:00"
         },
         {
             "name": "kkszymanowski/traitor",
@@ -4304,6 +4083,67 @@
             "time": "2022-08-18T16:18:26+00:00"
         },
         {
+            "name": "matanyadaev/laravel-eloquent-spatial",
+            "version": "3.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MatanYadaev/laravel-eloquent-spatial.git",
+                "reference": "cda683405d53d5a69938b844c52618d27f865b76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MatanYadaev/laravel-eloquent-spatial/zipball/cda683405d53d5a69938b844c52618d27f865b76",
+                "reference": "cda683405d53d5a69938b844c52618d27f865b76",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-pdo": "*",
+                "laravel/framework": "^10.0",
+                "phayes/geophp": "^1.2",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "doctrine/dbal": "^3.5.3",
+                "friendsofphp/php-cs-fixer": "^3.14.3",
+                "jubeki/laravel-code-style": "^1.2",
+                "nunomaduro/larastan": "^1.0|^2.4",
+                "orchestra/testbench": "^8.0",
+                "pestphp/pest": "^1.22.4",
+                "pestphp/pest-plugin-laravel": "^1.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MatanYadaev\\EloquentSpatial\\EloquentSpatialServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MatanYadaev\\EloquentSpatial\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matan Yadaev",
+                    "email": "matan.yed@gmail.com"
+                }
+            ],
+            "description": "Spatial library for Laravel",
+            "homepage": "https://github.com/matanyadaev/laravel-eloquent-spatial",
+            "support": {
+                "issues": "https://github.com/MatanYadaev/laravel-eloquent-spatial/issues",
+                "source": "https://github.com/MatanYadaev/laravel-eloquent-spatial/tree/3.1.2"
+            },
+            "time": "2023-02-28T21:34:41+00:00"
+        },
+        {
             "name": "mews/purifier",
             "version": "3.4.0",
             "source": {
@@ -5243,6 +5083,46 @@
                 "source": "https://github.com/paragonie/random_compat"
             },
             "time": "2020-10-15T08:29:30+00:00"
+        },
+        {
+            "name": "phayes/geophp",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phayes/geoPHP.git",
+                "reference": "015404e85b602e0df1f91441f8db0f9e98f7e567"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phayes/geoPHP/zipball/015404e85b602e0df1f91441f8db0f9e98f7e567",
+                "reference": "015404e85b602e0df1f91441f8db0f9e98f7e567",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "geoPHP.inc"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2 or New-BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Patrick Hayes"
+                }
+            ],
+            "description": "GeoPHP is a open-source native PHP library for doing geometry operations. It is written entirely in PHP and can therefore run on shared hosts. It can read and write a wide variety of formats: WKT (including EWKT), WKB (including EWKB), GeoJSON, KML, GPX, GeoRSS). It works with all Simple-Feature geometries (Point, LineString, Polygon, GeometryCollection etc.) and can be used to get centroids, bounding-boxes, area, and a wide variety of other useful information.",
+            "homepage": "https://github.com/phayes/geoPHP",
+            "support": {
+                "issues": "https://github.com/phayes/geoPHP/issues",
+                "source": "https://github.com/phayes/geoPHP/tree/master"
+            },
+            "time": "2014-12-02T06:11:22+00:00"
         },
         {
             "name": "phenx/php-font-lib",

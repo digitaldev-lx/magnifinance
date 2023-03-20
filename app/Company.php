@@ -3,7 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
-use DigitalDevLX\LaravelMySqlSpatial\Eloquent\SpatialTrait;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 use Illuminate\Support\Str;
 use Laravel\Cashier\Billable;
 use App\Observers\CompanyObserver;
@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
+use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
 /**
  * App\Company
@@ -128,10 +129,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Company extends Model
 {
-    use Notifiable, Billable, SpatialTrait;
+    use Notifiable, Billable, HasSpatial;
 
-    protected $spatialFields = [
-        'lat_long'
+    protected $casts = [
+        'lat_long' => Point::class,
     ];
 
     protected $fillable = [

@@ -153,7 +153,6 @@ return [
         /*
          * Package Service Providers...
          */
-        \DigitalDevLX\LaravelMySqlSpatial\SpatialServiceProvider::class,
         DigitalDevLX\Magnifinance\MagnifinanceServiceProvider::class,
         /*
          * Application Service Providers...

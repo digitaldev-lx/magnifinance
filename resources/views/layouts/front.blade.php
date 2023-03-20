@@ -150,7 +150,7 @@
 
         @include('sections.footer')
 
-        @include('cookieConsent::index')
+        {{--@include('cookieConsent::index')--}}
 
         @include('front.coupon-model')
 

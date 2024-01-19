@@ -30,26 +30,50 @@ class FrontBaseController extends Controller
     {
         parent::__construct();
 
-        $this->smsSettings = SmsSetting::first();
-        $this->googleCaptchaSettings = GoogleCaptchaSetting::first();
-        $this->settings = GlobalSetting::first();
-        $this->frontThemeSettings = FrontThemeSetting::first();
+        $this->smsSettings = cache()->remember('SmsSetting', 60*60, function () {
+            return SmsSetting::first();
+        });
+        $this->googleCaptchaSettings = cache()->remember('GoogleCaptchaSetting', 60*60, function () {
+            return GoogleCaptchaSetting::first();
+        });
+        $this->settings = cache()->remember('GlobalSetting', 60*60, function () {
+            return GlobalSetting::first();
+        });
+        $this->frontThemeSettings = cache()->remember('FrontThemeSetting', 60*60, function () {
+            return FrontThemeSetting::first();
+        });
 
-        $this->locations = Location::select('id', 'name')->active()->get();
-        $this->languages = Language::where('status', 'enabled')->orderBy('language_name', 'asc')->get();
-        $this->pages = Page::all();
+        $this->locations = cache()->remember('Locations', 60*60, function () {
+            return Location::select('id', 'name')->active()->get();
+        });
+        $this->languages = cache()->remember('language_enabled', 60*60, function () {
+            return Language::where('status', 'enabled')->orderBy('language_name', 'asc')->get();
+        });
+        $this->pages = cache()->remember('Pages', 60*60, function () {
+            return Page::all();
+        });
         $this->productsCount = json_decode(request()->cookie('products'), true);
-        $this->sections = Section::active()->get()->toArray();
-        $this->footerSetting = FooterSetting::first();
-        $this->widgets = FrontWidget::all();
-        $this->countries = Country::all();
+        $this->sections = cache()->remember('Sections', 60*60, function () {
+            return Section::active()->get()->toArray();
+        });
+        $this->footerSetting = cache()->remember('FooterSetting', 60*60, function () {
+            return FooterSetting::first();
+        });
+        $this->widgets = cache()->remember('FrontWidget', 60*60, function () {
+            return FrontWidget::all();
+        });
+        $this->countries = cache()->remember('Countries', 60*60, function () {
+            return Country::all();
+        });
 
-        $this->headerCategories = Category::withoutGlobalScopes()->active()->has('services', '>', 0)
-            ->whereHas('services', function ($query) {
-                $query->active();
-            })
-        ->withCount('services')
-        ->get();
+        $this->headerCategories = cache()->remember('Category_services', 60*60, function () {
+            return Category::withoutGlobalScopes()->active()->has('services', '>', 0)
+                ->whereHas('services', function ($query) {
+                    $query->active();
+                })
+                ->withCount('services')
+                ->get();
+        });
 
         view()->share('widgets', $this->widgets);
         view()->share('productsCount', $this->productsCount);
@@ -78,7 +102,9 @@ class FrontBaseController extends Controller
 
             App::setLocale($this->settings->locale);
 
-            $this->localeLanguage = Language::where('language_code', App::getLocale())->first();
+            $this->localeLanguage = cache()->remember('language_code', 60*60, function () {
+                return Language::where('language_code', App::getLocale())->first();
+            });
 
             view()->share('sections', $this->sections);
             view()->share('user', $this->user);
@@ -103,8 +129,12 @@ class FrontBaseController extends Controller
     public function getCallingCodes()
     {
         $codes = [];
-        $location = Location::where('country_id', '!=', null)->pluck('country_id');
-        $countries = count($location) > 0 ? Country::whereIn('id', $location)->get() : Country::get();
+        $location = cache()->remember('country_id_location', 60*60, function () {
+            return Location::where('country_id', '!=', null)->pluck('country_id');
+        });
+        $countries = cache()->remember('Country', 60*60, function () use ($location) {
+            return count($location) > 0 ? Country::whereIn('id', $location)->get() : Country::get();
+        });
 
         foreach($countries as $country) {
             $codes = Arr::add($codes, $country->iso, array('name' => $country->name, 'dial_code' => '+'.$country->phonecode));

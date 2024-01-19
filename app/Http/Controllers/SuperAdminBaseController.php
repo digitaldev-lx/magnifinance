@@ -41,7 +41,9 @@ class SuperAdminBaseController extends Controller
         $this->googleCaptchaSettings = GoogleCaptchaSetting::first();
 
         $this->languages = Language::where('status', 'enabled')->orderBy('language_name', 'asc')->get();
-        $this->frontThemeSettings = FrontThemeSetting::first();
+        $this->frontThemeSettings = cache()->remember('FrontThemeSetting', 60*60, function () {
+            return FrontThemeSetting::first();
+        });
         $this->paymentGatewayCredential = PaymentGatewayCredentials::first();
 
         $this->pages = Page::all();

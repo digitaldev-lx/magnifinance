@@ -45,7 +45,7 @@ class CreateFooterSettingsTable extends Migration
                     'link' => 'https://linkedin.com'
                 ],
             ],
-            'footer_text' => 'Froiden Technologies Pvt. Ltd. © 2020 - 2025 All Rights Reserved.'
+            'footer_text' => 'DigitalDev © '.now()->format("YYYY").' All Rights Reserved.'
         ];
 
         FooterSetting::create($data);

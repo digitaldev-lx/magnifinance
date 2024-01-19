@@ -125,8 +125,13 @@ if (!function_exists('currencyConvertedPrice')) {
     function currencyConvertedPrice($company_id, $price)
     {
         // Get exchange rates
-        $from_currency = Company::withoutGlobalScope(CompanyScope::class)->find($company_id)->currency->exchange_rate;
-        $to_currency = GlobalSetting::first()->currency->exchange_rate;
+        $from_currency = cache()->remember('from_currency_'.$company_id, 60*60, function () use ($company_id) {
+            return Company::withoutGlobalScope(CompanyScope::class)->find($company_id)->currency->exchange_rate;
+        });
+
+        $to_currency = cache()->remember('globalSettings', 60*60, function () {
+            return GlobalSetting::first()->currency->exchange_rate;
+        });
         try {
             // Convert amount
             $value = ($price * $to_currency) / $from_currency;
@@ -252,7 +257,9 @@ if (!function_exists('globalSetting')) {
 
     function globalSetting()
     {
-        return GlobalSetting::with('currency')->first();
+        return cache()->remember('GlobalSetting', 60*60, function () {
+            return GlobalSetting::with('currency')->first();
+        });
     }
 
 }

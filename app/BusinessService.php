@@ -204,7 +204,9 @@ class BusinessService extends Model
 
     public function getFormatedPriceAttribute()
     {
-        return currencyFormatter($this->converted_price);
+        return cache()->remember('currencyFormatter', 60*60, function () {
+            return currencyFormatter($this->converted_price);
+        });
     }
 
     public function getFormatedDiscountedPriceAttribute()
@@ -229,13 +231,16 @@ class BusinessService extends Model
 
     public function getPriceWithTaxesAttribute()
     {
-        if (!$this->taxServices) {
+        $taxServices = cache()->remember('taxServices', 60*60, function () {
+            return $this->taxServices;
+        });
+        if (!$taxServices) {
             return 0;
         }
 
         $taxPercent = 0;
 
-        foreach ($this->taxServices as $key => $tax) {
+        foreach ($taxServices as $key => $tax) {
             $taxPercent += $tax->tax->percent;
         }
 

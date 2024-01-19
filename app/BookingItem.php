@@ -84,7 +84,9 @@ class BookingItem extends Model
 
     public function getConvertedUnitPriceAttribute()
     {
-        return currencyConvertedPrice($this->company_id, $this->unit_price);
+        return cache()->remember('converted_Unit_Price_'. $this->company_id, 60*60, function () {
+            return currencyConvertedPrice($this->company_id, $this->unit_price);
+        });
     }
 
     public function getFormatedUnitPriceAttribute()

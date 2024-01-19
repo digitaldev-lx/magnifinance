@@ -46,7 +46,9 @@ class FrontThemeSettingController extends SuperAdminBaseController
     // @codingStandardsIgnoreLine
     public function update(StoreTheme $request, $id)
     {
-        $theme = FrontThemeSetting::first();
+        $theme = cache()->remember('FrontThemeSetting', 60*60, function () {
+            return FrontThemeSetting::first();
+        });
 
         $theme->primary_color = $request->primary_color;
         $theme->secondary_color = $request->secondary_color;
@@ -85,7 +87,9 @@ class FrontThemeSettingController extends SuperAdminBaseController
 
     public function addSeoDetails(StoreSeoRequest $request)
     {
-        $seo = FrontThemeSetting::first();
+        $seo = cache()->remember('FrontThemeSetting', 60*60, function () {
+            return FrontThemeSetting::first();
+        });
         $seo->seo_description = $request->seo_description;
         $seo->seo_keywords = $request->seo_keywords;
         $seo->save();

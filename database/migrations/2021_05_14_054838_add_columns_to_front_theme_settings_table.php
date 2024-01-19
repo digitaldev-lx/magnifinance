@@ -22,9 +22,9 @@ class AddColumnsToFrontThemeSettingsTable extends Migration
         });
 
         $theme = FrontThemeSetting::first();
-        
+
         if($theme){
-            $theme->title      = 'Appointo Multi Vendor';
+            $theme->title      = 'Spot-B';
             $theme->save();
         }
     }

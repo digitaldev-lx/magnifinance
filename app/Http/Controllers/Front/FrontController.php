@@ -95,8 +95,12 @@ class FrontController extends FrontBaseController
                     $query->withoutGlobalScope(CompanyScope::class)->where('location_id', $location_id);
                 }]);
 
-            $total_categories_count = $categories->count();
-            $categories = $categories->take(8)->get();
+            $total_categories_count = cache()->remember('categories_count', 60*60, function () use($categories) {
+                return $categories->count();
+            });
+            $categories = cache()->remember('categories_take_8', 60*60, function () use($categories) {
+                return $categories->take(8)->get();
+            });
 
 
             /* DEALS */
@@ -110,27 +114,35 @@ class FrontController extends FrontBaseController
                 ->where('end_date_time', '>=', Carbon::now()->setTimezone($this->settings->timezone))
                 ->where('location_id', $location_id);
 
-            $total_deals_count = $deals->count();
-            $deals = $deals->take(10)->get();
+            $total_deals_count = cache()->remember('deals_count', 60*60, function () use($deals) {
+                return $deals->count();
+            });
+            $deals = cache()->remember('deals_take_10', 60*60, function () use($deals) {
+                return $deals->take(10)->get();
+            });
 
-            $spotlight = Spotlight::with(['deal', 'company' => function ($q) {
-                $q->withoutGlobalScope(CompanyScope::class);
-            }])
-                ->activeCompany()
-                ->whereHas('deal', function ($q) use ($location_id) {
-                    $q->whereHas('location', function ($q) use ($location_id) {
-                        $q->where('location_id', $location_id);
-                    });
-                })->orderBy('sequence', 'asc')->get();
+            $spotlight = cache()->remember('Spotlight', 60*60, function () use($location_id) {
+                return Spotlight::with(['deal', 'company' => function ($q) {
+                    $q->withoutGlobalScope(CompanyScope::class);
+                }])
+                    ->activeCompany()
+                    ->whereHas('deal', function ($q) use ($location_id) {
+                        $q->whereHas('location', function ($q) use ($location_id) {
+                            $q->where('location_id', $location_id);
+                        });
+                    })->orderBy('sequence', 'asc')->get();
+            });
 
-            $articles = Article::published()->withoutGlobalScope(CompanyScope::class)
-                ->with([
-                    'category' => function ($q) {
-                        $q->withoutGlobalScope(CompanyScope::class);
-                    },
-                ])
-                ->where('status', 'approved')
-                ->latest()->take(10)->get();
+            $articles = cache()->remember('Articles', 60*60, function () {
+                return Article::published()->withoutGlobalScope(CompanyScope::class)
+                    ->with([
+                        'category' => function ($q) {
+                            $q->withoutGlobalScope(CompanyScope::class);
+                        },
+                    ])
+                    ->where('status', 'approved')
+                    ->latest()->take(10)->get();
+            });
 
             return Reply::dataOnly(['articles' => $articles, 'categories' => $categories, 'total_categories_count' => $total_categories_count, 'deals' => $deals, 'total_deals_count' => $total_deals_count, 'spotlight' => $spotlight]);
         }

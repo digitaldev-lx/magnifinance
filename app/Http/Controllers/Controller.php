@@ -68,13 +68,25 @@ class Controller extends BaseController
 //        $this->showInstall();
 //        $this->checkMigrateStatus();
 
-        $this->settings = GlobalSetting::first();
+        $this->settings = cache()->remember('GlobalSetting', 60*60, function () {
+            return GlobalSetting::first();
+        });;
 
-        $this->frontThemeSettings = FrontThemeSetting::first();
-        $this->popularSearch = UniversalSearch::withoutGlobalScope(CompanyScope::class)->where('type', 'frontend')->where('count', '>', 0)->orderBy('count', 'desc')->limit(7)->get();
-        $this->popularStores = Company::where('popular_store', '1')->limit(7)->get();
-        $this->languages = Language::where('status', 'enabled')->orderBy('language_name', 'asc')->get();
-        $this->socialAuthSettings = SocialAuthSetting::first();
+        $this->frontThemeSettings = cache()->remember('FrontThemeSetting', 60*60, function () {
+            return FrontThemeSetting::first();
+        });
+        $this->popularSearch = cache()->remember('UniversalSearch', 60*60, function () {
+            return UniversalSearch::withoutGlobalScope(CompanyScope::class)->where('type', 'frontend')->where('count', '>', 0)->orderBy('count', 'desc')->limit(7)->get();
+        });
+        $this->popularStores = cache()->remember('popular_store', 60*60, function () {
+            return Company::where('popular_store', '1')->limit(7)->get();
+        });
+        $this->languages = cache()->remember('language_enabled', 60*60, function () {
+            return Language::where('status', 'enabled')->orderBy('language_name', 'asc')->get();
+        });
+        $this->socialAuthSettings = cache()->remember('SocialAuthSetting', 60*60, function () {
+            return SocialAuthSetting::first();
+        });
 
         if($this->settings){
             config(['app.name' => $this->settings->company_name]);
@@ -87,9 +99,15 @@ class Controller extends BaseController
         view()->share('frontThemeSettings', $this->frontThemeSettings);
 
         $this->middleware(function ($request, $next) {
-            $this->superAdminThemeSetting = ThemeSetting::ofSuperAdminRole()->first();
-            $this->adminThemeSetting = ThemeSetting::ofAdminRole()->first();
-            $this->customerThemeSetting = ThemeSetting::ofCustomerRole()->first();
+            $this->superAdminThemeSetting = cache()->remember('ThemeSetting_ofSuperAdminRole', 60*60, function () {
+                return ThemeSetting::ofSuperAdminRole()->first();
+            });
+            $this->adminThemeSetting = cache()->remember('ThemeSetting_ofAdminRole', 60*60, function () {
+                return ThemeSetting::ofAdminRole()->first();
+            });
+            $this->customerThemeSetting = cache()->remember('ThemeSetting_ofCustomerRole', 60*60, function () {
+                return ThemeSetting::ofCustomerRole()->first();
+            });
 
             $this->productsCount = request()->hasCookie('products') ? count(json_decode(request()->cookie('products'), true)) : 0;
             $this->user = auth()->user();

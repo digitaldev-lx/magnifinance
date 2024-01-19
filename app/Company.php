@@ -180,7 +180,9 @@ class Company extends Model
 
     public function getLogoUrlAttribute()
     {
-        $globalSetting = GlobalSetting::first();
+        $globalSetting = cache()->remember('GlobalSetting', 60*60, function () {
+            return GlobalSetting::first();
+        });
 
         if (is_null($this->logo)) {
             return $globalSetting->logo_url;

@@ -11,6 +11,7 @@ use App\SmsSetting;
 use App\GlobalSetting;
 use App\Helper\Formats;
 use App\FrontThemeSetting;
+use App\User;
 use Illuminate\Support\Arr;
 use App\GoogleCaptchaSetting;
 use App\PaymentGatewayCredentials;
@@ -59,7 +60,7 @@ class SuperAdminBaseController extends Controller
         view()->share('calling_codes', $this->getCallingCodes());
 
         $this->middleware(function ($request, $next) {
-            $this->user = auth()->user();
+            $this->user = User::with('roles')->find(auth()->id());
 
             config(['app.name' => $this->settings->company_name]);
             config(['app.url' => url('/')]);

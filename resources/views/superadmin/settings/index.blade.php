@@ -961,7 +961,7 @@
                                         </button>
                                     </div>
                                     <br>
-                                    <p>{{__('app.sitemaplastModified')}} {{  \Carbon\Carbon::parse(\Storage::disk('digitalocean')->lastModified('sitemap/sitemap.xml'))->diffForHumans()  }}</p>
+                                    <p>{{__('app.sitemaplastModified')}} {{  sitemap_last_modification()  }}</p>
                                     <a href="{{route('superadmin.sitemapDownload')}}" class="btn btn-link">{{__('app.sitemapDownload')}}</a>
 
                                 </div>

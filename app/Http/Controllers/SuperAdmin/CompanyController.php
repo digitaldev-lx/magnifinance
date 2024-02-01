@@ -18,10 +18,10 @@ use App\Package;
 use App\Role;
 use App\User;
 use Carbon\Carbon;
-use DigitalDevLX\LaravelMySqlSpatial\Types\Point;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class CompanyController extends SuperAdminBaseController
 {

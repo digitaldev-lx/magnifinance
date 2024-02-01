@@ -3,9 +3,10 @@
 namespace App;
 
 use App\Scopes\CompanyScope;
-use DigitalDevLX\LaravelMySqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use MatanYadaev\EloquentSpatial\Objects\Point;
+use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 use Shetabit\Visitor\Traits\Visitable;
 
 /**
@@ -54,10 +55,10 @@ use Shetabit\Visitor\Traits\Visitable;
 class VendorPage extends Model
 {
     use Visitable;
-    use SpatialTrait;
+    use HasSpatial;
 
-    protected $spatialFields = [
-        'lat_long'
+    protected $casts = [
+        'lat_long' => Point::class,
     ];
 
     protected $guarded = ['id'];

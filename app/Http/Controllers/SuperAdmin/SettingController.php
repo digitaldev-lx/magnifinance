@@ -121,7 +121,7 @@ class SettingController extends SuperAdminBaseController
     public function sitemapDownload()
     {
         $path = "sitemap/sitemap.xml";
-        return Storage::disk('digitalocean')->download($path, 'sitemap.xml', ['Content-Type' => 'application/xml']);
+        return Storage::disk('local')->download($path, 'sitemap.xml', ['Content-Type' => 'application/xml']);
     }
 
     public function sitemapGenerate()

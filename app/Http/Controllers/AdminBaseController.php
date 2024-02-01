@@ -9,6 +9,7 @@ use App\GlobalSetting;
 use App\Helper\Formats;
 use App\Location;
 use App\ThemeSetting;
+use App\TodoItem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;

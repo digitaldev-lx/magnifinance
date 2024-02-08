@@ -1,5 +1,43 @@
 # Readme for Spot-B
 
+# docker
+
+cp envs/.env.qld.encrypted ./ && php artisan env:decrypt --key=g2SQwZDpD4QQgvL5qCfxANEjrnzCa93j --env=qld && rm .env.qld.encrypted
+
+php artisan env:encrypt --key=g2SQwZDpD4QQgvL5qCfxANEjrnzCa93j --env=staging \
+&& rm .env.staging 
+&& mv .env.staging.encrypted envs/.env.staging.encrypted
+
+docker build --build-arg lara_env=staging -t registry.gitlab.com/digitaldev-lx/spot-b .
+
+docker push registry.gitlab.com/digitaldev-lx/spot-b
+
+
+```yaml
+
+version: '3.8'
+services:
+
+    cloudflared:
+        image: cloudflare/cloudflared:latest
+        command: tunnel --no-autoupdate run --token eyJhIjoiNDg1NTg4OThmYjVmYWM5MmY2YmEyMjE1ZmYzYmQxY2YiLCJ0IjoiN2Y1ZjczZTAtMjAwNS00ODM3LWEwNTUtODA2NjVkZWQxMzc4IiwicyI6Ik1EaGtaakUzTldZdE5tSmlOQzAwTlRneUxXSXpZVFF0TlRaa09EWm1aVEExTlRGaCJ9
+
+    spot_b_staging:
+        image: "registry.gitlab.com/digitaldev-lx/spot-b"
+        ports:
+            - '3080:80'
+        container_name: "spot-b-staging"
+        restart: unless-stopped
+
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token eyJhIjoiNDg1NTg4OThmYjVmYWM5MmY2YmEyMjE1ZmYzYmQxY2YiLCJ0IjoiN2Y1ZjczZTAtMjAwNS00ODM3LWEwNTUtODA2NjVkZWQxMzc4IiwicyI6Ik1EaGtaakUzTldZdE5tSmlOQzAwTlRneUxXSXpZVFF0TlRaa09EWm1aVEExTlRGaCJ9
+```
+
+brew install cloudflared &&
+
+sudo cloudflared service install eyJhIjoiNDg1NTg4OThmYjVmYWM5MmY2YmEyMjE1ZmYzYmQxY2YiLCJ0IjoiN2Y1ZjczZTAtMjAwNS00ODM3LWEwNTUtODA2NjVkZWQxMzc4IiwicyI6Ik1EaGtaakUzTldZdE5tSmlOQzAwTlRneUxXSXpZVFF0TlRaa09EWm1aVEExTlRGaCJ9
 ### Plugins used in the app
 
 <ol>

@@ -269,7 +269,7 @@ if (!function_exists('sitemap_last_modification')) {
 
     function sitemap_last_modification()
     {
-        
+
         // todo: remove the test
         return \Carbon\Carbon::parse(now()->subMinutes(60));
         return \Carbon\Carbon::parse(\Storage::disk('local')->lastModified('sitemap/sitemap.xml'))->diffForHumans();

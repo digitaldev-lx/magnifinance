@@ -24,7 +24,7 @@ services:
         depends_on:
             - mysql
             - redis
-            - mailpit
+            - mailhog
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:

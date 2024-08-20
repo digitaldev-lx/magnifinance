@@ -37,7 +37,8 @@
         "spatie/laravel-ignition": "^2.0",
         "spatie/laravel-sitemap": "^6.2.3",
         "stripe/stripe-php": "^7.68",
-        "yajra/laravel-datatables-oracle": "^10.3.1"
+        "yajra/laravel-datatables-oracle": "^10.3.1",
+        "digitaldev-lx/magnifinance": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
@@ -88,6 +89,12 @@
         "optimize-autoloader": true,
         "process-timeout":0
     },
-    "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "packages/digitaldev-lx/magnifinance"
+        }
+    ],
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

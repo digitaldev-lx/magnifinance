@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fce9c339d9a498e0d3e43211da05f65",
+    "content-hash": "c20fd75651c35ebf5ff3a5d8da5a387e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -578,6 +578,71 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.3"
             },
             "time": "2024-07-08T12:26:09+00:00"
+        },
+        {
+            "name": "digitaldev-lx/magnifinance",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "packages/digitaldev-lx/magnifinance",
+                "reference": "e7416036a206f37359f9088cf32536123a3466de"
+            },
+            "require": {
+                "illuminate/support": "^10.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "DigitaldevLx\\Magnifinance\\MagnifinanceServiceProvider"
+                    ],
+                    "aliases": {
+                        "Magnifinance": "DigitaldevLx\\Magnifinance\\MagnifinanceFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DigitaldevLx\\Magnifinance\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "DigitaldevLx\\Magnifinance\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/phpunit"
+                ],
+                "test-coverage": [
+                    "vendor/bin/phpunit --coverage-html coverage"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paulo Serrano",
+                    "email": "geral@digitaldev.pt",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Magnifinance Api Laravel Package",
+            "homepage": "https://github.com/digitaldev-lx/magnifinance",
+            "keywords": [
+                "digitaldev-lx",
+                "magnifinance"
+            ],
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "doctrine/cache",
@@ -12563,7 +12628,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "santigarcor/laratrust": 20
     },

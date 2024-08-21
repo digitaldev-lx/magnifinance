@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d26e44dd8ebc0a9a0b272f9ae85d9bd",
+    "content-hash": "1ca418f9e46084df1e7f8b2fd808304b",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -581,11 +581,17 @@
         },
         {
             "name": "digitaldev-lx/magnifinance",
-            "version": "dev-develop",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/digitaldev-lx/magnifinance.git",
+                "reference": "a31e777a72eec88879b5544121b6725b115889eb"
+            },
             "dist": {
-                "type": "path",
-                "url": "packages/digitaldev-lx/magnifinance",
-                "reference": "73af17ba7461ec3570b44a93890cac38fc4b75c4"
+                "type": "zip",
+                "url": "https://api.github.com/repos/digitaldev-lx/magnifinance/zipball/a31e777a72eec88879b5544121b6725b115889eb",
+                "reference": "a31e777a72eec88879b5544121b6725b115889eb",
+                "shasum": ""
             },
             "require": {
                 "php": "^8.2"
@@ -606,19 +612,7 @@
                     "DigitaldevLx\\Magnifinance\\": "src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "DigitaldevLx\\Magnifinance\\Tests\\": "tests"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "vendor/bin/phpunit"
-                ],
-                "test-coverage": [
-                    "vendor/bin/phpunit --coverage-html coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -635,9 +629,11 @@
                 "digitaldev-lx",
                 "magnifinance"
             ],
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/digitaldev-lx/magnifinance/issues",
+                "source": "https://github.com/digitaldev-lx/magnifinance/tree/v1.0.0"
+            },
+            "time": "2024-08-21T11:43:58+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -12449,7 +12445,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,

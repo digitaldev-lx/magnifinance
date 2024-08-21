@@ -8,9 +8,8 @@
 
 namespace App\Traits;
 
-use App\Company;
-use App\GlobalSetting;
-use App\SmtpSetting;
+use App\Models\GlobalSetting;
+use App\Models\SmtpSetting;
 use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Support\Facades\Config;
 

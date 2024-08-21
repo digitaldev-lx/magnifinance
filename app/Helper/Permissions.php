@@ -2,8 +2,8 @@
 
 namespace App\Helper;
 
-use App\Permission;
-use App\Role;
+use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Support\Arr;
 
 class Permissions

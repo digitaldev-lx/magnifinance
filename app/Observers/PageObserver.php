@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Helper\SearchLog;
-use App\Page;
+use App\Models\Page;
 
 class PageObserver
 {

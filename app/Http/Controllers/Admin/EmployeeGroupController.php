@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\BusinessService;
-use App\EmployeeGroup;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\EmployeeGroup\StoreRequest;
 use App\Http\Requests\EmployeeGroup\UpdateRequest;
+use App\Models\BusinessService;
+use App\Models\EmployeeGroup;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

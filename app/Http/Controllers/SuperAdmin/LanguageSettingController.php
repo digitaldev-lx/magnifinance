@@ -5,12 +5,10 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Language\StoreLanguage;
-use App\Language;
+use App\Models\Language;
 use Barryvdh\TranslationManager\Models\Translation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
 
 class LanguageSettingController extends SuperAdminBaseController
 {

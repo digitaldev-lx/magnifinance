@@ -2,33 +2,31 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Tout;
+use App\Helper\Reply;
+use App\Http\Controllers\Controller;
+use App\Models\Booking;
+use App\Models\GatewayAccountDetail;
+use App\Models\Package;
+use App\Models\Payment;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\Tout;
+use App\Notifications\BookingConfirmation;
+use App\Notifications\CompanyUpdatedPlan;
+use App\Notifications\NewBooking;
 use App\Notifications\ToutCompanyInfo;
 use App\Notifications\ToutPurchased;
-use App\Notifications\CompanyUpdatedPlan;
-use App\Package;
 use App\Services\StripeCustomerManager;
 use App\User;
-use App\Booking;
-use App\Payment;
 use Carbon\Carbon;
 use DigitalDevLX\Magnifinance\facades\Magnifinance;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Stripe\Stripe;
-use App\Helper\Reply;
-use App\GlobalSetting;
-use Illuminate\Http\Request;
-use App\GatewayAccountDetail;
-use App\Notifications\NewBooking;
-use App\PaymentGatewayCredentials;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use App\Notifications\BookingConfirmation;
-use App\Tax;
-use Illuminate\Support\Facades\Notification;
 
 class StripeController extends Controller
 {

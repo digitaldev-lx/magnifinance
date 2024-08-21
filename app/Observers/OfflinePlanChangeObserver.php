@@ -2,10 +2,8 @@
 
 namespace App\Observers;
 
-use App\Notifications\OfflinePackageChangeConfirmation;
+use App\Models\OfflinePlanChange;
 use App\Notifications\OfflinePackageChangeRequest;
-use App\OfflinePlanChange;
-use App\Scopes\CompanyScope;
 use App\User;
 use Illuminate\Support\Facades\Notification;
 

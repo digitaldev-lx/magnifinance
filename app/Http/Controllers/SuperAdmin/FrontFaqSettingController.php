@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\FrontFaq;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
-use App\Language;
+use App\Models\FrontFaq;
+use App\Models\Language;
 use Illuminate\Http\Request;
 
 class FrontFaqSettingController extends SuperAdminBaseController

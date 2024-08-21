@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Company;
 use App\Helper\Reply;
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class PopularStoresController extends Controller

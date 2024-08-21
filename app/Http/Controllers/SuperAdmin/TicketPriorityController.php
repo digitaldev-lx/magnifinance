@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\TicketPriority;
 use App\Helper\Reply;
-;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TicketPriority\Store;
+use App\Models\TicketPriority;
+
+;
 
 class TicketPriorityController extends Controller
 {

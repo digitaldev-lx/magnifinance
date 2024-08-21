@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Role;
-use App\User;
-use App\Notifications\NewUser;
 use App\Helper\Reply;
-;
+use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\TicketAgent\Store;
 use App\Http\Requests\TicketAgent\Update;
-use App\Http\Controllers\SuperAdminBaseController;
+use App\Models\Role;
+use App\Notifications\NewUser;
+use App\User;
+
+;
 
 class TicketAgentController extends SuperAdminBaseController
 {

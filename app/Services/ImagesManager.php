@@ -14,7 +14,7 @@ class ImagesManager
         $extension = $request->file($input_name)->getClientOriginalExtension();
         $fileName = time().Str::uuid().'.'.$extension;
         $filePath = 'images/'. $directory . '/' . $fileName;
-        Storage::disk('digitalocean')->putFileAs('images/'. $directory, $request->$input_name, $fileName ,'public');
+        Storage::disk('r2')->putFileAs('images/'. $directory, $request->$input_name, $fileName ,'public');
         return $filePath;
     }
 
@@ -27,7 +27,7 @@ class ImagesManager
             $extension = $fileData->getClientOriginalExtension();
             $fileName = time().Str::uuid().'.'.$extension;
             $imagePath = 'images/'. $directory . '/'. $fileName;
-            Storage::disk('digitalocean')->putFileAs('images/'. $directory, $fileData, $fileName ,'public');
+            Storage::disk('r2')->putFileAs('images/'. $directory, $fileData, $fileName ,'public');
             array_push($service_images_arr, $imagePath);
             if ($imagePath == $request->default_image) {
                 $default_image_index = array_key_last($service_images_arr);
@@ -44,21 +44,21 @@ class ImagesManager
         list(, $data)      = explode(',', $data);
         $data = base64_decode($data);
         $path = "images/$directory/" . $fileName;
-        Storage::disk('digitalocean')->put($path, $data, 'public');
+        Storage::disk('r2')->put($path, $data, 'public');
         return $path;
     }
 
     public function deleteImage($filePath): bool
     {
-        if(Storage::disk('digitalocean')->exists($filePath)){
-            return Storage::disk('digitalocean')->delete($filePath);
+        if(Storage::disk('r2')->exists($filePath)){
+            return Storage::disk('r2')->delete($filePath);
         }
         return true;
     }
 
     public function imageUrl($filePath): string
     {
-        return Storage::disk('digitalocean')->url($filePath);
+        return Storage::disk('r2')->url($filePath);
     }
 
     public function imageCdnUrl($filePath): string

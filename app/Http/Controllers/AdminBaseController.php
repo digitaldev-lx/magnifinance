@@ -2,30 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\BusinessService;
-use App\Company;
-use App\Deal;
-use App\GlobalSetting;
 use App\Helper\Formats;
-use App\Location;
-use App\ThemeSetting;
-use App\TodoItem;
+use App\Models\BusinessService;
+use App\Models\Country;
+use App\Models\Deal;
+use App\Models\GlobalSetting;
+use App\Models\Language;
+use App\Models\Location;
+use App\Models\Package;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\Role;
+use App\Models\SmsSetting;
+use App\Models\ThemeSetting;
+use App\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Artisan;
-use App\Language;
-use App\ModuleSetting;
-use App\Package;
-use App\PaymentGatewayCredentials;
-use App\Role;
-use App\SmsSetting;
-use App\User;
-use Illuminate\Support\Facades\Auth;
-use App\Country;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
-use Laravel\Cashier\Subscription;
-use function PHPUnit\Framework\isNull;
 
 class AdminBaseController extends Controller
 {

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Media;
-use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\CreateFrontSlider;
 use App\Http\Requests\Front\UpdateFrontSlider;
+use App\Models\Media;
 use App\Services\ImagesManager;
 
 class FrontSliderController extends Controller

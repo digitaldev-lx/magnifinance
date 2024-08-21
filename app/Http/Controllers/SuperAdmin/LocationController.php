@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Country;
-use App\Location;
 use App\Helper\Reply;
-use Illuminate\Support\Facades\Artisan;
-use App\Http\Requests\Location\StoreLocation;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Location\ChangeLocationRequest;
+use App\Http\Requests\Location\StoreLocation;
+use App\Models\Country;
+use App\Models\Location;
+use Illuminate\Support\Facades\Artisan;
 
 class LocationController extends SuperAdminBaseController
 {
@@ -112,7 +112,7 @@ class LocationController extends SuperAdminBaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Location  $location
+     * @param  \App\Models\Location  $location
      * @return \Illuminate\Http\Response
      */
     public function edit(Location $location)

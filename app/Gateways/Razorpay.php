@@ -2,11 +2,8 @@
 
 namespace App\Gateways;
 
-use App\Booking;
-use App\Company;
-use App\GlobalSetting;
 use App\Helper\Razorpay\LocalApi;
-use App\PaymentGatewayCredentials;
+use App\Models\PaymentGatewayCredentials;
 use Razorpay\Api\Api;
 
 class Razorpay

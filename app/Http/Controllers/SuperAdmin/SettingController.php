@@ -2,46 +2,42 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Article;
-use App\BusinessService;
-use App\Company;
-use App\Country;
-use App\Role;
+use App\Helper\Formats;
+use App\Helper\Permissions;
+use App\Helper\Reply;
+use App\Http\Controllers\SuperAdminBaseController;
+use App\Http\Requests\Setting\UpdateNote;
+use App\Http\Requests\Setting\UpdateSetting;
+use App\Http\Requests\Setting\UpdateTerms;
+use App\Models\Article;
+use App\Models\BookingTime;
+use App\Models\BusinessService;
+use App\Models\Company;
+use App\Models\Country;
+use App\Models\Currency;
+use App\Models\CurrencyFormatSetting;
+use App\Models\GlobalSetting;
+use App\Models\Language;
+use App\Models\Media;
+use App\Models\Module;
+use App\Models\ModuleSetting;
+use App\Models\Package;
+use App\Models\PackageModules;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\SmsSetting;
+use App\Models\SmtpSetting;
+use App\Models\SocialAuthSetting;
 use App\Services\ImagesManager;
 use App\User;
-use App\Media;
-use App\Module;
-use App\Package;
-use App\Currency;
-use App\Language;
 use Carbon\Carbon;
-use App\Permission;
-use App\SmsSetting;
-use App\BookingTime;
-use App\SmtpSetting;
-use App\Helper\Files;
-use App\Helper\Reply;
-use App\GlobalSetting;
-use App\ModuleSetting;
-use GuzzleHttp\Client;
-use App\Helper\Formats;
-use App\PackageModules;
-use App\SocialAuthSetting;
-use App\Helper\Permissions;
 use Illuminate\Http\Request;
-use App\CurrencyFormatSetting;
-use App\PaymentGatewayCredentials;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use App\Http\Requests\Setting\UpdateNote;
-use App\Http\Requests\Setting\UpdateTerms;
-use App\Http\Requests\Setting\UpdateSetting;
-use App\Http\Controllers\SuperAdminBaseController;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
@@ -152,7 +148,7 @@ class SettingController extends SuperAdminBaseController
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
         });
 
-        $sitemapFile = $sitemap->writeToDisk('digitalocean', $path);
+        $sitemapFile = $sitemap->writeToDisk('r2', $path);
 
         if($sitemapFile) {
             return response()->json(["status" => true]);

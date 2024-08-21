@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\TicketType;
-use Illuminate\Http\Request;
 use App\Helper\Reply;
-;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TicketType\Store;
+use App\Models\TicketType;
+
+;
 
 class TicketTypeController extends Controller
 {

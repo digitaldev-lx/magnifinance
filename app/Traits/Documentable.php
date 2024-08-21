@@ -3,9 +3,8 @@
 namespace App\Traits;
 
 
-use App\Document;
-use App\PaymentGatewayCredentials;
-use App\User;
+use App\Models\Document;
+use App\Models\PaymentGatewayCredentials;
 use Carbon\Carbon;
 use DigitalDevLX\Magnifinance\facades\Magnifinance;
 

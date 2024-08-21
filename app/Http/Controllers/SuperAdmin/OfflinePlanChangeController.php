@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Company;
-use App\GlobalSetting;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
+use App\Models\Company;
+use App\Models\GlobalSetting;
+use App\Models\OfflineInvoice;
+use App\Models\OfflinePlanChange;
 use App\Notifications\OfflinePackageChangeConfirmation;
 use App\Notifications\OfflinePackageChangeReject;
-use App\OfflineInvoice;
-use App\OfflinePlanChange;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;

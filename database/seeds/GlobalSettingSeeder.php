@@ -1,6 +1,6 @@
 <?php
 
-use App\GlobalSetting;
+use App\Models\GlobalSetting;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 

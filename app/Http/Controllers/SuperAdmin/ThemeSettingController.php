@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Helper\Reply;
-use App\Http\Requests\Theme\StoreTheme;
-use App\ThemeSetting;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\SuperAdminBaseController;
+use App\Http\Requests\Theme\StoreTheme;
+use App\Models\ThemeSetting;
 
 class ThemeSettingController extends SuperAdminBaseController
 {

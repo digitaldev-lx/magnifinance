@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Payment;
+use App\Models\Payment;
 
 class PaymentObserver
 {

@@ -1,14 +1,12 @@
 <?php
 
-use App\BusinessService;
-use App\Category;
-use App\Deal;
-use App\ItemTax;
-use App\Tax;
-use App\UniversalSearch;
-use Illuminate\Support\Facades\File;
+use App\Models\BusinessService;
+use App\Models\Category;
+use App\Models\ItemTax;
+use App\Models\Tax;
+use App\Models\UniversalSearch;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 
 class CategorySeeder extends Seeder
 {

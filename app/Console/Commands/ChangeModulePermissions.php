@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Module;
-use App\Permission;
-use App\Role;
+use App\Models\Module;
+use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;
 

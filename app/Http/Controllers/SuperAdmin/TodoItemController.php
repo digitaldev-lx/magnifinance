@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\TodoItem;
 use App\Helper\Reply;
-use Illuminate\Http\Request;
-use App\Http\Requests\ToDo\StoreTodo;
 use App\Http\Controllers\SuperAdminBaseController;
+use App\Http\Requests\ToDo\StoreTodo;
+use App\Models\TodoItem;
+use Illuminate\Http\Request;
 
 class TodoItemController extends SuperAdminBaseController
 {

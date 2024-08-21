@@ -2,7 +2,7 @@
 
 namespace App\Helper;
 
-use App\UniversalSearch;
+use App\Models\UniversalSearch;
 use Illuminate\Support\Arr;
 
 class SearchLog

@@ -1,8 +1,8 @@
 <?php
 
-use App\Booking;
-use App\BusinessService;
-use App\Tax;
+use App\Models\Booking;
+use App\Models\BusinessService;
+use App\Models\Tax;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;

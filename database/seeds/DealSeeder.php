@@ -1,11 +1,11 @@
 <?php
 
-use App\Coupon;
-use App\Deal;
-use App\FrontFaq;
-use App\ItemTax;
-use App\Spotlight;
-use App\Tax;
+use App\Models\Coupon;
+use App\Models\Deal;
+use App\Models\FrontFaq;
+use App\Models\ItemTax;
+use App\Models\Spotlight;
+use App\Models\Tax;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
@@ -213,7 +213,7 @@ class DealSeeder extends Seeder
         foreach ($deals as $key => $deal) {
             Deal::create($deal);
         }
-        
+
         $dealItem = [
             'business_service_id' => 1,
             'quantity' => '1',

@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\SocialAuthSetting;
+use App\Models\SocialAuthSetting;
 use Illuminate\Support\Facades\Config;
 
 trait SocialAuthSettings

@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Services\ImagesManager;
-use App\Services\UrlManager;
-use App\Tax;
-use App\Deal;
-use App\ItemTax;
-use App\DealItem;
-use App\Location;
-use Carbon\Carbon;
-use App\Helper\Files;
 use App\Helper\Reply;
-use App\BusinessService;
-use Illuminate\Support\Arr;
-use App\Scopes\CompanyScope;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\Deal\CreateDeal;
 use App\Http\Requests\Deal\StoreRequest;
 use App\Http\Requests\Deal\UpdateRequest;
-use App\Http\Controllers\AdminBaseController;
+use App\Models\BusinessService;
+use App\Models\Deal;
+use App\Models\DealItem;
+use App\Models\ItemTax;
+use App\Models\Location;
+use App\Models\Tax;
+use App\Scopes\CompanyScope;
+use App\Services\ImagesManager;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class DealController extends AdminBaseController
 {

@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Country;
-use App\FooterSetting;
-use App\FrontThemeSetting;
-use App\FrontWidget;
-use App\GlobalSetting;
-use App\GoogleCaptchaSetting;
 use App\Helper\Formats;
-use App\Language;
-use App\Location;
-use App\Page;
-use App\Section;
-use App\SmsSetting;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Category;
+use App\Models\Country;
+use App\Models\FooterSetting;
+use App\Models\FrontThemeSetting;
+use App\Models\FrontWidget;
+use App\Models\GlobalSetting;
+use App\Models\GoogleCaptchaSetting;
+use App\Models\Language;
+use App\Models\Location;
+use App\Models\Page;
+use App\Models\Section;
+use App\Models\SmsSetting;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Cookie;
 
 class FrontBaseController extends Controller
 {

@@ -1,10 +1,10 @@
 <?php
 
-use App\PaymentGatewayCredentials;
-use App\Role;
-use App\Tax;
-use Illuminate\Database\Seeder;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\Role;
+use App\Models\Tax;
 use App\User;
+use Illuminate\Database\Seeder;
 
 class DefaultSuperAdminSeeder extends Seeder
 {

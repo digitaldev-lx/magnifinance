@@ -15,7 +15,7 @@ return [
     /*
      * Model name of where purchase code is stored
      */
-    'setting' => \App\GlobalSetting::class,
+    'setting' => \App\Models\GlobalSetting::class,
 
     /*
      * Add redirect route here route('login') will be used

@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\User;
-use App\Ticket;
-use App\Company;
-use App\TicketType;
 use App\Helper\Files;
-use App\TicketComment;
-use App\TicketPriority;
-use App\TicketTemplate;
-use Illuminate\Http\Request;
 use App\Helper\Reply;
-;
-use App\Http\Requests\Superadmin\Ticket\Store;
 use App\Http\Controllers\SuperAdminBaseController;
+use App\Http\Requests\Superadmin\Ticket\Store;
 use App\Http\Requests\TicketReply\Store as ReplyStore;
+use App\Models\Company;
+use App\Models\Ticket;
+use App\Models\TicketComment;
+use App\Models\TicketPriority;
+use App\Models\TicketTemplate;
+use App\Models\TicketType;
+use App\User;
+use Illuminate\Http\Request;
+
+;
 
 class TicketController extends SuperAdminBaseController
 {

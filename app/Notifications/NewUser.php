@@ -2,10 +2,9 @@
 
 namespace App\Notifications;
 
-use App\SmsSetting;
-use Illuminate\Support\HtmlString;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\NexmoMessage;
+use Illuminate\Support\HtmlString;
 
 class NewUser extends BaseNotification
 {

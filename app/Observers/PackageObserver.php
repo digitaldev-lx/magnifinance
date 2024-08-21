@@ -2,10 +2,10 @@
 
 namespace App\Observers;
 
-use App\Company;
-use App\GlobalSetting;
-use App\ModuleSetting;
-use App\Package;
+use App\Models\Company;
+use App\Models\GlobalSetting;
+use App\Models\ModuleSetting;
+use App\Models\Package;
 
 class PackageObserver
 {
@@ -13,7 +13,7 @@ class PackageObserver
     /**
      * Handle the package "created" event.
      *
-     * @param  \App\Package  $package
+     * @param  \App\Models\Package  $package
      * @return void
      */
     public function creating(Package $package)
@@ -28,7 +28,7 @@ class PackageObserver
     /**
      * Handle the package "updated" event.
      *
-     * @param  \App\Package  $package
+     * @param  \App\Models\Package  $package
      * @return void
      */
     public function updated(Package $package)

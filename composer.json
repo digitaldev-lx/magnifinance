@@ -28,7 +28,7 @@
         "laravel/ui": "^4.2",
         "stripe/stripe-php": "^v13.0",
         "laravel/vonage-notification-channel": "^3.0",
-        "league/flysystem-aws-s3-v3": "~3.0",
+        "league/flysystem-aws-s3-v3": "^3.0",
         "macellan/laravel-zip": "^1.0",
         "matanyadaev/laravel-eloquent-spatial": "^4.3.2",
         "mews/purifier": "^3.3",

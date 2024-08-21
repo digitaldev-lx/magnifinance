@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\BookingTime;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
-use Carbon\Carbon;
 use App\Http\Requests\BookingTime\UpdateBookingTime;
+use App\Models\BookingTime;
+use Carbon\Carbon;
 
 class BookingTimeController extends AdminBaseController
 {

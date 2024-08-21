@@ -1,8 +1,6 @@
 <?php
 
-use App\PackageModules;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\PackageModules;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateGoogleCalendarPackageModule extends Migration

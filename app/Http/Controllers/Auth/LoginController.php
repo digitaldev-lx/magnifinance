@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\GoogleCaptchaSetting;
-use App\Role;
+use App\Http\Controllers\FrontBaseController;
+use App\Models\Role;
+use App\Models\Social;
+use App\Notifications\NewUser;
+use App\Traits\SocialAuthSettings;
 use App\User;
-use App\Social;
+use GuzzleHttp\Client;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Traits\SocialAuthSettings;
-use GuzzleHttp\Client;
-use Laravel\Socialite\Facades\Socialite;
-use App\Http\Controllers\FrontBaseController;
-use App\Notifications\NewUser;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends FrontBaseController
 {

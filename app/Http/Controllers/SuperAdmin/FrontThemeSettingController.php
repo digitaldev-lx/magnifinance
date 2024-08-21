@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\FrontThemeSetting;
 use App\Helper\Files;
 use App\Helper\Reply;
+use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\FrontTheme\StoreImagesRequest;
+use App\Http\Requests\FrontTheme\StoreSeoRequest;
 use App\Http\Requests\FrontTheme\StoreTheme;
-use App\Media;
+use App\Models\FrontThemeSetting;
+use App\Models\Media;
 use App\Services\ImagesManager;
 use Illuminate\Http\Request;
-use App\Http\Controllers\SuperAdminBaseController;
-use App\Http\Requests\FrontTheme\StoreSeoRequest;
-use Illuminate\Support\Facades\File;
 
 class FrontThemeSettingController extends SuperAdminBaseController
 {

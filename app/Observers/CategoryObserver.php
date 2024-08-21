@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Helper\SearchLog;
-use App\Category;
+use App\Models\Category;
 use App\Services\ImagesManager;
 
 class CategoryObserver

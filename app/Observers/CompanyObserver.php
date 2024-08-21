@@ -2,18 +2,17 @@
 
 namespace App\Observers;
 
-use App\Role;
-use App\Company;
-use App\Package;
-use Carbon\Carbon;
-use App\VendorPage;
-use App\BookingTime;
-use App\Helper\Files;
-use App\ThemeSetting;
-use App\ModuleSetting;
-use App\Helper\SearchLog;
 use App\Helper\Permissions;
-use App\PaymentGatewayCredentials;
+use App\Helper\SearchLog;
+use App\Models\BookingTime;
+use App\Models\Company;
+use App\Models\ModuleSetting;
+use App\Models\Package;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\Role;
+use App\Models\ThemeSetting;
+use App\Models\VendorPage;
+use Carbon\Carbon;
 
 class CompanyObserver
 {

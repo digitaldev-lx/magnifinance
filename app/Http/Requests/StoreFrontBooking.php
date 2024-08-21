@@ -2,8 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\GoogleCaptchaSetting;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\GoogleCaptchaSetting;
 
 class StoreFrontBooking extends CoreRequest
 {

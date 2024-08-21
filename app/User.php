@@ -2,102 +2,27 @@
 
 namespace App;
 
+use App\Models\Booking;
+use App\Models\BusinessService;
+use App\Models\Company;
+use App\Models\Country;
+use App\Models\EmployeeGroup;
+use App\Models\GoogleAccount;
+use App\Models\ModuleSetting;
+use App\Models\Role;
+use App\Models\TodoItem;
 use App\Observers\UserObserver;
 use App\Scopes\CompanyScope;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
-use Laratrust\Traits\LaratrustUserTrait;
-use Laravel\Cashier\Billable;
+use Laratrust\Contracts\LaratrustUser;
+use Laratrust\Traits\HasRolesAndPermissions;
 
-/**
- * App\User
- *
- * @property int $id
- * @property int|null $company_id
- * @property int|null $group_id
- * @property string $name
- * @property string $email
- * @property string $address
- * @property string $city
- * @property string $post_code
- * @property string $vat_number
- * @property string|null $calling_code
- * @property string|null $mobile
- * @property int $mobile_verified
- * @property string $password
- * @property string|null $image
- * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property int|null $country_id
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Booking[] $bookings
- * @property-read int|null $bookings_count
- * @property-read \App\Company|null $company
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Booking[] $completedBookings
- * @property-read int|null $completed_bookings_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Booking[] $customerBookings
- * @property-read int|null $customer_bookings_count
- * @property-read \App\EmployeeGroup|null $employeeGroup
- * @property-read mixed $formatted_mobile
- * @property-read mixed $is_admin
- * @property-read mixed $is_agent
- * @property-read mixed $is_customer
- * @property-read mixed $is_employee
- * @property-read mixed $is_superadmin
- * @property-read mixed $is_superadmin_employee
- * @property-read mixed $mobile_with_code
- * @property-read mixed $modules
- * @property-read mixed $role
- * @property-read mixed $user_image_url
- * @property-read \App\GoogleAccount|null $googleAccount
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Leave[] $leave
- * @property-read int|null $leave_count
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Permission[] $permissions
- * @property-read int|null $permissions_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Role[] $roles
- * @property-read int|null $roles_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\BusinessService[] $services
- * @property-read int|null $services_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\TodoItem[] $todoItems
- * @property-read int|null $todo_items_count
- * @method static Builder|User allAdministrators()
- * @method static Builder|User allAgents()
- * @method static Builder|User allCustomers()
- * @method static Builder|User allEmployees()
- * @method static Builder|User newModelQuery()
- * @method static Builder|User newQuery()
- * @method static Builder|User orWherePermissionIs($permission = '')
- * @method static Builder|User orWhereRoleIs($role = '', $team = null)
- * @method static Builder|User otherThanCustomers()
- * @method static Builder|User query()
- * @method static Builder|User whereCallingCode($value)
- * @method static Builder|User whereCompanyId($value)
- * @method static Builder|User whereCountryId($value)
- * @method static Builder|User whereCreatedAt($value)
- * @method static Builder|User whereDeletedAt($value)
- * @method static Builder|User whereEmail($value)
- * @method static Builder|User whereGroupId($value)
- * @method static Builder|User whereId($value)
- * @method static Builder|User whereImage($value)
- * @method static Builder|User whereMobile($value)
- * @method static Builder|User whereMobileVerified($value)
- * @method static Builder|User whereName($value)
- * @method static Builder|User wherePassword($value)
- * @method static Builder|User wherePermissionIs($permission = '', $boolean = 'and')
- * @method static Builder|User whereRememberToken($value)
- * @method static Builder|User whereRoleIs($role = '', $team = null, $boolean = 'and')
- * @method static Builder|User whereUpdatedAt($value)
- * @mixin \Eloquent
- */
-class User extends Authenticatable
+class User extends Authenticatable implements LaratrustUser
 {
-    use LaratrustUserTrait, Notifiable;
+    use HasRolesAndPermissions;
+    use Notifiable;
 
     protected static function boot()
     {
@@ -176,7 +101,7 @@ class User extends Authenticatable
 
     public function leave()
     {
-        return $this->hasMany('App\Leave', 'employee_id', 'id');
+        return $this->hasMany('App\Models\Leave', 'employee_id', 'id');
     }
 
     public function todoItems()

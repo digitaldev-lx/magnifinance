@@ -3,8 +3,8 @@
 namespace App\Observers;
 
 use App\Helper\Permissions;
-use App\Module;
-use App\Role;
+use App\Models\Module;
+use App\Models\Role;
 
 class ModuleObserver
 {

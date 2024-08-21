@@ -5,7 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Sms\UpdateSmsSetting;
-use App\SmsSetting;
+use App\Models\SmsSetting;
 
 class SmsSettingController extends SuperAdminBaseController
 {

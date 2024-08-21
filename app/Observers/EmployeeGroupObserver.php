@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\EmployeeGroup;
+use App\Models\EmployeeGroup;
 use App\User;
 
 class EmployeeGroupObserver

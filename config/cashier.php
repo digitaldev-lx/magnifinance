@@ -57,7 +57,7 @@ return [
     |
     */
 
-    'model' => env('CASHIER_MODEL', App\Company::class),
+    'model' => env('CASHIER_MODEL', \App\Models\Company::class),
     /*
     |--------------------------------------------------------------------------
     | Currency

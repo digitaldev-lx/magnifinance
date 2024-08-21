@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Services\ImagesManager;
-use App\Services\UrlManager;
-use App\VendorPage;
-use App\Helper\Files;
-use Illuminate\Http\Request;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
-use App\Http\Requests\VendorPage\UpdateVendorPageRequest;
+use App\Models\VendorPage;
+use App\Services\ImagesManager;
+use Illuminate\Http\Request;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class VendorPageController extends AdminBaseController

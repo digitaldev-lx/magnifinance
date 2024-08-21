@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\User;
-use App\UniversalSearch;
-use Illuminate\Http\Request;
 use App\Helper\Reply;
-;
 use App\Http\Controllers\AdminBaseController;
+use App\Models\UniversalSearch;
+use App\User;
+use Illuminate\Http\Request;
+
+;
 
 class SearchController extends AdminBaseController
 {

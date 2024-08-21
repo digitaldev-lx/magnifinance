@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Deal;
 use App\Helper\SearchLog;
+use App\Models\Deal;
 use Illuminate\Support\Facades\File;
 
 class DealObserver
@@ -45,7 +45,7 @@ class DealObserver
             }
 
         }
-        
+
         SearchLog::deleteSearchEntry($deal->id, 'admin.deals.edit');
     }
 

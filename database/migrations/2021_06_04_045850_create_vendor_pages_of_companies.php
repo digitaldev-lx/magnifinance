@@ -1,9 +1,7 @@
 <?php
 
-use App\Company;
-use App\VendorPage;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Company;
+use App\Models\VendorPage;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateVendorPagesOfCompanies extends Migration
@@ -18,7 +16,7 @@ class CreateVendorPagesOfCompanies extends Migration
     {
 
         $companies = Company::doesntHave('vendorPage')->get();
-        
+
         foreach ($companies as $company) {
             VendorPage::create([
                 'company_id' => $company->id,

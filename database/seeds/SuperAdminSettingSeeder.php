@@ -1,12 +1,12 @@
 <?php
 
-use App\FrontThemeSetting;
 use App\Helper\Permissions;
-use App\Page;
-use App\Role;
-use App\SmsSetting;
-use App\SmtpSetting;
-use App\ThemeSetting;
+use App\Models\FrontThemeSetting;
+use App\Models\Page;
+use App\Models\Role;
+use App\Models\SmsSetting;
+use App\Models\SmtpSetting;
+use App\Models\ThemeSetting;
 use Illuminate\Database\Seeder;
 
 class SuperAdminSettingSeeder extends Seeder

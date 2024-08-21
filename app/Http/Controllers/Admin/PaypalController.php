@@ -1,39 +1,37 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Company;
-use App\Package;
-use App\PaymentGatewayCredentials;
-use App\PaypalInvoice;
-use App\Subscription;
+use App\Http\Controllers\AdminBaseController;
+use App\Models\Company;
+use App\Models\Package;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\PaypalInvoice;
+use App\Models\Subscription;
 use App\Traits\StripeSettings;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use PayPal\Api\Agreement;
 use PayPal\Api\AgreementStateDescriptor;
 use PayPal\Api\Currency;
 use PayPal\Api\MerchantPreferences;
 use PayPal\Api\Patch;
 use PayPal\Api\PatchRequest;
-use PayPal\Api\PaymentDefinition;
-use PayPal\Api\Plan;
-use PayPal\Common\PayPalModel;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Redirect;
-
-/** All Paypal Details class **/
-
-use PayPal\Exception\PayPalConnectionException;
-use PayPal\Rest\ApiContext;
-use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment;
+use PayPal\Api\PaymentDefinition;
 use PayPal\Api\PaymentExecution;
-use Carbon\Carbon;
-use App\User;
-use App\Http\Controllers\AdminBaseController;
+use PayPal\Api\Plan;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Common\PayPalModel;
+use PayPal\Exception\PayPalConnectionException;
+use PayPal\Rest\ApiContext;
 
+/** All Paypal Details class **/
 class PaypalController extends AdminBaseController
 {
     private $api_context;

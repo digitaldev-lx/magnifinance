@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
-use App\PaymentGatewayCredentials;
+use App\Models\PaymentGatewayCredentials;
 use Illuminate\Http\Request;
 
 class PaymentGatewayCredentialController extends AdminBaseController

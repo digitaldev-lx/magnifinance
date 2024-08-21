@@ -2,11 +2,10 @@
 
 namespace App\Notifications;
 
-use PDF;
-use App\Booking;
-use Illuminate\Support\HtmlString;
+use App\Models\Booking;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\NexmoMessage;
+use Illuminate\Support\HtmlString;
 
 class NewBooking extends BaseNotification
 {

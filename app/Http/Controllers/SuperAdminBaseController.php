@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Page;
-use App\Company;
-use App\Country;
-use App\Language;
-use App\Location;
-use App\SmsSetting;
-use App\GlobalSetting;
 use App\Helper\Formats;
-use App\FrontThemeSetting;
+use App\Models\Company;
+use App\Models\Country;
+use App\Models\FrontThemeSetting;
+use App\Models\GlobalSetting;
+use App\Models\GoogleCaptchaSetting;
+use App\Models\Language;
+use App\Models\Location;
+use App\Models\Page;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\SmsSetting;
 use App\User;
 use Illuminate\Support\Arr;
-use App\GoogleCaptchaSetting;
-use App\PaymentGatewayCredentials;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Session;
 
 class SuperAdminBaseController extends Controller
 {

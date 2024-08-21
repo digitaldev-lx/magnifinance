@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
-use App\Currency;
-use App\Package;
-use App\PaymentGatewayCredentials;
-use App\RazorpayInvoice;
-use App\RazorpaySubscription;
+use App\Models\Company;
+use App\Models\Currency;
+use App\Models\Package;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\RazorpayInvoice;
+use App\Models\RazorpaySubscription;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

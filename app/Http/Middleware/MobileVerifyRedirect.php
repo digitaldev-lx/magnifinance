@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Helper\Reply;
-use App\SmsSetting;
+use App\Models\SmsSetting;
 use Closure;
 
 class MobileVerifyRedirect
@@ -21,7 +21,7 @@ class MobileVerifyRedirect
         $smsSetting = SmsSetting::first();
 
         if ($smsSetting->nexmo_status == 'active') {
-            
+
             if (!auth()->user()->mobile_verified) {
                 if ($request->ajax()) {
                     return response(Reply::error(__('messages.front.errors.verifyMobile')));

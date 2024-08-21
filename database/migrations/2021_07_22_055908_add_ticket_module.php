@@ -1,8 +1,6 @@
 <?php
 
-use App\Module;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Module;
 use Illuminate\Database\Migrations\Migration;
 
 class AddTicketModule extends Migration

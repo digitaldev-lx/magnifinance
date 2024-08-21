@@ -1,6 +1,6 @@
 <?php
 
-use App\TodoItem;
+use App\Models\TodoItem;
 use App\User;
 use Faker\Generator as Faker;
 
@@ -29,7 +29,7 @@ function getUserIdArray()
 }
 
 /** @phpstan-ignore-next-line */
-$factory->define(App\TodoItem::class, function (Faker $faker) {
+$factory->define(\App\Models\TodoItem::class, function (Faker $faker) {
     $randomStatus = $faker->randomElement(['pending', 'completed']); /** @phpstan-ignore-line */
     $randomUserId = $faker->randomElement(getUserIdArray()); /** @phpstan-ignore-line */
 
@@ -41,7 +41,7 @@ $factory->define(App\TodoItem::class, function (Faker $faker) {
 });
 
 /** @phpstan-ignore-next-line */
-$factory->afterCreating(App\TodoItem::class, function ($todoItem, $faker) {
+$factory->afterCreating(\App\Models\TodoItem::class, function ($todoItem, $faker) {
     if ($todoItem->position == 0) {
         $pendingPosition = $completedPosition = 0;
         $pendingTodos = TodoItem::where(['user_id' => $todoItem->user_id, 'status' => 'pending'])->get();

@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Location;
 use Illuminate\Database\Seeder;
-use App\Location;
 
 class LocationSeeder extends Seeder
 {

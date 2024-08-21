@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Currency;
 use App\Helper\Reply;
-use App\CurrencyFormatSetting;
-use App\Http\Requests\Currency\StoreCurrency;
 use App\Http\Controllers\SuperAdminBaseController;
+use App\Http\Requests\Currency\StoreCurrency;
 use App\Http\Requests\Currency\UpdateCurrency;
 use App\Http\Requests\Currency\UpdateCurrencyFormatSetting;
+use App\Models\Currency;
+use App\Models\CurrencyFormatSetting;
 
 class CurrencySettingController extends SuperAdminBaseController
 {

@@ -2,9 +2,7 @@
 
 namespace App\Observers;
 
-use App\Helper\SearchLog;
-use App\Role;
-use App\User;
+use App\Models\Role;
 
 class RoleObserver
 {

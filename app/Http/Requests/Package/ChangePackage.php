@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Package;
 
-use App\GlobalSetting;
+use App\Models\GlobalSetting;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ChangePackage extends FormRequest

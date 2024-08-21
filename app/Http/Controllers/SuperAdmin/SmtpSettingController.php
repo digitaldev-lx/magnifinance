@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\SmtpSetting;
 use App\Helper\Reply;
-use Illuminate\Http\Request;
-use App\Notifications\TestEmail;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Notification;
-use App\Http\Requests\Mail\UpdateSmtpSetting;
 use App\Http\Controllers\SuperAdminBaseController;
+use App\Http\Requests\Mail\UpdateSmtpSetting;
+use App\Models\SmtpSetting;
+use App\Notifications\TestEmail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class SmtpSettingController extends SuperAdminBaseController
 {

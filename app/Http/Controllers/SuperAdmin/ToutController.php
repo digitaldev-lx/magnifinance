@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Tout;
-use App\Article;
-use App\Category;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Tout\StoreTout;
 use App\Http\Requests\Tout\UpdateTout;
-use App\Location;
+use App\Models\Article;
+use App\Models\Category;
+use App\Models\Location;
+use App\Models\Tout;
 use App\Scopes\CompanyScope;
 use App\Services\ImagesManager;
 use Illuminate\Http\Request;

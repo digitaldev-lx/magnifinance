@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\AdminBaseController;
-use App\Ticket;
-use Illuminate\Http\Request;
-use App\User;
-use App\TicketType;
 use App\Helper\Files;
-use App\TicketPriority;
 use App\Helper\Reply;
-;
+use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\Admin\Ticket\Store;
 use App\Http\Requests\TicketReply\Store as ReplyStore;
-use App\TicketComment;
-use App\TicketTemplate;
+use App\Models\Ticket;
+use App\Models\TicketComment;
+use App\Models\TicketPriority;
+use App\Models\TicketTemplate;
+use App\Models\TicketType;
+use App\User;
+use Illuminate\Http\Request;
+
+;
 
 class TicketController extends AdminBaseController
 {

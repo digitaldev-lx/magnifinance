@@ -5,7 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Page\StorePage;
-use App\Page;
+use App\Models\Page;
 
 class PageController extends SuperAdminBaseController
 {

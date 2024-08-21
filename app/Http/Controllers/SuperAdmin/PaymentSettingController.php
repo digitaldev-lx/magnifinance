@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Helper\Reply;
-use App\PaymentGatewayCredentials;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\OfflinePayment\StoreOfflinePayment;
 use App\Http\Requests\OfflinePayment\UpdateOfflinePayment;
-use App\OfflinePaymentMethod;
+use App\Models\OfflinePaymentMethod;
+use App\Models\PaymentGatewayCredentials;
 
 class PaymentSettingController extends SuperAdminBaseController
 {

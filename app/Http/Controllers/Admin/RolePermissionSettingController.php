@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Role;
-use App\User;
-use App\Module;
-use App\Permission;
-use App\BookingTime;
-
-use App\Helper\Reply;
-use App\EmployeeSchedule;
 use App\Helper\Permissions;
-use Illuminate\Http\Request;
+use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
-use App\Http\Requests\RolePermission\StoreRole;
 use App\Http\Requests\RolePermission\AddMembers;
+use App\Http\Requests\RolePermission\StoreRole;
+use App\Models\BookingTime;
+use App\Models\EmployeeSchedule;
+use App\Models\Module;
+use App\Models\Permission;
+use App\Models\Role;
+use App\User;
+use Illuminate\Http\Request;
 
 class RolePermissionSettingController extends AdminBaseController
 {

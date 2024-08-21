@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
-use App\Language;
-use App\ThemeSetting;
-use App\GlobalSetting;
-use App\UniversalSearch;
-use App\FrontThemeSetting;
-use App\SocialAuthSetting;
+use App\Models\Company;
+use App\Models\FrontThemeSetting;
+use App\Models\GlobalSetting;
+use App\Models\Language;
+use App\Models\SocialAuthSetting;
+use App\Models\ThemeSetting;
+use App\Models\UniversalSearch;
 use App\Scopes\CompanyScope;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {

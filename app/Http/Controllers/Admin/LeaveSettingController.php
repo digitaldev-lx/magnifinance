@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
-use Illuminate\Http\Request;
 use App\Http\Requests\Leave\StoreLeave;
-use Carbon\Carbon;
-use App\User;
-use App\Leave;
+use App\Models\Leave;
 use App\Notifications\newLeave;
 use App\Notifications\updateLeaveStatus;
-use Illuminate\Support\Facades\Notification;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class LeaveSettingController  extends AdminBaseController
 {

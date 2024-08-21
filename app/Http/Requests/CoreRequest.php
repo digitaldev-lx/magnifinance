@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Company;
 use App\Helper\Reply;
+use App\Models\Company;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CoreRequest extends FormRequest

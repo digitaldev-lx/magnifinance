@@ -1,24 +1,23 @@
 <?php
 namespace App\Http\Controllers\Front;
 
-use App\User;
-use App\Booking;
-use App\Payment;
-use Carbon\Carbon;
-use App\Helper\Reply;
-use Razorpay\Api\Api;
-use App\GlobalSetting;
 use App\Facades\Razorpay;
-use Illuminate\Http\Request;
-use App\GatewayAccountDetail;
-use App\Notifications\NewBooking;
-use App\PaymentGatewayCredentials;
+use App\Helper\Reply;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use App\Notifications\BookingConfirmation;
-use Illuminate\Support\Facades\Notification;
-use App\Http\Requests\Gateways\Razorpay\CreateOrderRequest;
 use App\Http\Requests\Gateways\Razorpay\CreateAccountRequest;
+use App\Models\Booking;
+use App\Models\GatewayAccountDetail;
+use App\Models\GlobalSetting;
+use App\Models\Payment;
+use App\Models\PaymentGatewayCredentials;
+use App\Notifications\BookingConfirmation;
+use App\Notifications\NewBooking;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Session;
+use Razorpay\Api\Api;
 
 class RazorPayController extends Controller
 {

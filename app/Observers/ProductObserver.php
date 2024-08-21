@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Helper\SearchLog;
-use App\Product;
+use App\Models\Product;
 use Illuminate\Support\Facades\File;
 
 class ProductObserver
@@ -19,7 +19,7 @@ class ProductObserver
     /**
      * Handle the product "created" event.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Models\Product  $product
      * @return void
      */
     public function created(Product $product)
@@ -30,7 +30,7 @@ class ProductObserver
     /**
      * Handle the product "updated" event.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Models\Product  $product
      * @return void
      */
     public function updated(Product $product)
@@ -41,7 +41,7 @@ class ProductObserver
     /**
      * Handle the product "deleted" event.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Models\Product  $product
      * @return void
      */
     public function deleted(Product $product)

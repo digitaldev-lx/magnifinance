@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Tax;
-use App\Role;
-use App\User;
-use DateTime;
-use App\Booking;
-use App\Payment;
-use App\Product;
-use App\Category;
-use App\Location;
-use Carbon\Carbon;
-use App\BookingItem;
 use App\Helper\Reply;
-use App\BusinessService;
+use App\Http\Controllers\AdminBaseController;
+use App\Models\Booking;
+use App\Models\BookingItem;
+use App\Models\BusinessService;
+use App\Models\Category;
+use App\Models\Location;
+use App\Models\Payment;
+use App\Models\Product;
+use App\Models\Role;
+use App\Models\Tax;
 use App\Scopes\CompanyScope;
+use App\User;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\AdminBaseController;
 
 class ReportController extends AdminBaseController
 {

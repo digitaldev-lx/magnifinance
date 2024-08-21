@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\GlobalSetting;
+use App\Models\GlobalSetting;
 use Illuminate\Support\Facades\Config;
 
 trait GoogleOAuth

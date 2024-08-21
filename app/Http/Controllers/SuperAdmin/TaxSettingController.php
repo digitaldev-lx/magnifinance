@@ -4,10 +4,8 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
-use Illuminate\Http\Request;
-
 use App\Http\Requests\Tax\StoreTax;
-use App\Tax;
+use App\Models\Tax;
 
 class TaxSettingController extends SuperAdminBaseController
 {

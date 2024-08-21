@@ -2,13 +2,12 @@
 
 namespace App\Notifications;
 
-use App\FooterSetting;
-use App\GlobalSetting;
-use App\SmsSetting;
+use App\Models\FooterSetting;
+use App\Models\GlobalSetting;
+use App\Models\SmsSetting;
 use App\Traits\SmsSettings;
 use App\Traits\SmtpSettings;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
 class BaseNotification extends Notification

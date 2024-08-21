@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Company;
-use App\GlobalSetting;
 use App\Helper\Reply;
-
 use App\Http\Controllers\SuperAdminBaseController;
-use App\OfflineInvoice;
-use App\Payment;
-use App\RazorpayInvoice;
+use App\Models\Company;
+use App\Models\GlobalSetting;
+use App\Models\OfflineInvoice;
+use App\Models\Payment;
+use App\Models\PaypalInvoice;
+use App\Models\RazorpayInvoice;
+use App\Models\StripeInvoice;
 use App\Traits\StripeSettings;
-use App\PaypalInvoice;
-use App\StripeInvoice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

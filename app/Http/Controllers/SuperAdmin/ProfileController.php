@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Country;
-use App\Helper\Files;
 use App\Helper\Reply;
-use App\Services\ImagesManager;
-use App\User;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Setting\ProfileSetting;
+use App\Models\Country;
+use App\Services\ImagesManager;
+use App\User;
 
 class ProfileController extends SuperAdminBaseController
 {

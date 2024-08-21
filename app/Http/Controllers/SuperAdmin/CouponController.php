@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Coupon;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Coupon\StoreRequest;
 use App\Http\Requests\Coupon\UpdateRequest;
+use App\Models\Coupon;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class CouponController extends SuperAdminBaseController
 {

@@ -1,7 +1,7 @@
 <?php
 
-use App\Booking;
-use App\Payment;
+use App\Models\Booking;
+use App\Models\Payment;
 use Illuminate\Database\Seeder;
 
 class PaymentSeeder extends Seeder

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use Illuminate\Http\Request;
+use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Spotlight\StoreSpotlight;
-use App\Company;
-use App\Deal;
-use App\Spotlight;
-use App\Helper\Reply;
+use App\Models\Company;
+use App\Models\Deal;
+use App\Models\Spotlight;
+use Illuminate\Http\Request;
 
 class SpotlightController extends SuperAdminBaseController
 {

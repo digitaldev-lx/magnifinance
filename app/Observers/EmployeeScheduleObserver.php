@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\EmployeeSchedule;
-use App\Role;
+use App\Models\EmployeeSchedule;
+use App\Models\Role;
 
 class EmployeeScheduleObserver
 {

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\Theme\AdminStoreTheme;
-use App\ThemeSetting;
+use App\Models\ThemeSetting;
 
 class ThemeSettingController extends AdminBaseController
 {

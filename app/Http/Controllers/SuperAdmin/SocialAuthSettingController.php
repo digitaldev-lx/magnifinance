@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Helper\Reply;
-use App\SocialAuthSetting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Superadmin\SocialAuth\UpdateRequest;
+use App\Models\SocialAuthSetting;
 
 class SocialAuthSettingController extends Controller
 {

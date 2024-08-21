@@ -2,15 +2,13 @@
 
 namespace App\Observers;
 
-use App\Booking;
-use App\Company;
-use Carbon\Carbon;
-use App\BookingTime;
-use App\Services\Google;
-use App\BookingNotification;
-use App\Scopes\CompanyScope;
-use Google_Service_Calendar_Event;
+use App\Models\Booking;
+use App\Models\BookingNotification;
+use App\Models\BookingTime;
 use App\Notifications\BookingStatusChange;
+use App\Scopes\CompanyScope;
+use App\Services\Google;
+use Google_Service_Calendar_Event;
 
 class BookingObserver
 {
@@ -46,7 +44,7 @@ class BookingObserver
     /**
      * Handle the currency "deleting" event.
      *
-     * @param  \App\Booking  $booking
+     * @param  \App\Models\Booking  $booking
      * @return void
      */
     public function deleting(Booking $booking)

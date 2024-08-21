@@ -1,9 +1,9 @@
 <?php
 
-use App\ItemTax;
+use App\Models\ItemTax;
+use App\Models\Product;
+use App\Models\Tax;
 use Illuminate\Database\Seeder;
-use App\Product;
-use App\Tax;
 use Illuminate\Support\Facades\File;
 
 class ProductSeeder extends Seeder
@@ -119,7 +119,7 @@ class ProductSeeder extends Seeder
         if (!File::isDirectory($path5)) {
             File::makeDirectory($path5);
         }
-        
+
         $path6 = base_path('public/user-uploads/' . 'product' . '/' . '6' . '/');
 
         if (!File::isDirectory($path6)) {

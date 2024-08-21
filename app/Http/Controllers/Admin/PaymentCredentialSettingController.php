@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Company;
-use App\GatewayAccountDetail;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\Payment\UpdateCredentialSetting;
-use App\PaymentGatewayCredentials;
+use App\Models\Company;
+use App\Models\GatewayAccountDetail;
+use App\Models\PaymentGatewayCredentials;
 use App\User;
 use Carbon\Carbon;
 use DigitalDevLX\Magnifinance\facades\Magnifinance;

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\GoogleAccount;
+use App\Helper\Reply;
+use App\Models\GoogleAccount;
 use App\Services\Google;
 use Illuminate\Http\Request;
-use App\Helper\Reply;
-;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
+
+;
 
 class GoogleAuthController extends Controller
 {

@@ -2,12 +2,12 @@
 
 namespace App\Notifications;
 
-use App\Booking;
+use App\Models\Booking;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\HtmlString;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\NexmoMessage;
+use Illuminate\Support\HtmlString;
 
 class BookingStatusChange extends BaseNotification implements ShouldQueue
 {

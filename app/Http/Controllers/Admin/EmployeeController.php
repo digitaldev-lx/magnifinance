@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\BookingTime;
-use App\BusinessService;
-use App\EmployeeGroup;
-use App\EmployeeGroupService;
-use App\EmployeeSchedule;
-use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
+use App\Http\Requests\Employee\ChangeRoleRequest;
 use App\Http\Requests\Employee\StoreRequest;
 use App\Http\Requests\Employee\UpdateRequest;
+use App\Models\BookingTime;
+use App\Models\BusinessService;
+use App\Models\EmployeeGroup;
+use App\Models\EmployeeGroupService;
+use App\Models\EmployeeSchedule;
+use App\Models\Role;
 use App\Services\ImagesManager;
-use App\Services\UrlManager;
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\Employee\ChangeRoleRequest;
-use App\Role;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 

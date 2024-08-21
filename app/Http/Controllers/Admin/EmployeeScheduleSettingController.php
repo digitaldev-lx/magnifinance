@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\EmployeeSchedule;
-use App\User;
-use Illuminate\Http\Request;
 use App\Helper\Reply;
-use Carbon\Carbon;
 use App\Http\Controllers\AdminBaseController;
+use App\Models\EmployeeSchedule;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class EmployeeScheduleSettingController extends AdminBaseController
 {

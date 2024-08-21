@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Currency;
 use Illuminate\Database\Seeder;
-use App\Currency;
 
 class CurrencySeeder extends Seeder
 {

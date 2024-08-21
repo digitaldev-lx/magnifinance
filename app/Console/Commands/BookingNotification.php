@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Company;
+use App\Models\Company;
+use App\Notifications\BookingReminder;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Console\Command;
-use App\Notifications\BookingReminder;
 
 class BookingNotification extends Command
 {

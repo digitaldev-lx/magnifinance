@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\BusinessService;
+use App\Models\BusinessService;
 use Illuminate\Contracts\Validation\Rule;
 
 class BusinessServiceUniqueSlug implements Rule

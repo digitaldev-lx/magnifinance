@@ -8,8 +8,8 @@
 
 namespace App\Traits;
 
-use App\GlobalSetting;
-use App\SmsSetting;
+use App\Models\GlobalSetting;
+use App\Models\SmsSetting;
 use Illuminate\Notifications\NexmoChannelServiceProvider;
 use Illuminate\Support\Facades\Config;
 

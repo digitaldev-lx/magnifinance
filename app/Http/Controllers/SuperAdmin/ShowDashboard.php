@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Tout;
-use App\User;
-use App\Booking;
-use App\Category;
-use App\Company;
-use Carbon\Carbon;
 use App\Helper\Reply;
-;
-use App\Currency;
-use Illuminate\Http\Request;
 use App\Http\Controllers\SuperAdminBaseController;
+use App\Models\Booking;
+use App\Models\Category;
+use App\Models\Company;
+use App\Models\Currency;
+use App\Models\Tout;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+;
 
 class ShowDashboard extends SuperAdminBaseController
 {

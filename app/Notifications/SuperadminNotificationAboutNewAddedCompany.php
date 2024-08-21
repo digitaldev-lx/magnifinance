@@ -2,10 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Company;
-use App\FooterSetting;
-use App\GlobalSetting;
-use App\SmsSetting;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class SuperadminNotificationAboutNewAddedCompany extends BaseNotification

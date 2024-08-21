@@ -2,10 +2,10 @@
 
 namespace App\Notifications;
 
-use App\Company;
-use App\Package;
-use Illuminate\Notifications\Messages\SlackMessage;
+use App\Models\Company;
+use App\Models\Package;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\SlackMessage;
 
 class CompanyUpdatedPlan extends BaseNotification
 {

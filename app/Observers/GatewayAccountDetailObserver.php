@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\GatewayAccountDetail;
+use App\Models\GatewayAccountDetail;
 
 class GatewayAccountDetailObserver
 {

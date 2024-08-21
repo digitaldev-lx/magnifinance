@@ -5,11 +5,9 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Package\StorePackage;
-use App\Package;
-use App\PackageModules;
-use App\PaymentGatewayCredentials;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Models\Package;
+use App\Models\PackageModules;
+use App\Models\PaymentGatewayCredentials;
 
 class PackageController extends SuperAdminBaseController
 {
@@ -154,7 +152,7 @@ class PackageController extends SuperAdminBaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Package  $package
+     * @param  \App\Models\Package  $package
      * @return \Illuminate\Http\Response
      */
     public function edit(Package $package)
@@ -181,7 +179,7 @@ class PackageController extends SuperAdminBaseController
      * Update the specified resource in storage.
      *
      * @param  StorePackage $request
-     * @param  \App\Package  $package
+     * @param  \App\Models\Package  $package
      * @return \Illuminate\Http\Response
      */
     public function update(StorePackage $request, Package $package)

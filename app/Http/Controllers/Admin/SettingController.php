@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Country;
-use App\Services\ImagesManager;
-use App\Services\UrlManager;
-use App\Tax;
-use App\Role;
-use App\User;
-use App\Media;
-use App\Module;
-use App\Company;
-use App\Currency;
-use App\Language;
-use Carbon\Carbon;
-use App\Permission;
-use App\SmsSetting;
-use App\VendorPage;
-use App\BookingTime;
-use App\OfficeLeave;
-use App\SmtpSetting;
-use App\Helper\Files;
-use App\Helper\Reply;
-use App\ModuleSetting;
-use GuzzleHttp\Client;
 use App\Helper\Formats;
 use App\Helper\Permissions;
+use App\Helper\Reply;
+use App\Http\Controllers\AdminBaseController;
+use App\Http\Requests\Admin\Company\BookingSetting;
+use App\Http\Requests\Setting\UpdateSetting;
+use App\Models\BookingTime;
+use App\Models\Company;
+use App\Models\Country;
+use App\Models\Currency;
+use App\Models\GatewayAccountDetail;
+use App\Models\Language;
+use App\Models\Media;
+use App\Models\Module;
+use App\Models\ModuleSetting;
+use App\Models\OfficeLeave;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\SmsSetting;
+use App\Models\SmtpSetting;
+use App\Models\Tax;
+use App\Models\VendorPage;
+use App\Services\ImagesManager;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\GatewayAccountDetail;
-use App\PaymentGatewayCredentials;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use App\Http\Requests\Setting\UpdateSetting;
-use App\Http\Controllers\AdminBaseController;
-use App\Http\Requests\Admin\Company\BookingSetting;
 
 class SettingController extends AdminBaseController
 {

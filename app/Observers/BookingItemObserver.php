@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\BookingItem;
+use App\Models\BookingItem;
 
 class BookingItemObserver
 {

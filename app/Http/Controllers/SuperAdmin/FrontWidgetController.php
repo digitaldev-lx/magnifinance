@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Language;
-use App\FrontWidget;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
+use App\Models\FrontWidget;
 use Illuminate\Http\Request;
 
 class FrontWidgetController extends SuperAdminBaseController

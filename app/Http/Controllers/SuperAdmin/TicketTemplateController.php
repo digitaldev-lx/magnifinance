@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\TicketTemplate;
-use Illuminate\Http\Request;
 use App\Helper\Reply;
-;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TicketTemplate\Store;
+use App\Models\TicketTemplate;
+
+;
 
 class TicketTemplateController extends Controller
 {

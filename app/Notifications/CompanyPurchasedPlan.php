@@ -2,8 +2,8 @@
 
 namespace App\Notifications;
 
-use App\Company;
-use App\Package;
+use App\Models\Company;
+use App\Models\Package;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;

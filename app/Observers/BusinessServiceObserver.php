@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Helper\SearchLog;
-use App\BusinessService;
+use App\Models\BusinessService;
 use Illuminate\Support\Facades\File;
 
 class BusinessServiceObserver

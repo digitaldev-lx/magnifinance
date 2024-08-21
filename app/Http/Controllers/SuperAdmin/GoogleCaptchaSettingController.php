@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\GoogleCaptchaSetting;
 use App\Helper\Reply;
-use App\Http\Requests\GoogleCaptcha\UpdateGoogleCaptchaSetting;
 use App\Http\Controllers\SuperAdminBaseController;
+use App\Http\Requests\GoogleCaptcha\UpdateGoogleCaptchaSetting;
+use App\Models\GoogleCaptchaSetting;
 
 class GoogleCaptchaSettingController extends SuperAdminBaseController
 {

@@ -1,10 +1,7 @@
 <?php
 
-use App\Role;
-use App\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 
 class LaratrustSetupTables extends Migration

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\BookingNotification;
 use App\Helper\Reply;
-;
 use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\Admin\BookingNotification\Store;
+use App\Models\BookingNotification;
+
+;
 
 class BookingNotificationController extends AdminBaseController
 {

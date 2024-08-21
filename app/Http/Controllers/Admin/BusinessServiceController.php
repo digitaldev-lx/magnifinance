@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Service\UpdateService;
-use App\Services\ImagesManager;
-use App\Tax;
-use App\User;
-use App\ItemTax;
-use App\Package;
-use App\Category;
-use App\Location;
-use App\Helper\Files;
 use App\Helper\Reply;
-use App\BusinessService;
-use Illuminate\Support\Arr;
-use App\Scopes\CompanyScope;
-use Illuminate\Http\Request;
-use App\Http\Requests\Service\StoreService;
-use App\Http\Requests\Service\CreateService;
 use App\Http\Controllers\AdminBaseController;
+use App\Http\Requests\Service\CreateService;
+use App\Http\Requests\Service\StoreService;
+use App\Http\Requests\Service\UpdateService;
+use App\Models\BusinessService;
+use App\Models\Category;
+use App\Models\ItemTax;
+use App\Models\Location;
+use App\Models\Package;
+use App\Models\Tax;
+use App\Scopes\CompanyScope;
+use App\Services\ImagesManager;
+use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class BusinessServiceController extends AdminBaseController
 {
@@ -283,10 +281,10 @@ class BusinessServiceController extends AdminBaseController
 
         if ($businessService->image) {
             foreach ($businessService->image as $image) {
-                if (\Storage::disk('digitalocean')->exists($image)) {
+                if (\Storage::disk('r2')->exists($image)) {
                     $reqImage['name'] = $image;
-                    $reqImage['size'] = \Storage::disk('digitalocean')->size($image);
-                    $reqImage['type'] = \Storage::disk('digitalocean')->mimeType($image);
+                    $reqImage['size'] = \Storage::disk('r2')->size($image);
+                    $reqImage['type'] = \Storage::disk('r2')->mimeType($image);
                     $images[] = $reqImage;
                 }
             }

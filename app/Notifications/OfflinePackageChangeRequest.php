@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\OfflinePlanChange;
+use App\Models\OfflinePlanChange;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class OfflinePackageChangeRequest extends BaseNotification

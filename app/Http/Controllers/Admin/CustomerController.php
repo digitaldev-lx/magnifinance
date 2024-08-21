@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Booking;
 use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\Customer\StoreCustomer;
+use App\Http\Requests\Customer\UpdateCustomer;
+use App\Models\Booking;
+use App\Models\Role;
 use App\Notifications\NewUser;
 use App\User;
-use App\Http\Requests\Customer\UpdateCustomer;
-use App\Role;
 use Illuminate\Support\Str;
 
 class CustomerController extends AdminBaseController

@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\BookingTime;
-use App\EmployeeSchedule;
+use App\Models\BookingTime;
+use App\Models\EmployeeSchedule;
 
 class BookingTimeObserver
 {
@@ -11,7 +11,7 @@ class BookingTimeObserver
     /**
      * Handle the booking time "updated" event.
      *
-     * @param  \App\BookingTime  $bookingTime
+     * @param  \App\Models\BookingTime  $bookingTime
      * @return void
      */
     public function updated(BookingTime $bookingTime)

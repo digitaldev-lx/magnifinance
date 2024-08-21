@@ -1,10 +1,9 @@
 <?php
 
-use App\Role;
+use App\Models\Company;
+use App\Models\Role;
+use App\Models\VendorPage;
 use App\User;
-use App\Company;
-use App\VendorPage;
-use App\EmployeeGroup;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 

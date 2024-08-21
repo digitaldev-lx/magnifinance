@@ -8,7 +8,7 @@
 
 namespace App\Traits;
 
-use App\PaymentGatewayCredentials;
+use App\Models\PaymentGatewayCredentials;
 use Illuminate\Support\Facades\Config;
 
 trait StripeSettings

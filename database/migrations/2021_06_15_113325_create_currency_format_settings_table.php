@@ -1,9 +1,9 @@
 <?php
 
-use App\CurrencyFormatSetting;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\CurrencyFormatSetting;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateCurrencyFormatSettingsTable extends Migration
 {
@@ -22,7 +22,7 @@ class CreateCurrencyFormatSettingsTable extends Migration
             $table->string('thousand_separator')->nullable();
             $table->string('decimal_separator')->nullable();
         });
-        
+
         $currencyFormatSetting = new CurrencyFormatSetting();
         $currencyFormatSetting->currency_position = 'right';
         $currencyFormatSetting->no_of_decimal = '2';

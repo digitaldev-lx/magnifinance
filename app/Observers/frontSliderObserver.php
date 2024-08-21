@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Media;
+use App\Models\Media;
 use Illuminate\Support\Facades\File;
 
 class frontSliderObserver
@@ -11,7 +11,7 @@ class frontSliderObserver
     /**
      * Handle the media "deleted" event.
      *
-     * @param  \App\Media  $media
+     * @param  \App\Models\Media  $media
      * @return void
      */
     public function deleted(Media $media)

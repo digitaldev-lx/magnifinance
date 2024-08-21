@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\TodoItem;
+use App\Models\TodoItem;
 
 class TodoItemObserver
 {

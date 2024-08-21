@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\OfflineInvoice;
+use App\Models\OfflineInvoice;
 
 class OfflineInvoiceObserver
 {

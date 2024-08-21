@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Company;
-use App\Currency;
 use App\Helper\Files;
 use App\Helper\Formats;
 use App\Helper\Reply;
@@ -11,11 +9,13 @@ use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Company\StoreCompany;
 use App\Http\Requests\Company\UpdateCompany;
 use App\Http\Requests\Package\ChangePackage;
-use App\Language;
-use App\OfflineInvoice;
-use App\OfflinePaymentMethod;
-use App\Package;
-use App\Role;
+use App\Models\Company;
+use App\Models\Currency;
+use App\Models\Language;
+use App\Models\OfflineInvoice;
+use App\Models\OfflinePaymentMethod;
+use App\Models\Package;
+use App\Models\Role;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -181,7 +181,7 @@ class CompanyController extends SuperAdminBaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Company $company
+     * @param  \App\Models\Company $company
      * @return \Illuminate\Http\Response
      */
     public function edit(Company $company)
@@ -203,7 +203,7 @@ class CompanyController extends SuperAdminBaseController
      * Update the specified resource in storage.
      *
      * @param  UpdateCompany  $request
-     * @param  \App\Company  $company
+     * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateCompany $request, Company $company)

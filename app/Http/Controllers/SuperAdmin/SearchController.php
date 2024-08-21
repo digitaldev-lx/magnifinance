@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\UniversalSearch;
-use Illuminate\Http\Request;
 use App\Helper\Reply;
-;
 use App\Http\Controllers\SuperAdminBaseController;
+use App\Models\UniversalSearch;
+use Illuminate\Http\Request;
+
+;
 
 class SearchController extends SuperAdminBaseController
 {

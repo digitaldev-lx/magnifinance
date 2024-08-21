@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Booking;
 use App\Comment;
-use App\GlobalSetting;
 use App\Helper\Reply;
-use App\Rating;
-use Illuminate\Http\Request;
 use App\Http\Controllers\SuperAdminBaseController;
-use Illuminate\Support\Facades\Auth;
+use App\Models\GlobalSetting;
+use App\Models\Rating;
+use Illuminate\Http\Request;
 
 class RatingController extends SuperAdminBaseController
 {
@@ -111,7 +109,7 @@ class RatingController extends SuperAdminBaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Rating  $rating
+     * @param  \App\Models\Rating  $rating
      * @return \Illuminate\Http\Response
      */
     public function edit(Rating $rating)
@@ -134,7 +132,7 @@ class RatingController extends SuperAdminBaseController
     public function store(Request $request)
     {
         $ratingStatus = GlobalSetting::first();
-        
+
         if ($request->rating_option == 'active') {
             $ratingStatus->rating_status = $request->rating_option;
         }
@@ -151,7 +149,7 @@ class RatingController extends SuperAdminBaseController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Rating  $rating
+     * @param  \App\Models\Rating  $rating
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Rating $rating)
@@ -175,7 +173,7 @@ class RatingController extends SuperAdminBaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Rating  $rating
+     * @param  \App\Models\Rating  $rating
      * @return \Illuminate\Http\Response
      */
     public function destroy(Rating $rating)
@@ -185,5 +183,5 @@ class RatingController extends SuperAdminBaseController
 
         return Reply::success(__('messages.feedbackDeletedSuccessfully'));
     }
-    
+
 }

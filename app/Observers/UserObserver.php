@@ -2,10 +2,9 @@
 
 namespace App\Observers;
 
-use App\Role;
-use App\User;
 use App\Helper\SearchLog;
 use App\Notifications\NewCompany;
+use App\User;
 use Illuminate\Support\Facades\File;
 
 class UserObserver

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\BusinessService;
-use App\Category;
 use App\Helper\Reply;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\Category\StoreCategory;
-use Illuminate\Support\Facades\DB;
+use App\Models\BusinessService;
+use App\Models\Category;
 use App\Services\ImagesManager;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends SuperAdminBaseController
 {

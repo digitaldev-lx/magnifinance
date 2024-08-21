@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests\Company;
 
-use App\GoogleCaptchaSetting;
 use App\Http\Requests\CoreRequest;
-use App\Rules\Captcha;
+use App\Models\GoogleCaptchaSetting;
 
 class RegisterCompany extends CoreRequest
 {

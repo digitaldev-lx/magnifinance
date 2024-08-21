@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\ClientPayment;
-use App\Company;
-use App\PaypalInvoice;
+use App\Models\Company;
+use App\Models\PaypalInvoice;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

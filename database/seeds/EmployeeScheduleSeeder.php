@@ -1,7 +1,7 @@
 <?php
 
-use App\BookingTime;
-use App\EmployeeSchedule;
+use App\Models\BookingTime;
+use App\Models\EmployeeSchedule;
 use App\User;
 use Illuminate\Database\Seeder;
 

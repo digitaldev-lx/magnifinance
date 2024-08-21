@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Tout;
-use App\User;
-use App\Payment;
-use Carbon\Carbon;
-use App\BookingItem;
 use App\Helper\Reply;
+use App\Http\Controllers\SuperAdminBaseController;
+use App\Models\BookingItem;
+use App\Models\Payment;
+use App\Models\Tout;
+use App\User;
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\SuperAdminBaseController;
 
 class ReportController extends SuperAdminBaseController
 {

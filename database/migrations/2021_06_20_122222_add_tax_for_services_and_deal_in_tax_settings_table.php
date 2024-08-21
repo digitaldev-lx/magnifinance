@@ -1,13 +1,11 @@
 <?php
 
+use App\Models\BusinessService;
+use App\Models\Deal;
+use App\Models\ItemTax;
+use App\Models\Product;
+use App\Models\Tax;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-use App\BusinessService;
-use App\Deal;
-use App\ItemTax;
-use App\Product;
-use App\Tax;
 
 class AddTaxForServicesAndDealInTaxSettingsTable extends Migration
 {

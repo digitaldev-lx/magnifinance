@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Leave;
+use App\Models\Leave;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;

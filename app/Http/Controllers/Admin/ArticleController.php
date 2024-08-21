@@ -2,25 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Article;
-use App\BusinessService;
-use App\Category;
-use App\EmployeeGroup;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Article\SaveArticle;
 use App\Http\Requests\Article\StoreArticle;
 use App\Http\Requests\Article\UpdateArticle;
-use App\ItemTax;
-use App\Location;
-use App\Role;
+use App\Models\Article;
+use App\Models\BusinessService;
+use App\Models\Category;
 use App\Scopes\CompanyScope;
 use App\Services\ImagesManager;
-use App\SmsSetting;
-use App\Tax;
-use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 

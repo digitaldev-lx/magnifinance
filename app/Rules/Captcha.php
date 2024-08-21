@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\GoogleCaptchaSetting;
+use App\Models\GoogleCaptchaSetting;
 use Illuminate\Contracts\Validation\Rule;
 use ReCaptcha\ReCaptcha;
 

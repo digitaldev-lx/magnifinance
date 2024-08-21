@@ -1,34 +1,33 @@
 <?php
 namespace App\Http\Controllers\Front;
 
-use App\Booking;
-use App\Company;
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
+use App\Models\Company;
+use App\Models\PaymentGatewayCredentials;
 use App\Notifications\BookingConfirmation;
 use App\Notifications\NewBooking;
-use App\PaymentGatewayCredentials;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
-
-/** All Paypal Details class **/
-use PayPal\Rest\ApiContext;
-use PayPal\Auth\OAuthTokenCredential;
+use Illuminate\Support\Facades\Session;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment;
-use PayPal\Api\RedirectUrls;
 use PayPal\Api\PaymentExecution;
+use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
 
+/** All Paypal Details class **/
 class PaypalController extends Controller
 {
     private $api_context;
@@ -145,7 +144,7 @@ class PaypalController extends Controller
             Session::put('invoice_id', $invoice->id);
 
         // Save details in database and redirect to paypal
-            $clientPayment = new \App\Payment();
+            $clientPayment = new \App\Models\Payment();
             $clientPayment->booking_id = $invoice->id;
             $clientPayment->currency_id = $currency->id;
             $clientPayment->amount = $invoice->amount_to_pay;
@@ -167,7 +166,7 @@ class PaypalController extends Controller
         /** Get the payment ID before session clear **/
         $payment_id = Session::get('paypal_payment_id');
         $invoice_id = Session::get('invoice_id');
-        $clientPayment = \App\Payment::where('transaction_id', $payment_id)->first();
+        $clientPayment = \App\Models\Payment::where('transaction_id', $payment_id)->first();
         $setting = Company::first();
         $currency = $setting->currency;
         /** clear the session payment ID **/

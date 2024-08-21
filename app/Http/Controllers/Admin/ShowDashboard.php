@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\User;
-use App\Booking;
-use Carbon\Carbon;
 use App\Helper\Reply;
-use App\Scopes\CompanyScope;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\AdminBaseController;
+use App\Models\Booking;
+use App\Scopes\CompanyScope;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class ShowDashboard extends AdminBaseController
 {

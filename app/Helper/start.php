@@ -1,17 +1,18 @@
 <?php
 
-use App\Company;
-use App\Currency;
-use App\GlobalSetting;
-use Illuminate\Support\Str;
+use App\Models\Company;
+use App\Models\Currency;
+use App\Models\CurrencyFormatSetting;
+use App\Models\GlobalSetting;
 use App\Scopes\CompanyScope;
-use App\CurrencyFormatSetting;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 
 if (!function_exists('cdn_storage_url')) {
 
     function cdn_storage_url($path)
     {
+        return Storage::disk('r2')->url($path);
        return "https://". config("digitalocean.spaces.DIGITALOCEAN_SPACES_BUCKET") .".". config("digitalocean.spaces.DIGITALOCEAN_SPACES_REGION") .".cdn.digitaloceanspaces.com/". $path;
     }
 

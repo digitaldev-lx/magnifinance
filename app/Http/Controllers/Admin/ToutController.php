@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Tout;
-use App\Article;
-use App\Category;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\Tout\StoreTout;
-use App\Location;
-use App\PaymentGatewayCredentials;
+use App\Models\Article;
+use App\Models\Category;
+use App\Models\Location;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\Tout;
 use App\Scopes\CompanyScope;
 use App\Services\ImagesManager;
 use App\Services\UrlManager;

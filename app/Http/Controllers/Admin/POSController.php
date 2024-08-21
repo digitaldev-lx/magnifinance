@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Tax;
-use App\User;
-use App\Leave;
-use App\Coupon;
-use App\Booking;
-use App\ItemTax;
-use App\Payment;
-use App\Product;
-use App\Category;
-use App\Location;
-use Carbon\Carbon;
-use App\BookingItem;
 use App\Helper\Reply;
-use App\BusinessService;
-use App\EmployeeSchedule;
+use App\Http\Controllers\AdminBaseController;
+use App\Http\Requests\Pos\StorePos;
+use App\Models\Booking;
+use App\Models\BookingItem;
+use App\Models\BusinessService;
+use App\Models\Category;
+use App\Models\Coupon;
+use App\Models\EmployeeSchedule;
+use App\Models\ItemTax;
+use App\Models\Leave;
+use App\Models\Location;
+use App\Models\Payment;
+use App\Models\Product;
+use App\Models\Tax;
 use App\Scopes\CompanyScope;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\Pos\StorePos;
-use App\Http\Controllers\AdminBaseController;
 
 class POSController extends AdminBaseController
 {

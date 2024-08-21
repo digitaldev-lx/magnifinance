@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Coupon;
+use App\Models\Coupon;
 
 class CouponObserver
 {

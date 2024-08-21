@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\ToDo\StoreTodo;
-use App\TodoItem;
+use App\Models\TodoItem;
 use Illuminate\Http\Request;
 
 class TodoItemController extends AdminBaseController

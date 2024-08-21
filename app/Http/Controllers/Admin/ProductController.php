@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\BusinessService;
-use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Controllers\AdminBaseController;
 use App\Http\Requests\Product\StoreProduct;
-use App\ItemTax;
-use App\Location;
-use App\Product;
+use App\Models\ItemTax;
+use App\Models\Location;
+use App\Models\Product;
+use App\Models\Tax;
 use App\Services\ImagesManager;
-use App\Tax;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -144,7 +142,7 @@ class ProductController extends AdminBaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function edit(Product $product)

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
-use App\StripeInvoice;
-use App\Subscription;
+use App\Models\Company;
+use App\Models\StripeInvoice;
+use App\Models\Subscription;
 use App\Traits\StripeSettings;
 use App\User;
 use Illuminate\Http\Request;
@@ -58,7 +58,7 @@ class StripeWebhookController extends Controller
 
                 $company = Company::where('stripe_id', $customerId)->orWhere('customer_id', $customerId)->first();
 
-                $package = \App\Package::where(function ($query) use($planId) {
+                $package = \App\Models\Package::where(function ($query) use($planId) {
                     $query->where('stripe_annual_plan_id', '=', $planId)
                         ->orWhere('stripe_monthly_plan_id', '=', $planId);
                 })->first();

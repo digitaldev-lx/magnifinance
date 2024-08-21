@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\BookingTime;
-use App\Currency;
-use App\FooterSetting;
-use App\FrontFaq;
-use App\FrontWidget;
 use App\Helper\Formats;
 use App\Helper\Reply;
-use App\Language;
-use App\Media;
-use App\PaymentGatewayCredentials;
-use App\SmtpSetting;
-use GuzzleHttp\Client;
 use App\Http\Controllers\SuperAdminBaseController;
 use App\Http\Requests\FrontSetting\UpdateFrontSettings;
-use App\Section;
-use App\SmsSetting;
+use App\Models\BookingTime;
+use App\Models\Currency;
+use App\Models\FooterSetting;
+use App\Models\FrontFaq;
+use App\Models\FrontWidget;
+use App\Models\Language;
+use App\Models\Media;
+use App\Models\PaymentGatewayCredentials;
+use App\Models\Section;
+use App\Models\SmsSetting;
+use App\Models\SmtpSetting;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;

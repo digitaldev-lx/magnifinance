@@ -6,7 +6,7 @@ namespace App\Traits;
 use App\Models\Document;
 use App\Models\PaymentGatewayCredentials;
 use Carbon\Carbon;
-use DigitalDevLX\Magnifinance\facades\Magnifinance;
+use DigitalDevLX\Magnifinance\Magnifinance;
 
 trait Documentable
 {
